@@ -4,7 +4,7 @@
 
 # copy all files from src to remote server using scp
 ENV=prod
-SRC_PATH=D:/src/clients/webforless/destiny-limo
+SRC_PATH=$1
 REMOTE_PATH=/home/root/src/clients/webforless/destiny-limo-lms/$ENV/destiny-limo
 
 echo "-----------> Copying Files to remote server on ${ENV} environment..."
