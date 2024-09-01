@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\src\\clients\\webforless\\destiny-limo\\appServer\\DestinyLimoServer\\DestinyLimoServer.csproj": {}
+    "D:\\src\\clients\\webforless\\destinyLimo\\appServer\\DestinyLimoServer\\DestinyLimoServer.csproj": {}
   },
   "projects": {
-    "D:\\src\\clients\\webforless\\destiny-limo\\appServer\\DestinyLimoServer\\DestinyLimoServer.csproj": {
+    "D:\\src\\clients\\webforless\\destinyLimo\\appServer\\DestinyLimoServer\\DestinyLimoServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\src\\clients\\webforless\\destiny-limo\\appServer\\DestinyLimoServer\\DestinyLimoServer.csproj",
+        "projectUniqueName": "D:\\src\\clients\\webforless\\destinyLimo\\appServer\\DestinyLimoServer\\DestinyLimoServer.csproj",
         "projectName": "DestinyLimoServer",
-        "projectPath": "D:\\src\\clients\\webforless\\destiny-limo\\appServer\\DestinyLimoServer\\DestinyLimoServer.csproj",
+        "projectPath": "D:\\src\\clients\\webforless\\destinyLimo\\appServer\\DestinyLimoServer\\DestinyLimoServer.csproj",
         "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-        "outputPath": "D:\\src\\clients\\webforless\\destiny-limo\\appServer\\DestinyLimoServer\\obj\\",
+        "outputPath": "D:\\src\\clients\\webforless\\destinyLimo\\appServer\\DestinyLimoServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
