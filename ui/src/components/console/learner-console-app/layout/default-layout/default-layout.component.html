@@ -8,7 +8,13 @@
 >
   <c-sidebar-header class="border-bottom">
     <c-sidebar-brand [routerLink]="[]">
+    <div class="d-flex align-items-center">
+      
+      <a cNavLink routerLink="/" routerLinkActive="active" style="margin-top: -2px; margin-right: 8px;">
+        <svg cIcon class="my-1" name="cilHome" size="lg" style="width:24px; height:24px"></svg>
+      </a>
       <span class="fs-4 fw-bolder" style="padding: 2px;">Learner's Console</span>
+    </div>
     </c-sidebar-brand>
   </c-sidebar-header>
 

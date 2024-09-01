@@ -43,10 +43,13 @@ namespace DestinyLimoServer.Repositories.impl
         public async Task<IEnumerable<T>> GetAllMaterials(bool is_public, bool inactive = true, bool deleted = false)
         {
 
+            System.Console.WriteLine("is public " + is_public);
+
             using var connection = CreateConnection();
             var sql = $"SELECT * FROM {_getTableName()} " +
-                      $"INNER JOIN training_material ON training_material.material_id = {_getTableName()}.material_id " +
-                      $"WHERE is_public = {(is_public ? 1 : 0)}";
+                      $"INNER JOIN training_material ON training_material.material_id = {_getTableName()}.material_id ";
+
+            sql += (is_public == true) ? "WHERE is_public = 1" : "WHERE is_public in (1,0)";
 
             if (!inactive)
             {
@@ -58,7 +61,7 @@ namespace DestinyLimoServer.Repositories.impl
                 sql += " AND is_deleted = 0";
             }
 
-            System.Console.WriteLine("sql: " + sql);
+            System.Console.WriteLine("MATERIAL sql: " + sql);
 
             return await connection.QueryAsync<T>(sql);
         }

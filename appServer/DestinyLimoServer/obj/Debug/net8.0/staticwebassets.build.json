@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "6kEQtaEWCwZV3LCXjGQEFzUFf1R+4ZjXmh2K6xfm/cg=",
+  "Source": "DestinyLimoServer",
+  "BasePath": "_content/DestinyLimoServer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

@@ -6,5 +6,6 @@
 <!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<app-console></app-console>
+<app-landing *ngIf="isHomeVisible"></app-landing>
+<app-console *ngIf="isConsoleVisible"></app-console>
 

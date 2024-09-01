@@ -15,16 +15,16 @@ import {
 } from '@coreui/angular';
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from '../../../../icons/icon-subset';
-import { DefaultHeaderComponent } from './default-header.component';
+import { AdminDefaultHeaderComponent } from './default-header.component';
 
-describe('DefaultHeaderComponent', () => {
-  let component: DefaultHeaderComponent;
-  let fixture: ComponentFixture<DefaultHeaderComponent>;
+describe('AdminDefaultHeaderComponent', () => {
+  let component: AdminDefaultHeaderComponent;
+  let fixture: ComponentFixture<AdminDefaultHeaderComponent>;
   let iconSetService: IconSetService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [GridModule, HeaderModule, IconModule, NavModule, BadgeModule, AvatarModule, DropdownModule, BreadcrumbModule, RouterTestingModule, SidebarModule, ProgressModule, ButtonGroupModule, ReactiveFormsModule, DefaultHeaderComponent],
+    imports: [GridModule, HeaderModule, IconModule, NavModule, BadgeModule, AvatarModule, DropdownModule, BreadcrumbModule, RouterTestingModule, SidebarModule, ProgressModule, ButtonGroupModule, ReactiveFormsModule, AdminDefaultHeaderComponent],
     providers: [IconSetService]
 })
       .compileComponents();
@@ -34,7 +34,7 @@ describe('DefaultHeaderComponent', () => {
     iconSetService = TestBed.inject(IconSetService);
     iconSetService.icons = { ...iconSubset };
 
-    fixture = TestBed.createComponent(DefaultHeaderComponent);
+    fixture = TestBed.createComponent(AdminDefaultHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

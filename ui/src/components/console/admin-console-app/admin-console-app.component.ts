@@ -33,5 +33,7 @@ export class AdminConsoleAppComponent implements OnInit {
         return;
       }
     });
+
+    this.router.navigate(['/admin/console/dashboard']);
   }
 }

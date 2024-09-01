@@ -59,9 +59,9 @@ export class MaterialEffect {
   loadAllMaterialFile$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(invokeMaterialFileFetchAPI),
-      mergeMap(() => {
+      mergeMap((action) => {
         return this.materialService
-          .getMaterialFile()
+          .getMaterialFile(action.isPublic)
           .pipe(map((data: MaterialFile[]) => materialFileFetchAPI_Success({ allMaterialFiles: data as MaterialFile[] }))
           );
       }));
@@ -70,9 +70,9 @@ export class MaterialEffect {
   loadAllMaterialText$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(invokeMaterialTextFetchAPI),
-      mergeMap(() => {
+      mergeMap((action) => {
         return this.materialService
-          .getMaterialText()
+          .getMaterialText(action.isPublic)
           .pipe(map((data: MaterialText[]) => materialTextFetchAPI_Success({ allMaterialTexts: data as MaterialText[] }))
           );
       }));
@@ -81,9 +81,9 @@ export class MaterialEffect {
   loadAllMaterialVideo$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(invokeMaterialVideoFetchAPI),
-      mergeMap(() => {
+      mergeMap((action) => {
         return this.materialService
-          .getMaterialVideo()
+          .getMaterialVideo(action.isPublic)
           .pipe(map((data: MaterialVideo[]) => materialVideoFetchAPI_Success({ allMaterialVideos: data as MaterialVideo[] }))
           );
       }));
@@ -92,9 +92,9 @@ export class MaterialEffect {
   loadAllMaterialMCQ$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(invokeMaterialMCQFetchAPI),
-      mergeMap(() => {
+      mergeMap((action) => {
         return this.materialService
-          .getMaterialMCQ()
+          .getMaterialMCQ(action.isPublic)
           .pipe(map((data: MaterialMCQ[]) => materialMCQFetchAPI_Success({ allMaterialMCQs: data as MaterialMCQ[] }))
           );
       }));

@@ -1,3 +1,5 @@
+using DestinyLimoServer.Models;
+
 namespace DestinyLimoServer.DTOs.ResponseDTOs
 {
     public class UserProfileDTO
@@ -18,5 +20,7 @@ namespace DestinyLimoServer.DTOs.ResponseDTOs
         public DateTime? LicenseExpiryDate { get; set; } // Maps to `license_expiry_date` (nullable DateTime)
         public DateTime CreatedAt { get; set; }      // Maps to `created_at`
         public DateTime? UpdatedAt { get; set; }     // Maps to `updated_at` (nullable DateTime)
+
+        public IEnumerable<RoleDTO>? Roles { get; set; }           // Maps to `role`
     }
 }

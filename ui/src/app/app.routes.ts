@@ -5,6 +5,8 @@ import { HomeComponent } from '../components/landing/home/home.component';
 import { landingRoutes } from '../components/landing/routes';
 import { adminConsoleRoutes } from '../components/console/admin-console-app/views/routes';
 import { learnerConsoleRoutes } from '../components/console/learner-console-app/views/routes';
+import { LearnerConsoleAppComponent } from '@src/components/console/learner-console-app/learner-console-app.component';
+
 
 export const routes: Routes = [
     {

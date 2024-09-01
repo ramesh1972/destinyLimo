@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { RouterLinkActive } from '@angular/router';
+import { ChangeDetectorRef } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -16,6 +17,7 @@ import { LearnerDefaultLayoutComponent } from '../components/console/learner-con
 
 import { invokeContentFetchAPI } from '../store/actions/content.action';
 import { invokeMaterialCategoryFetchAPI } from '../store/actions/material.action';
+import { VisibilityService } from '@src/components/common/VisibilityService';
 
 @Component({
   selector: 'app-root',
@@ -26,17 +28,32 @@ import { invokeMaterialCategoryFetchAPI } from '../store/actions/material.action
 })
 export class AppComponent {
 
-  constructor(private store: Store,     private iconSetService: IconSetService) {
+  constructor(private store: Store,  private iconSetService: IconSetService, 
+    private visibilityService: VisibilityService, private cdr: ChangeDetectorRef ) {
         // iconSet singleton
         this.iconSetService.icons = { ...iconSubset };
   }
 
   title = 'destiny-limo';
-
+  isHomeVisible: boolean = true;
+  isConsoleVisible: boolean = false;
+  
   ngOnInit() {
     console.log('App component initialized');
 
     this.store.dispatch(invokeContentFetchAPI());
     this.store.dispatch(invokeMaterialCategoryFetchAPI());
+
+    this.visibilityService.homeVisible$.subscribe((visible: any) => {
+      this.isHomeVisible = visible;
+      this.isConsoleVisible = !visible;
+      this.cdr.detectChanges(); 
+    });
+
+    this.visibilityService.consoleVisible$.subscribe((visible: any) => {
+      this.isConsoleVisible = visible;
+      this.isHomeVisible = !visible;
+      this.cdr.detectChanges();
+    });
   }
 }

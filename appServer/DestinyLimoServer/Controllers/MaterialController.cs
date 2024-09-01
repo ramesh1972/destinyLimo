@@ -21,9 +21,10 @@ namespace DestinyLimoServer.Controllers
         [HttpGet("material/{includeInActive?}/{includeDeleted?}")]
         public async Task<IActionResult> GetMaterialsAsync(bool? includeInActive = true, bool? includeDeleted = false, bool? isPublic = false)
         {
+            System.Console.WriteLine("is public : controller", isPublic);
             IMaterialRepository<Material> _repository = new MaterialRepository<Material>(_dapper);
 
-            var materials = await _repository.GetAllMaterials(includeInActive ?? true, includeDeleted ?? false, isPublic ?? false);
+            var materials = await _repository.GetAllMaterials(isPublic ?? false, includeInActive ?? true, includeDeleted ?? false);
 
             System.Console.WriteLine("materials: " + materials);
 
@@ -37,7 +38,7 @@ namespace DestinyLimoServer.Controllers
         {
             IMaterialRepository<MaterialFile> _repository = new MaterialRepository<MaterialFile>(_dapper);
 
-            var materials = await _repository.GetAllMaterials(includeInActive ?? true, includeDeleted ?? false, isPublic ?? false);
+            var materials = await _repository.GetAllMaterials( isPublic ?? false, includeInActive ?? true, includeDeleted ?? false);
 
             System.Console.WriteLine("materials: " + materials);
 
@@ -51,7 +52,7 @@ namespace DestinyLimoServer.Controllers
         {
             IMaterialRepository<MaterialText> _repository = new MaterialRepository<MaterialText>(_dapper);
 
-            var materials = await _repository.GetAllMaterials(includeInActive ?? true, includeDeleted ?? false, isPublic ?? false);
+            var materials = await _repository.GetAllMaterials( isPublic ?? false, includeInActive ?? true, includeDeleted ?? false);
 
             System.Console.WriteLine("materials: " + materials);
 
@@ -65,7 +66,7 @@ namespace DestinyLimoServer.Controllers
         {
             IMaterialRepository<MaterialVideo> _repository = new MaterialRepository<MaterialVideo>(_dapper);
 
-            var materials = await _repository.GetAllMaterials(includeInActive ?? true, includeDeleted ?? false, isPublic ?? false);
+            var materials = await _repository.GetAllMaterials( isPublic ?? false, includeInActive ?? true, includeDeleted ?? false);
 
             System.Console.WriteLine("materials: " + materials);
 
@@ -81,7 +82,7 @@ namespace DestinyLimoServer.Controllers
         {
             IMaterialRepository<MaterialMCQ> _repository = new MaterialRepository<MaterialMCQ>(_dapper);
 
-            var materials = await _repository.GetAllMaterials(includeInActive ?? true, includeDeleted ?? false, isPublic ?? false);
+            var materials = await _repository.GetAllMaterials( isPublic ?? false, includeInActive ?? true, includeDeleted ?? false);
 
             System.Console.WriteLine("materials: " + materials);
 

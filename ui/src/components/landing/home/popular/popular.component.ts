@@ -22,7 +22,7 @@ export class PopularComponent {
     console.log('Home component initialized');
 
     this.store.select(selectMaterialCategorys).subscribe((categories) => {
-      this.categories = categories.slice(0, 9); 
+      this.categories = categories.slice(0, 8); 
 
       console.log('cats ', this.categories);
     });

@@ -8,6 +8,7 @@ import { UserProfile } from '../models/UserProfile';
 import { UserService } from '../apis/user.service';
 
 import { invokeUserProfilesFetchAPI, UserProfilesFetchAPI_Success, invokeUserProfileFetchAPI, UserProfileFetchAPI_Success } from '../actions/user.action';
+import { invokeAuthenticateUser, AuthenticateUser_Success } from '../actions/user.action';
 
 @Injectable()
 export class UserEffect {
@@ -16,6 +17,16 @@ export class UserEffect {
     private userService: UserService,
     private store: Store
   ) { }
+
+  authenticateUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(invokeAuthenticateUser),
+      mergeMap((action) => {
+        return this.userService
+          .authenticateUser(action.userName, action.password)
+          .pipe(map((data: UserProfile) => AuthenticateUser_Success({ loggedInUser: data as UserProfile })));
+        }));
+  });
 
   loadAllUserProfiles$ = createEffect(() => {
     return this.actions$.pipe(

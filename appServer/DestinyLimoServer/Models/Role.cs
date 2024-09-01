@@ -2,7 +2,7 @@ namespace DestinyLimoServer.Models
 {
     public class Role
     {
-        public int RoleId { get; set; }
-        public required string RoleName { get; set; }
+        public int role_id { get; set; }
+        public required string role_name { get; set; }
     }
 }

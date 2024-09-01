@@ -29,7 +29,8 @@ export const materialFetchAPI_Success = createAction(
 
 // fetch MaterialFile
 export const invokeMaterialFileFetchAPI = createAction(
-  '[MaterialFile API] Invoke MaterialFile Fetch API'
+  '[MaterialFile API] Invoke MaterialFile Fetch API',
+  props<{ isPublic: boolean }>()
 );
 
 export const materialFileFetchAPI_Success = createAction(
@@ -39,7 +40,8 @@ export const materialFileFetchAPI_Success = createAction(
 
 // fetch MaterialText
 export const invokeMaterialTextFetchAPI = createAction(
-  '[MaterialText API] Invoke MaterialText Fetch API'
+  '[MaterialText API] Invoke MaterialText Fetch API',
+  props<{ isPublic: boolean }>()
 );
 
 export const materialTextFetchAPI_Success = createAction(
@@ -49,7 +51,8 @@ export const materialTextFetchAPI_Success = createAction(
 
 // fetch MaterialVideo
 export const invokeMaterialVideoFetchAPI = createAction(
-  '[MaterialVideo API] Invoke MaterialVideo Fetch API'
+  '[MaterialVideo API] Invoke MaterialVideo Fetch API',
+  props<{ isPublic: boolean }>()
 );
 
 export const materialVideoFetchAPI_Success = createAction(
@@ -59,7 +62,8 @@ export const materialVideoFetchAPI_Success = createAction(
 
 // fetch MaterialMCQ
 export const invokeMaterialMCQFetchAPI = createAction(
-  '[MaterialMCQ API] Invoke MaterialMCQ Fetch API'
+  '[MaterialMCQ API] Invoke MaterialMCQ Fetch API',
+  props<{ isPublic: boolean }>()
 );
 
 export const materialMCQFetchAPI_Success = createAction(

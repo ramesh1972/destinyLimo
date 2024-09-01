@@ -68,7 +68,7 @@ export class CoursesComponent {
     })
 
 
-    this.store.dispatch(invokeMaterialFileFetchAPI());
+    this.store.dispatch(invokeMaterialFileFetchAPI({ isPublic: false }));
     this.actions$.pipe(
       ofType(materialFileFetchAPI_Success),
       take(1)

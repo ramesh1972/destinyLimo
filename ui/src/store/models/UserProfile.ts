@@ -1,7 +1,10 @@
+import { Role } from "./Role";
+
 export interface UserProfile {
     profileId: number;              // Maps to `ProfileId`
     userId: number;                 // Maps to `UserId`
     username?: string;              // Maps to `Username`
+    password?: string;              // Maps to `Password`
     
     firstName: string;              // Maps to `FirstName`, required field
     lastName?: string;              // Maps to `LastName`
@@ -15,5 +18,7 @@ export interface UserProfile {
     licenseExpiryDate?: Date;       // Maps to `LicenseExpiryDate`, nullable Date
     createdAt: Date;                // Maps to `CreatedAt`
     updatedAt?: Date;               // Maps to `UpdatedAt`, nullable Date
+
+    roles?: Role[];                 // Maps to `Roles`,
   }
   

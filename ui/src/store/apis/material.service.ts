@@ -25,20 +25,22 @@ export class MaterialService {
     return this._http.get<TrainingMaterial[]>(environment.baseURL + "material");
   };
 
-  getMaterialFile(): Observable<MaterialFile[]> {
-    return this._http.get<MaterialFile[]>(environment.baseURL + "material/file/false/false?isPublic=false");
+  getMaterialFile(isPublic: boolean): Observable<MaterialFile[]> {
+    const url = environment.baseURL + "material/file/false/false?isPublic=" + (isPublic? "true" : "false");
+    console.log("file url: ", url)
+    return this._http.get<MaterialFile[]>(url);
   };
 
-  getMaterialText(): Observable<MaterialText[]> {
-    return this._http.get<MaterialText[]>(environment.baseURL + "material/text/false/false?isPublic=false");
+  getMaterialText(isPublic: boolean): Observable<MaterialText[]> {
+    return this._http.get<MaterialText[]>(environment.baseURL + "material/text/false/false?isPublic=" + (isPublic? "true" : "false"));
   };
 
-  getMaterialVideo(): Observable<MaterialVideo[]> {
-    return this._http.get<MaterialVideo[]>(environment.baseURL + "material/video/false/false?isPublic=false");
+  getMaterialVideo(isPublic: boolean): Observable<MaterialVideo[]> {
+    return this._http.get<MaterialVideo[]>(environment.baseURL + "material/video/false/false?isPublic=" + (isPublic? "true" : "false"));
   };
 
-  getMaterialMCQ(): Observable<MaterialMCQ[]> {
-    return this._http.get<MaterialMCQ[]>(environment.baseURL + "material/mcq/true/false?isPublic=true");
+  getMaterialMCQ(isPublic: boolean): Observable<MaterialMCQ[]> {
+    return this._http.get<MaterialMCQ[]>(environment.baseURL + "material/mcq/false/false?isPublic=" + (isPublic? "true" : "false"));
   };
 
   updateTrainingMaterial(trainingMaterial: TrainingMaterial): Observable<any> {

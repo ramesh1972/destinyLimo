@@ -48,7 +48,7 @@ export class ExamsComponent {
       this.categories = [...data];
     });
 
-    this.store.dispatch(invokeMaterialMCQFetchAPI())
+    this.store.dispatch(invokeMaterialMCQFetchAPI({isPublic: false}));
 
     // Wait for the action to complete
     this.actions$.pipe(

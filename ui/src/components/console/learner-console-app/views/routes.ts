@@ -1,7 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LearnerConsoleAppComponent } from '../learner-console-app.component';
 
 export const learnerConsoleRoutes: Routes = [
+  {
+    path: '',
+    component: LearnerConsoleAppComponent,
+  },
   {
     path: 'dashboard',
     loadChildren: () => import('./dashboard/routes').then(m => m.routes)

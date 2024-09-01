@@ -10,7 +10,7 @@
         </div>
 
         <!-- Main Navigation -->
-        <nav class="main_nav_container" style="padding-right: 120px;">
+        <nav class="main_nav_container" style="padding-right: 80px;">
             <div class="main_nav">
                 <ul class="main_nav_list">
                     <li class="main_nav_item"> <a routerLink="/" routerLinkActive="active"
@@ -19,26 +19,27 @@
 
                     <li class="main_nav_item">
                         <div class="main_sub_menu_center">
-                            <a routerLink="/info" routerLinkActive="active" ariaCurrentWhenActive="page">Services
+                            <a routerLink="/home/services" routerLinkActive="active" ariaCurrentWhenActive="page">Services
                                 <hr class="thin-line" />
                             </a>
-                            <a routerLink="/Processes" routerLinkActive="active" ariaCurrentWhenActive="page">Processes
+                            <a routerLink="/home/processes" routerLinkActive="active" ariaCurrentWhenActive="page">Processes
                             </a>
                         </div>
                     </li>
 
-                    <li class="main_nav_item"><a routerLink="/info" routerLinkActive="active"
+                    <li class="main_nav_item"><a routerLink="/home/courses" routerLinkActive="active"
                             ariaCurrentWhenActive="page">Training Info</a></li>
 
-                    <li class="main_nav_item"><a routerLink="/faq" routerLinkActive="active"
+                    <li class="main_nav_item"><a routerLink="/home/faqs" routerLinkActive="active"
                             ariaCurrentWhenActive="page">FAQ</a></li>
 
-                    <li class="main_nav_item"><a routerLink="/blogs" routerLinkActive="active"
+                    <li class="main_nav_item"><a routerLink="/home/posts" routerLinkActive="active"
                             ariaCurrentWhenActive="page">Blogs</a></li>
 
                     <li class="main_nav_item">
                         <div class="main_sub_menu_center">
-                            <a routerLink="/home/about-us" routerLinkActive="active" ariaCurrentWhenActive="page">About Us
+                            <a routerLink="/home/about-us" routerLinkActive="active" ariaCurrentWhenActive="page">About
+                                Us
                                 <hr class="thin-line" />
                             </a>
                             <a routerLink="/contact" routerLinkActive="active" ariaCurrentWhenActive="page">Contact</a>
@@ -47,8 +48,18 @@
 
                     <li class="main_nav_item">
                         <div class="main_sub_menu_end">
-                            <a routerLink="/home/register" routerLinkActive="active" ariaCurrentWhenActive="page"
+                            <a *ngIf="this.loggedInUser === undefined" routerLink="/home/login"
+                                routerLinkActive="active" ariaCurrentWhenActive="page">Login
+                                <hr class="thin-line" />
+                            </a>
+                            <a *ngIf="this.loggedInUser" routerLink="/home/console" routerLinkActive="active"
+                                ariaCurrentWhenActive="page">Console
+                                <hr class="thin-line" />
+                            </a>
+                            <a *ngIf="this.loggedInUser === undefined" routerLink="/home/register" routerLinkActive="active" ariaCurrentWhenActive="page"
                                 style="color: black;">Register</a>
+                                <a *ngIf="this.loggedInUser" routerLink="/home/logout" routerLinkActive="active"
+                                ariaCurrentWhenActive="page" (click)="onLogout()">Log Out</a>
 
 
                         </div>

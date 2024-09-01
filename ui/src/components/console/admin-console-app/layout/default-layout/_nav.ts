@@ -3,12 +3,12 @@ import { INavData } from '@coreui/angular';
 export const navItems: INavData[] = [
   {
     name: 'Dashboard',
-    url: '/admin/console//dashboard',
+    url: '/admin/console/dashboard',
     iconComponent: { name: 'cil-speedometer' },
   },
   {
     name: 'Users',
-    url: '/admin/console//users',
+    url: '/admin/console/users',
     iconComponent: { name: 'cil-people' },
     badge: {
       text: '9',
@@ -21,27 +21,27 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Course Files',
-    url: '/admin/console//training-material/courses',
+    url: '/admin/console/training-material/courses',
     iconComponent: { name: 'cil-library', className: 'child-menu' }
   },
   {
     name: 'Course Content',
-    url: '/admin/console//training-material/text',
+    url: '/admin/console/training-material/text',
     iconComponent: { name: 'cil-library', className: 'child-menu' }
   },
   {
     name: 'Videos',
-    url: '/admin/console//training-material/videos',
+    url: '/admin/console/training-material/videos',
     iconComponent: { name: 'cil-video' }
   },
   {
     name: 'MCQs',
-    url: '/admin/console//training-material/exams',
+    url: '/admin/console/training-material/exams',
     iconComponent: { name: 'cil-pencil', className: 'child-menu' }
   },
   {
     name: "Categories",
-    url: '/admin/console//training-material/categories',
+    url: '/admin/console/training-material/categories',
     iconComponent: { name: 'cil-opentype', className: 'child-menu' }
   },
   {

@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminConsoleAppComponent } from '@src/components/console/admin-console-app/admin-console-app.component';
+
 
 export const adminConsoleRoutes: Routes = [
+  { 
+    path: '',
+    component: AdminConsoleAppComponent,
+  },
   {
     path: 'dashboard',
     loadChildren: () => import('./dashboard/routes').then(m => m.routes)

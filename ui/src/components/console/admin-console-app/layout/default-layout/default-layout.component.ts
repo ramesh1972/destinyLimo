@@ -14,8 +14,11 @@ import {
   SidebarToggleDirective,
   SidebarTogglerDirective
 } from '@coreui/angular';
+import { HeaderNavComponent, NavItemComponent, NavLinkDirective } from '@coreui/angular';
 
-import { DefaultFooterComponent, DefaultHeaderComponent } from '.';
+import { RouterLinkActive } from '@angular/router';
+
+import {AdminDefaultFooterComponent, AdminDefaultHeaderComponent } from '.';
 import { navItems } from './_nav';
 
 function isOverflown(element: HTMLElement) {
@@ -41,11 +44,12 @@ function isOverflown(element: HTMLElement) {
     SidebarFooterComponent,
     SidebarToggleDirective,
     SidebarTogglerDirective,
-    DefaultHeaderComponent,
+    AdminDefaultHeaderComponent,
     ShadowOnScrollDirective,
     ContainerComponent,
     RouterOutlet,
-    DefaultFooterComponent
+    AdminDefaultFooterComponent,
+    HeaderNavComponent, NavItemComponent, NavLinkDirective, RouterLink, RouterLinkActive,
   ]
 })
 export class AdminDefaultLayoutComponent {

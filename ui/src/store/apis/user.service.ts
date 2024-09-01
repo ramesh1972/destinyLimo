@@ -20,4 +20,9 @@ export class UserService {
     console.log("User service :", environment.baseURL);
     return this._http.get<UserProfile>(environment.baseURL + "User/profile/" + userId);
   }
+
+  authenticateUser(userName: string, password: string): Observable<UserProfile> {
+    console.log("User service :", environment.baseURL, userName);
+    return this._http.post<UserProfile>(environment.baseURL + "User/authenticate", { userName, password });
+  }
 }

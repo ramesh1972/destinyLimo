@@ -38,6 +38,7 @@ import { userAskedQuestionReducer } from '@src/store/reducers/user-question.redu
 import { UserAskedQuestionEffect } from '@src/store/effects/user-question.effect';
 import { userReducer } from '@src/store/reducers/user.reducer';
 import { UserEffect } from '@src/store/effects/user.effect';
+import { ConsoleComponent } from '@src/components/console/console.component';
 
 @NgModule({
     declarations: [],
@@ -56,7 +57,7 @@ import { UserEffect } from '@src/store/effects/user.effect';
         EffectsModule.forFeature([UserAskedQuestionEffect]),
         StoreModule.forFeature('users', userReducer),
         EffectsModule.forFeature([UserEffect]),
-        AppComponent, LandingComponent,
+        AppComponent, LandingComponent, ConsoleComponent,
         ConsoleModule
     ],
     providers: [

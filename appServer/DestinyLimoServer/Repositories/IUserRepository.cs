@@ -13,5 +13,7 @@ namespace DestinyLimoServer.Repositories
         Task<bool> UpdateAsync(User entity, int id, string[]? cols = null);
         Task<bool> DeleteAsync(int id);
         Task<bool> DeleteSoftAsync(int id);
+        Task<int> AuthenticateUser(string username, string password);
+        Task<IEnumerable<Role>> GetUserRolesByUserId(int userId);
     }
 }

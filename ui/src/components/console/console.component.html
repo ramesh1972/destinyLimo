@@ -1,4 +1,6 @@
-<app-admin-console-root *ngIf="loggedInUserRole === 'admin'">
-</app-admin-console-root>
-<app-learner-console-root *ngIf="loggedInUserRole === 'learner'">
-</app-learner-console-root>
+<div *ngIf="isVisible">
+    <app-admin-console-root *ngIf="loggedInUserRole === 1">
+    </app-admin-console-root>
+    <app-learner-console-root *ngIf="loggedInUserRole === 2">
+    </app-learner-console-root>
+</div>

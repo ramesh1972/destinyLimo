@@ -54,7 +54,7 @@ export class VideosComponent {
       });
     })
 
-    this.store.dispatch(invokeMaterialVideoFetchAPI());
+    this.store.dispatch(invokeMaterialVideoFetchAPI({ isPublic: false }));
     this.actions$.pipe(
       ofType(materialVideoFetchAPI_Success),
       take(1)

@@ -33,5 +33,8 @@ export class LearnerConsoleAppComponent implements OnInit {
         return;
       }
     });
+
+    
+    this.router.navigate(['/learner/console/training-material/courses']);
   }
 }

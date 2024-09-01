@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { DefaultLayoutComponent } from './layout';
+import { AdminDefaultLayoutComponent } from './layout';
 
 export const ddroutes: Routes = [
   {
     path: '',
-    component: DefaultLayoutComponent,
+    component: AdminDefaultLayoutComponent,
     data: {
       title: 'Home'
     },

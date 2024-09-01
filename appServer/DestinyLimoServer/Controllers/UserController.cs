@@ -20,6 +20,28 @@ namespace DestinyLimoServer.Controllers
         private readonly IMapper _mapper = mapper;
         private readonly ILogger _logger = logger;
 
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> authenicateUser([FromBody] UserLoginDTO loginDTO)
+        {
+            int userId = await _repository.User.AuthenticateUser(loginDTO.Username, loginDTO.Password);
+            if (userId == -1)
+            {
+                _logger.LogInformation("User with username: {username} is not authenticated.", loginDTO.Username);
+                return NotFound();
+            }
+            else
+            {
+                var user = await _repository.UserProfile.GetUserById(userId);
+
+                var userRoles = await _repository.User.GetUserRolesByUserId(userId);
+                var userRolesDTO = _mapper.Map<IEnumerable<DTOs.ResponseDTOs.RoleDTO>>(userRoles);
+
+                var userDto = _mapper.Map<UserProfileDTO>(user);
+                userDto.Roles = userRolesDTO;
+                return Ok(userDto);
+            }
+        }
+
         [HttpGet("{includeInActive?}/{includeDeleted?}")]
         public async Task<IActionResult> GetUsersAsync(bool? includeInActive = true, bool? includeDeleted = false)
         {

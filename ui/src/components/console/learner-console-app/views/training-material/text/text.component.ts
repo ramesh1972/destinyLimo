@@ -47,7 +47,7 @@ export class TextComponent {
       this.categories = [...cats];
     });
 
-    this.store.dispatch((invokeMaterialTextFetchAPI()));
+    this.store.dispatch((invokeMaterialTextFetchAPI({ isPublic: false })));
 
 
     // Wait for the action to complete

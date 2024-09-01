@@ -15,6 +15,10 @@ namespace DestinyLimoServer.Common.Mapper
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive)).ReverseMap();
 
+            CreateMap<Role, DTOs.ResponseDTOs.RoleDTO>()
+            .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.role_id))
+            .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.role_name)).ReverseMap();
+
             CreateMap<UserProfile, UserProfileDTO>()
             .ForMember(dest => dest.ProfileId, opt => opt.MapFrom(src => src.profile_id))
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.user_id))

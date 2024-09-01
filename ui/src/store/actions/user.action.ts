@@ -2,6 +2,20 @@ import { createAction, props } from '@ngrx/store';
 
 import { UserProfile } from '../models/UserProfile';
 
+export const invokeAuthenticateUser = createAction(
+  '[UserProfile API] Invoke Get Login User Fetch API',
+  props<{ userName: string, password: string }>()
+);
+
+export const AuthenticateUser_Success = createAction(
+  '[UserProfile API] Fetch API Success',
+  props<{ loggedInUser: UserProfile }>()
+);
+
+export const logoutUser = createAction(
+  '[UserProfile API] Logout User'
+);
+
 // fetch UserProfile
 export const invokeUserProfilesFetchAPI = createAction(
   '[UserProfile API] Invoke UserProfiles Fetch API'
