@@ -1,0 +1,105 @@
+<div class="register">
+
+  <div class="container-fluid">
+
+    <div class="row row-eq-height">
+      <div class="nopadding">
+
+        <!-- Register -->
+
+        <div class="register_section d-flex flex-column align-items-center justify-content-center"
+          style="background-color: white;margin-top:50px">
+
+          <c-container>
+            <c-row class="justify-content-center">
+              <c-col md="9" xl="6">
+                <c-card class="mx-4">
+                  <form cForm style="padding: 10px;">
+                    <h1>Register Yourself</h1>
+
+                    <div
+                      style="padding: 20px;padding-bottom:5px;margin-bottom:20px;background-color: antiquewhite;border: 1px solid lightgray;border-radius: 4px">
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText>
+                          <svg cIcon name="cilUser"></svg>
+                        </span>
+                        <input autoComplete="name" cFormControl placeholder="Select Username" />
+                      </c-input-group>
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText style="width:153px">New Password</span>
+                        <input cFormControl placeholder="Password" type='password' />
+                      </c-input-group>
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText>Confirm Password</span>
+                        <input cFormControl placeholder="Confirm Password" type='password' />
+                      </c-input-group>
+                    </div>
+
+                    <div
+                      style="padding: 20px;padding-bottom:5px;margin-bottom:20px;background-color: antiquewhite;border: 1px solid lightgray;border-radius: 4px">
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText>&#64;</span>
+                        <input autoComplete="firstName" cFormControl placeholder="First Name" />
+                        &nbsp;
+                        <span cInputGroupText>&#64;</span>
+                        <input autoComplete="lastName" cFormControl placeholder="Last Name" />
+                      </c-input-group>
+
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText>Photo</span>
+                        <input autoComplete="photo" cFormControl placeholder="Photo" type='file' />
+                      </c-input-group>
+
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText>
+                          Date of Birth
+                        </span>
+                        <input cFormControl placeholder="Date of Birth" type="date" />
+                      </c-input-group>
+                    </div>
+
+                    <div
+                      style="padding: 20px;padding-bottom:5px;margin-bottom:20px;background-color: antiquewhite;border: 1px solid lightgray;border-radius: 4px;">
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText style="width:80px">&#64;</span>
+                        <input autoComplete="email" cFormControl placeholder="Email" />
+                      </c-input-group>
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText style="width:80px">Mobile</span>
+                        <input autoComplete="mobile" cFormControl placeholder="Mobile Number" />
+                      </c-input-group>
+
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText style="width:80px">Address</span>
+                        <textarea autoComplete="address" rows=4 cFormControl placeholder="Address"></textarea>
+                      </c-input-group>
+                    </div>
+
+                    <div
+                      style="padding: 20px;padding-bottom:5px;margin-bottom:0px;background-color: antiquewhite;border: 1px solid lightgray;border-radius: 4px">
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText>License Number</span>
+                        <input autoComplete="license" cFormControl placeholder="License Number" />
+                      </c-input-group>
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText style="width: 100px;">Issue Date</span>
+                        <input autoComplete="doi" cFormControl placeholder="License Date of Issue" type="date" />
+                      </c-input-group>
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText style="width: 100px;">Expiry Date</span>
+                        <input autoComplete="doe" cFormControl placeholder="License Date of Expiry" type="date" />
+                      </c-input-group>
+                    </div>
+
+                    <div class="d-grid" style="justify-content: center;padding:10px;border:0px">
+                      <button cButton color="primary" style="width: 180px;height:60px;text-align: center;">Register</button>
+                    </div>
+                  </form>
+                </c-card>
+              </c-col>
+            </c-row>
+          </c-container>
+        </div>
+      </div>
+    </div>
+  </div>

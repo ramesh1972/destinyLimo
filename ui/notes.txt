@@ -1,0 +1,57 @@
+TO DO
+-----
+A) app.component.html
+        1) include the landing page
+        2) in app-header onclick of console/dashboard, hide the app-header
+        3) create proper modules for VTable, console and landing and include css/scss properly
+B) grid 
+        3) dropdowns - select id instead of name
+        4) category select - only first word is coming
+        3) filter for categories
+        4) Search
+        5) click on link to open file/url
+        6) video - double click edit - open a small form to either upload a file or ebter a URL...
+        6) bulk update - include inner joins with other tables, maintain order of creation of ids in case of inserts, delete parent record
+        8) on select of checkboxes, the grid refrehses
+
+D) all 
+        1) response messages on all actions
+        1) ondelete - pop up diaglog
+        2) onleave without save - diaglog               
+        3) create category widget
+        4) vimeo integration
+        5) check all pages and all ACTIONS - some are not done
+        
+PAGES
+----> Admin console
+8) users manage - grid, approve/reject in place edit, grouping, sortable, filters etc.
+11) next exam - (add new exam)
+13) certificate editor
+14) settings
+16) Overview dashboard
+
+----> Common console
+1) change password (need to update backend)
+2) Edit profile (need to update backend)
+1) alerts, notifications, badges, Avatar Menu
+
+AUTO
+1) assign new exam if perido more than 2 years
+
+----> Login page 
+----> Registration Page (need to passwords/username and merge with the edit profile component)
+----> Home Page
+
+ISSUES
+------
+1) try to isolate css/scss for course master and coreui
+1) something wrong on loading of images in landing page
+2) responsive design for landing page
+2) responsive design for console pages (just the header bar)
+3) responsive design for grids
+4) the content editor should be a rich editor....paragraph breaks are being ignored now
+6) theme has issues
+7) date format
+8) check the filter tables
+9) file upload paths
+10) youtube/vimeo videos playback - need iframe

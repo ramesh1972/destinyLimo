@@ -1,0 +1,16 @@
+.page_section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.testimonials {
+    border-bottom: 4px solid white;
+}
+
+.testimonials_slider_container {
+    margin-top: 0px;
+}
+
+.owl-theme .owl-nav.disabled + .owl-dots {
+    margin-top: 10px;
+}

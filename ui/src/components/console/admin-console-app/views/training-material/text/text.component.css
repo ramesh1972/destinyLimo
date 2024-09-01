@@ -1,0 +1,27 @@
+/* styles.css */
+.container {
+    max-width: 800px;
+  }
+  
+  .card-title[contenteditable="true"] {
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    cursor: text;
+  }
+  
+  .form-check span[contenteditable="true"] {
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 3px;
+    cursor: text;
+  }
+  
+  .title_header {
+    display: flex;
+    flex-direction: row;
+    background-color: lightgoldenrodyellow;
+    vertical-align: middle;
+    align-items: center;
+    height: 60px;
+    justify-items: center;
+}
