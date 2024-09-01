@@ -29,7 +29,7 @@ export class ConsoleComponent {
     this.iconSetService.icons = { ...iconSubset };
   }
 
-  loggedInUserRole: string = "learner";
+  loggedInUserRole: string = "admin";
 
   ngOnInit() {
     this.router.events.subscribe((evt) => {
