@@ -164,6 +164,15 @@ export class CoursesComponent {
         disableColumnResize: true,
         fieldFormat: (record: any) => {
           console.log("the record ", record);
+          let fileName = record.file_name?.fileName ?? record?.file_name ?? '';
+
+          if (fileName !== '') {
+            // get only the filename from path
+            const parts = fileName.split('/');
+            fileName = parts[parts.length - 1];
+            return fileName;
+          }
+          
           return record.file_name?.fileName ?? record?.file_name ?? 'Click to upload';
         },
         style: {
@@ -243,5 +252,22 @@ export class CoursesComponent {
 
     // create table
     this.dataGridHelper?.createTable(option);
+
+    // set events
+    this.setTableEvents();
+  }
+
+  // set table events
+  setTableEvents() {
+    this.dataGridHelper?.table?.on('click_cell', (args: any) => {
+      const { col, row } = args;
+      if (col === 3) {
+        let fileName = args.dataValue;
+        fileName = fileName;
+        console.log('file name', fileName);
+
+        window.open(fileName, '_blank');
+      }
+    });
   }
 }

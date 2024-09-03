@@ -10,7 +10,7 @@
     flex-wrap: wrap;
     width: 100%;
     vertical-align: middle;
-    justify-content: right;
+    justify-content: left;
     margin-top: 25px;
 
 }
@@ -22,7 +22,6 @@
     vertical-align: middle;
     align-self: right;
     justify-content: flex-end;
-    width: 180px;
 }
 
 .grid-header-title-row {

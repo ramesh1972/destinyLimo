@@ -61,7 +61,7 @@ export class CoursesComponent {
       });
     })
 
-    this.store.dispatch(invokeMaterialFileFetchAPI({isPublic: false}));
+    this.store.dispatch(invokeMaterialFileFetchAPI({ isPublic: false }));
     this.actions$.pipe(
       ofType(materialFileFetchAPI_Success),
       take(1)
@@ -93,6 +93,8 @@ export class CoursesComponent {
       case 'xlsx':
         return '/images/icons/files/excel-85-48.png';
       case 'pptx':
+        return '/images/icons/files/powerpoint-33-48.png';
+      case 'ppt':
         return '/images/icons/files/powerpoint-33-48.png';
       case 'txt':
         return '/images/icons/files/typora-48.png';

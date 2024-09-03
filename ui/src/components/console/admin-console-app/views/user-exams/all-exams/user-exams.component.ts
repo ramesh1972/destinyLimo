@@ -236,7 +236,7 @@ export class UserExamsComponent {
 
           const containerLeft: any = new VTable.CustomLayout.Group({
             height: 50,
-            width: 150,
+            width: 180,
 
             display: 'flex',
             flexDirection: 'row',

@@ -9,7 +9,7 @@
     <div>
         <div id="tableContainer" style="margin-top:20px;height: 500px;min-width:800px"></div>
     </div>
-    <div style="width: 100%;margin-top:10px" *ngIf="examAnswers.length>0">
+    <div style="width: 100%;margin-top:-50px" *ngIf="examAnswers.length>0">
         <hr>
         <div class="grid-title-new-exam">Your Exam Results!</div>
         <app-user-exam-answers [exam]="currentExam" [userAnswers]="examAnswers" [mcqs]="mcqs" [categories]="categories"

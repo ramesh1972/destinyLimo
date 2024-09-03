@@ -34,7 +34,7 @@ export class FAQsComponent {
       {
         title: "Question", field: "title",
         cellType: 'text',
-        width: 150,
+        width: 70,
         sort: true,
         textStick: true,
         style: {
