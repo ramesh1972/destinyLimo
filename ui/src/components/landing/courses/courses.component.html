@@ -6,7 +6,7 @@
                     <h2>View some of our Sample Courses</h2>
                     <div class="main-container">
                         <h1 style="text-align: start;margin-top: 20px;">Files</h1>
-                        <div class="row" style="margin-top:-50px;row-gap: 20px">
+                        <div class="row" style="margin-top:-50px;row-gap: 20px;justify-content: center;">
 
                             <div class="col-md-4" *ngFor="let file of files" style="width: 300px;">
                                 <img [src]="fileTypeIcon(file.file_name)" alt="File Type Icon" width="48" height="48"
@@ -50,7 +50,7 @@
                         </div>
                         <div class="main-container">
                             <h1 style="text-align: start;margin-top: 40px;">Videos</h1>
-                            <div class="row" style="row-gap: 20px">
+                            <div class="row" style="row-gap: 20px; justify-content: center;">
                                 <div class="col-md-4" *ngFor="let video of videos" style="width: 330px;height: fit-content;">
                                     <div
                                         style="display: flex;flex-direction: row;justify-content: flex-end;  align-self: end;width:100%;z-index: 101;padding-right:10px;">

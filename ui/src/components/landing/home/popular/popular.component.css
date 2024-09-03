@@ -9,6 +9,7 @@
     margin-top: 20px;
     flex-wrap: wrap;
     text-wrap-style: pretty;
+    justify-content: center;
 }
 
 .cat-card {
