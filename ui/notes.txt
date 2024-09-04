@@ -55,3 +55,6 @@ ISSUES
 8) check the filter tables
 9) file upload paths
 10) youtube/vimeo videos playback - need iframe
+11) move to top when a new menu is clicked
+12) dashboard menus are getting closed when clicked
+13) user exams - not responsive

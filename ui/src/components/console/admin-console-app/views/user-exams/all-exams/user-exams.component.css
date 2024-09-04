@@ -11,7 +11,7 @@
     width: 100%;
     vertical-align: middle;
     justify-content: right;
-    margin-top: 25px;
+    margin-top: 10px;
 
 }
 
@@ -22,7 +22,7 @@
     vertical-align: middle;
     align-self: right;
     justify-content: flex-end;
-    width: 180px;
+    width: 150px;
 }
 
 .grid-header-title-row {
@@ -110,10 +110,39 @@
     }
 
     .grid-container {
-        margin-top: 30px;
+        margin-top: 0px;
+    }
+
+    .grid-header-row {
+        flex-wrap: wrap;
+        font-size: 13px;
     }
 
     .search-row {
         display: none;
+    }
+
+    .grid-title {
+        width: 100%;
+        flex-wrap: wrap;
+        font-size: 12px;
+    }
+
+    .edit-text {
+        font-size: 10px;
+        width: 280px;
+        height: 20px;
+        margin-top: 10px;
+
+    }
+
+    .grid-header-title-row {
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .grid-title-new-exam {
+        text-align: left;
+        font-size: 18px;
     }
 }

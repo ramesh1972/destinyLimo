@@ -389,10 +389,11 @@ export class UserExamsComponent {
       container: container!,
       columns: this.dataGridHelper?.columns,
 
-      widthMode: 'adaptive',
+
+      widthMode: 'autoWidth',
       heightMode: 'autoHeight',
-      autoFillWidth: true,
       autoFillHeight: false,
+      autoFillWidth: true,
 
       animationAppear: {
         duration: 100,
@@ -406,6 +407,15 @@ export class UserExamsComponent {
 
     option.theme = VTable.themes.ARCO.extends({
       underlayBackgroundColor: 'transparent',
+      scrollStyle: {
+        visible: 'always',
+        scrollSliderColor: 'purple',
+        scrollRailColor: '#bac3cc',
+        scrollSliderCornerRadius: 6,
+        hoverOn: false,
+        barToSide: false,
+        width:16,
+      },
       defaultStyle: {
         autoWrapText: true,
         color: 'black',
@@ -451,6 +461,7 @@ export class UserExamsComponent {
     this.examAnswers = [];
 
     this.currentExam = this.dataGridHelper?.data.find((exam: any) => exam.examId === examId);
+    this.currentExam.dateStartedString = new Date(this.currentExam.dateStarted).toLocaleString();
     console.log("currentExam", this.currentExam);
 
     this.store.dispatch(invokeUserExamByIdFetchAPI({ examId: examId }));

@@ -91,6 +91,19 @@
   height: 60px;
 }
 
+.title-description {
+  width: calc(100% - 300px);
+  margin-bottom: 60px;
+  font-size: 16px
+}
+
+.title-category {
+  width: 300px;
+  margin-bottom: 60px;
+  text-align: right;
+  font-size: 16px
+}
+
 .scrollable-container {
   width: 100%;
   /* Adjust as needed */
@@ -154,4 +167,71 @@
   height: 32px;
   padding: 2px;
   border-radius: 6px;
+}
+
+.card-title-question {
+  width: calc(100% - 144px);
+  text-wrap: wrap;
+}
+
+@media screen and (max-width: 768px) {
+  .grid-header-title-row {
+    justify-content: left;
+    font-size: 15px;
+  }
+
+  .grid-header-row {
+    flex-wrap: wrap;
+    font-size: 13px;
+    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .grid-title {
+    text-wrap: wrap;
+    font-size: 13px;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+
+  .edit-text {
+    width: 100%;
+  }
+
+  .complete-checkboxes {
+    width: 100%;
+  }
+
+  .title_header {
+    flex-direction: column;
+  }
+
+  .title-description {
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .title-category {
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+    display: none;
+  }
+
+  .card-title {
+    margin-top: 44px;
+  }
+
+  .result-text {
+    margin-top: 55px;
+  }
+
+  .card-title-question {
+    margin-top: 45px;
+    margin-right: 10px;
+  }
 }

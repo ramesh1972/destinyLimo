@@ -193,10 +193,10 @@ export class CoursesComponent {
       container: container!,
       columns: this.dataGridHelper?.columns,
 
-      widthMode: 'adaptive',
+      widthMode: 'autoWidth',
       heightMode: 'autoHeight',
-      autoFillWidth: true,
       autoFillHeight: false,
+      autoFillWidth: true,
 
       animationAppear: {
         duration: 100,
@@ -204,12 +204,20 @@ export class CoursesComponent {
         type: 'one-by-one', // all
         direction: 'row' // colunm
       },
-
-      theme: VTable.themes.ARCO
+      theme: VTable.themes.ARCO,
     };
 
     option.theme = VTable.themes.ARCO.extends({
       underlayBackgroundColor: 'transparent',
+      scrollStyle: {
+        visible: 'always',
+        scrollSliderColor: 'purple',
+        scrollRailColor: '#bac3cc',
+        scrollSliderCornerRadius: 6,
+        hoverOn: false,
+        barToSide: false,
+        width:16,
+      },
       defaultStyle: {
         autoWrapText: true,
         color: 'black',

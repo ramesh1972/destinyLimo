@@ -120,6 +120,15 @@ export class CategoriesComponent {
 
     option.theme = VTable.themes.BRIGHT.extends({
       underlayBackgroundColor: 'transparent',
+      scrollStyle: {
+        visible: 'always',
+        scrollSliderColor: 'purple',
+        scrollRailColor: '#bac3cc',
+        scrollSliderCornerRadius: 6,
+        hoverOn: false,
+        barToSide: false,
+        width:16,
+      },
       defaultStyle: {
         borderLineWidth: .5,
         autoWrapText: true,

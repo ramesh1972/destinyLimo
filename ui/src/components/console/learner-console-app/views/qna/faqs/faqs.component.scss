@@ -35,7 +35,7 @@
     color: 'black';
     font-variant: small-caps;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-    margin-top: -7px;
+    margin-top: -15px;
     margin-left: 5px;
     width: 750px;
 }
@@ -104,5 +104,11 @@
 
     .search-row {
         display: none;
+    }
+
+    .complete-checkboxes {
+        width: 100%;
+        margin-top: 10px;
+        justify-content: left;
     }
 }

@@ -104,10 +104,12 @@ export class FAQsComponent {
       container: container!,
       columns: this.dataGridHelper?.columns,
 
-      autoFillWidth: true,
-      autoFillHeight: false,
-      widthMode: 'adaptive',
+      
+      widthMode: 'autoWidth',
       heightMode: 'autoHeight',
+      autoFillHeight: false,
+      autoFillWidth: true,
+
       textOverflow: 'string',
 
       animationAppear: {
@@ -124,6 +126,15 @@ export class FAQsComponent {
 
     option.theme = VTable.themes.ARCO.extends({
       underlayBackgroundColor: 'transparent',
+      scrollStyle: {
+        visible: 'always',
+        scrollSliderColor: 'purple',
+        scrollRailColor: '#bac3cc',
+        scrollSliderCornerRadius: 6,
+        hoverOn: false,
+        barToSide: false,
+        width:16,
+      },
       defaultStyle: {
         borderLineWidth: .6,
         autoWrapText: true,

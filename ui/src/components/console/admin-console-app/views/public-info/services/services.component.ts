@@ -103,11 +103,11 @@ export class ServicesComponent {
       container: container!,
       columns: this.dataGridHelper?.columns,
 
-      autoFillWidth: true,
-      autoFillHeight: false,
-      widthMode: 'adaptive',
+ 
+      widthMode: 'autoWidth',
       heightMode: 'autoHeight',
-      textOverflow: 'string',
+      autoFillHeight: false,
+      autoFillWidth: true,
 
       animationAppear: {
         duration: 100,
@@ -123,6 +123,15 @@ export class ServicesComponent {
 
     option.theme = VTable.themes.BRIGHT.extends({
       underlayBackgroundColor: 'transparent',
+      scrollStyle: {
+        visible: 'always',
+        scrollSliderColor: 'purple',
+        scrollRailColor: '#bac3cc',
+        scrollSliderCornerRadius: 6,
+        hoverOn: false,
+        barToSide: false,
+        width:16,
+      },
       defaultStyle: {
         borderColor: 'black',
         borderLineWidth: .7,
