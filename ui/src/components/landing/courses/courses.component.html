@@ -14,7 +14,7 @@
                                 <div
                                     style="display: flex;flex-direction: row;justify-content: flex-end;  align-self: end;width:100%;z-index: 101;padding-right:10px;">
                                     <h6 cCardSubtitle class="mb-2" class="overlay-text"
-                                        style="background-color: lightcyan;border-bottom-right-radius: 0px;border-top-right-radius: 0px;">
+                                        style="background-color:lightgrey;border-bottom-right-radius: 0px;border-top-right-radius: 0px;">
                                         Category&nbsp;
                                     </h6>
                                     <h6 cCardSubtitle class="mb-2" class="overlay-text"
@@ -55,7 +55,7 @@
                                     <div
                                         style="display: flex;flex-direction: row;justify-content: flex-end;  align-self: end;width:100%;z-index: 101;padding-right:10px;">
                                         <h6 cCardSubtitle class="mb-2" class="overlay-text"
-                                            style="background-color: lightcyan;border-bottom-right-radius: 0px;border-top-right-radius: 0px;">
+                                            style="background-color: rgb(195 225 209 / 100%);;border-bottom-right-radius: 0px;border-top-right-radius: 0px;">
                                             Category&nbsp;
                                         </h6>
                                         <h6 cCardSubtitle class="mb-2" class="overlay-text"
@@ -98,29 +98,29 @@
                                         </button>
                                     </ng-template>
                                     <ng-template cTemplateId="accordionBodyTemplate">
-                                        <c-card style="border: 2px solid blue; text-align: start;">
+                                        <c-card style="border: 1px solid black; text-align: start;">
                                             <c-card-body
-                                                style="background-color: rgba(200, 168, 243,.3);padding: 6px;padding-top: 16px;align-items: start;">
+                                                style="background-color: white;padding: 6px;padding-top: 16px;align-items: start;">
                                                 <div class="form-check">
                                                     <c-form-check [switch]="true">
                                                         <input cFormCheckInput id="answer_1" type="checkbox"
                                                             [checked]="mcq.correct_1" disabled>
-                                                        <label cFormCheckLabel for="answer_1">{{ mcq.answer_1 }}</label>
+                                                        <label cFormCheckLabel for="answer_1" style="opacity: 1;font-weight: 500;">{{ mcq.answer_1 }}</label>
                                                     </c-form-check>
                                                     <c-form-check [switch]="true">
                                                         <input cFormCheckInput id="answer_2" type="checkbox"
                                                             [checked]="mcq.correct_2" disabled>
-                                                        <label cFormCheckLabel for="answer_2">{{ mcq.answer_2 }}</label>
+                                                        <label cFormCheckLabel for="answer_2" style="opacity: 1;font-weight: 500;">{{ mcq.answer_2 }}</label>
                                                     </c-form-check>
                                                     <c-form-check [switch]="true">
                                                         <input cFormCheckInput id="answer_3" type="checkbox"
                                                             [checked]="mcq.correct_3" disabled>
-                                                        <label cFormCheckLabel for="answer_3">{{ mcq.answer_3 }}</label>
+                                                        <label cFormCheckLabel for="answer_3" style="opacity: 1;font-weight: 500;">{{ mcq.answer_3 }}</label>
                                                     </c-form-check>
                                                     <c-form-check [switch]="true">
                                                         <input cFormCheckInput id="answer_4" type="checkbox"
                                                             [checked]="mcq.correct_4" disabled>
-                                                        <label cFormCheckLabel for="answer_4">{{ mcq.answer_4 }}</label>
+                                                        <label cFormCheckLabel for="answer_4" style="opacity: 1;font-weight: 500;">{{ mcq.answer_4 }}</label>
                                                     </c-form-check>
                                                 </div>
                                             </c-card-body>

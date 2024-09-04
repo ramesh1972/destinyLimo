@@ -28,7 +28,7 @@
     height: 50px;
     max-height: 100px;
     margin-top: -3px;
-    background-color: rgb(195 225 209 / 70%);
+    background-color: rgb(195 225 209 / 100%);
     overflow: hidden;
     font-size: 15px;
 }
@@ -41,16 +41,17 @@
 
 .overlay-text {
     position: relative;
-    background-color: rgba(255, 255, 0, 1);
+    background-color: rgba(255, 255, 0, .7);
     padding: 6px;
     color: blue;
     border-radius: 6px;
+
     width: fit-content;
     align-self: end;
     font-size: 14px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
     transform: translateY(+30%);
-    box-shadow: inset 1px 1px 8px 4px rgb(255, 155, 120, .4);
+    box-shadow: inset 1px 1px 12px 2px rgb(255, 155, 120, .35)
 }
 
 .overlay-file-image {

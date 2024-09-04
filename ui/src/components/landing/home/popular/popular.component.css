@@ -10,6 +10,8 @@
     flex-wrap: wrap;
     text-wrap-style: pretty;
     justify-content: center;
+    gap: 20px;
+    row-gap: normal;
 }
 
 .cat-card {
