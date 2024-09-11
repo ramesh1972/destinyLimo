@@ -1,6 +1,6 @@
-using DestinyLimoServer.DTOs.RequestDTOs;
+using DestinyLimoServer.DTOs.ResponseDTOs;
 
-namespace DestinyLimoServer.DTOs.RequestDTOs
+namespace DestinyLimoServer.DTOs.ResponseDTOs
 {
     public class UserDTO
     {

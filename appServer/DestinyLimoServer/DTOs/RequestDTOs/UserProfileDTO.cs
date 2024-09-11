@@ -1,9 +1,9 @@
-namespace DestinyLimoServer.DTOs.ResponseDTOs
+namespace DestinyLimoServer.DTOs.RequestDTOs
 {
     public class UserProfileDTO
     {
         public int ProfileId { get; set; }           // Maps to `profile_id`
-        public int UserId { get; set; }              // Maps to `user_id`        
+        public int UserId { get; set; }              // Maps to `user_id`
         public required string FirstName { get; set; }        // Maps to `first_name`
         public string? LastName { get; set; }         // Maps to `last_name`
         public string? Avatar { get; set; }           // Maps to `avatar` (BLOB data type)

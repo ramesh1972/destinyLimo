@@ -23,22 +23,24 @@ namespace DestinyLimoServer.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> authenicateUser([FromBody] UserLoginDTO loginDTO)
         {
-            int userId = await _repository.User.AuthenticateUser(loginDTO.Username, loginDTO.Password);
-            if (userId == -1)
+            User user = await _repository.User.AuthenticateUser(loginDTO.Username, loginDTO.Password);
+            if (user == null)
             {
                 _logger.LogInformation("User with username: {username} is not authenticated.", loginDTO.Username);
                 return NotFound();
             }
             else
             {
-                var user = await _repository.UserProfile.GetUserById(userId);
+                var userDTO = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>(user);
 
-                var userRoles = await _repository.User.GetUserRolesByUserId(userId);
+                var userRoles = await _repository.User.GetUserRolesByUserId(user.user_id);
                 var userRolesDTO = _mapper.Map<IEnumerable<DTOs.ResponseDTOs.RoleDTO>>(userRoles);
+                userDTO.Roles = userRolesDTO;
 
-                var userDto = _mapper.Map<UserProfileDTO>(user);
-                userDto.Roles = userRolesDTO;
-                return Ok(userDto);
+
+                var userProfileDto = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(user);
+                userDTO.UserProfile = userProfileDto;
+                return Ok(userDTO);
             }
         }
 
@@ -48,7 +50,33 @@ namespace DestinyLimoServer.Controllers
             var users = await _repository.User.GetUsers(includeInActive ?? true, includeDeleted ?? false);
             System.Console.WriteLine("Users: " + users);
 
-            var userDto = _mapper.Map<IEnumerable<UserDTO>>(users);
+            var userDto = _mapper.Map<IEnumerable<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>>(users);
+
+            // get all the profiles
+            var userProfiles = await _repository.UserProfile.GetUsers(includeInActive ?? true, includeDeleted ?? false);
+
+            // get all the roles
+            var rolesList = await _repository.Role.GetRoles();
+            var userRolesList = await _repository.Role.GetAllUsersRoles();
+
+            // map the userDTO to the userProfiles, roles and userRoles
+            foreach (var user in userDto)
+            {
+                var userProfile = userProfiles.FirstOrDefault(x => x.user_id == user.UserId);
+                if (userProfile != null)
+                {
+                    user.UserProfile = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(userProfile);
+                }
+
+                var userRoles = userRolesList.Where(x => x.UserId == user.UserId);
+                if (userRoles != null)
+                {
+                    var roles = userRoles.Select(x => new Role { role_id = x.RoleId, role_name = rolesList.FirstOrDefault(y => y.role_id == x.RoleId).role_name });
+                    var rolesDTO = _mapper.Map<IEnumerable<DTOs.ResponseDTOs.RoleDTO>>(roles);
+                    user.Roles = rolesDTO;
+                }
+            }
+
             return Ok(userDto);
         }
 
@@ -58,7 +86,7 @@ namespace DestinyLimoServer.Controllers
             var users = await _repository.UserProfile.GetUsers(includeInActive ?? true, includeDeleted ?? false);
             System.Console.WriteLine("Users: " + users);
 
-            var userDto = _mapper.Map<IEnumerable<UserProfileDTO>>(users);
+            var userDto = _mapper.Map<IEnumerable<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>>(users);
             return Ok(userDto);
         }
 
@@ -73,7 +101,7 @@ namespace DestinyLimoServer.Controllers
             }
             else
             {
-                var userDto = _mapper.Map<UserDTO>(user);
+                var userDto = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>(user);
                 return Ok(userDto);
             }
         }
@@ -90,13 +118,13 @@ namespace DestinyLimoServer.Controllers
             }
             else
             {
-                var userDto = _mapper.Map<UserProfileDTO>(user);
+                var userDto = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(user);
                 return Ok(userDto);
             }
         }
 
         [HttpPost]
-        async public Task<IActionResult> CreateUserAsync([FromBody] UserDTO user)
+        async public Task<IActionResult> CreateUserAsync([FromBody] DestinyLimoServer.DTOs.RequestDTOs.UserDTO user)
         {
             if (user == null)
             {
@@ -111,15 +139,23 @@ namespace DestinyLimoServer.Controllers
             }
 
             var userEntity = _mapper.Map<User>(user);
-            int newUserId = await _repository.User.AddAsync(userEntity);
 
             var userProfile = user.UserProfile;
-            userProfile!.UserId = newUserId;
-
             var userProfileEntity = _mapper.Map<UserProfile>(userProfile);
-            int newProfileId = await _repository.UserProfile.AddAsync(userProfileEntity);
 
-            return CreatedAtRoute("UserById", new { id = userEntity.UserId }, userEntity);
+            User newUser = await _repository.User.RegisterUser(userEntity, userProfileEntity);
+            if (newUser == null)
+            {
+                _logger.LogError("Unable to register user");
+                return Ok(false);
+            }
+
+            UserProfile newUserProfile = await _repository.UserProfile.GetUserById(newUser.user_id);
+            userEntity.UserProfile = newUserProfile;
+
+            DestinyLimoServer.DTOs.ResponseDTOs.UserDTO userDTO = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>(userEntity);
+
+            return Ok(userDTO);
         }
 
         [HttpDelete("{id}")]
@@ -132,14 +168,14 @@ namespace DestinyLimoServer.Controllers
                 return NotFound();
             }
 
-            await _repository.User.DeleteAsync(id);
+            await _repository.User.DeleteUser(id);
             await _repository.UserProfile.DeleteAsync(id);
 
             return CreatedAtRoute("UserById", new { id = id }, user);
         }
 
         [HttpPut("{id}")]
-        async public Task<IActionResult> UpdateUserAsync(int id, [FromBody] UserDTO user)
+        async public Task<IActionResult> UpdateUserAsync(int id, [FromBody] DestinyLimoServer.DTOs.RequestDTOs.UserDTO user)
         {
             if (user == null)
             {
@@ -154,18 +190,20 @@ namespace DestinyLimoServer.Controllers
             }
 
             User userEntity = _mapper.Map<User>(user);
-            await _repository.User.UpdateAsync(userEntity, id);
+            userEntity.user_id = id;
+            await _repository.User.UpdateUser(userEntity);
 
             var userProfile = user.UserProfile;
-            
+
             if (userProfile != null)
             {
                 userProfile.UserId = id;
                 var userProfileEntity = _mapper.Map<UserProfile>(userProfile);
+                userProfileEntity.user_id = id;
                 await _repository.UserProfile.UpdateAsync(userProfileEntity, id);
             }
 
-            return CreatedAtRoute("UserById", new { id = userEntity.UserId }, userEntity);
+            return CreatedAtRoute("UserById", new { id = userEntity.user_id }, userEntity);
         }
     }
 }

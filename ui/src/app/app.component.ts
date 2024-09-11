@@ -35,8 +35,8 @@ export class AppComponent {
   }
 
   title = 'destiny-limo';
-  isHomeVisible: boolean = true;
-  isConsoleVisible: boolean = false;
+  isHomeVisible: boolean = false;
+  isConsoleVisible: boolean = true;
   
   ngOnInit() {
     console.log('App component initialized');
@@ -44,7 +44,7 @@ export class AppComponent {
     this.store.dispatch(invokeContentFetchAPI());
     this.store.dispatch(invokeMaterialCategoryFetchAPI());
 
-    this.visibilityService.homeVisible$.subscribe((visible: any) => {
+/*     this.visibilityService.homeVisible$.subscribe((visible: any) => {
       this.isHomeVisible = visible;
       this.isConsoleVisible = !visible;
       this.cdr.detectChanges(); 
@@ -54,6 +54,6 @@ export class AppComponent {
       this.isConsoleVisible = visible;
       this.isHomeVisible = !visible;
       this.cdr.detectChanges();
-    });
+    }); */
   }
 }

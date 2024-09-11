@@ -14,7 +14,7 @@ import { FormCheckComponent } from '@coreui/angular';
 import { invokeMaterialMCQFetchAPI, materialMCQFetchAPI_Success } from '@src/store/actions/material.action';
 import { selectMaterialCategorys, selectMaterialMCQs } from '@src/store/selectors/material.selector';
 
-import { invokeUserProfilesFetchAPI, UserProfilesFetchAPI_Success } from '@src/store/actions/user.action';
+import { invokeUserProfilesFetchAPI, UserProfilesFetchAPI_Success } from '@src/store/actions/user-profile.action';
 import { invokeUserExamsFetchAPI, UserExamsFetchAPI_Success } from '@src/store/actions/exam.action';
 import { selectUserExamsById } from '@src/store/selectors/exam.selector';
 

@@ -12,7 +12,7 @@ import { ButtonDirective, FormModule, ButtonGroupComponent, FormCheckLabelDirect
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { DataGridComponentHelper } from '@src/components/common/components/grid-parent/data-grid.helper';
-import { invokeUserProfilesFetchAPI, UserProfilesFetchAPI_Success } from '@src/store/actions/user.action';
+import { invokeUserProfilesFetchAPI, UserProfilesFetchAPI_Success } from '@src/store/actions/user-profile.action';
 import { invokeUserQuestionsFetchAPI, UserQuestionsFetchAPI_Success } from '@src/store/actions/user-question.action';
 import { UserAskedQuestion } from '@src/store/models/UserAskedQuestion';
 import { GridParentComponent } from '../../../../../common/components/grid-parent/grid-parent.component';

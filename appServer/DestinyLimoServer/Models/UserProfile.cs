@@ -14,7 +14,5 @@ namespace DestinyLimoServer.Models
         public string? license_number { get; set; }     // Maps to `license_number`
         public DateTime? license_issue_date { get; set; } // Maps to `license_issue_date`
         public DateTime? license_expiry_date { get; set; } // Maps to `license_expiry_date`
-        public DateTime created_at { get; set; }       // Maps to `created_at`
-        public DateTime? updated_at { get; set; }      // Maps to `updated_at`
     }
 }

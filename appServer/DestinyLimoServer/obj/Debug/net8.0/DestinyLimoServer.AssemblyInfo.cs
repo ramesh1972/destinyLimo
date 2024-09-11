@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DestinyLimoServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a8597d82d2f59dc7562aca36b958cd734cf5713e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e278c09873045291c61a737e99b8e5d2b25140b5")]
 [assembly: System.Reflection.AssemblyProductAttribute("DestinyLimoServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DestinyLimoServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

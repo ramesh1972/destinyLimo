@@ -9,17 +9,45 @@ namespace DestinyLimoServer.Common.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDTO>()
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive)).ReverseMap();
+            CreateMap<User, DTOs.RequestDTOs.UserDTO>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.user_id))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.username))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.email))
+            .ForMember(dest => dest.IsApproved, opt => opt.MapFrom(src => src.is_approved))
+            .ForMember(dest => dest.ApproveRejectReason, opt => opt.MapFrom(src => src.approved_rejected_reason))
+            .ForMember(dest => dest.ApprovedByAdminId, opt => opt.MapFrom(src => src.approved_rejected_by))
+            .ForMember(dest => dest.ApprovedAt, opt => opt.MapFrom(src => src.approved_rejected_datetime))
+            .ForMember(dest => dest.IsLocked, opt => opt.MapFrom(src => src.is_locked))
+            .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => src.is_deleted))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.created_at))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.updated_at))
+            .ForMember(dest => dest.UserProfile, opt => opt.MapFrom(src => src.UserProfile))
+            .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.user_roles)).ReverseMap();
 
+            CreateMap<User, DTOs.ResponseDTOs.UserDTO>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.user_id))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.username))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.email))
+            .ForMember(dest => dest.IsApproved, opt => opt.MapFrom(src => src.is_approved))
+            .ForMember(dest => dest.ApproveRejectReason, opt => opt.MapFrom(src => src.approved_rejected_reason))
+            .ForMember(dest => dest.ApprovedByAdminId, opt => opt.MapFrom(src => src.approved_rejected_by))
+            .ForMember(dest => dest.ApprovedAt, opt => opt.MapFrom(src => src.approved_rejected_datetime))
+            .ForMember(dest => dest.IsLocked, opt => opt.MapFrom(src => src.is_locked))
+            .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => src.is_deleted))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.created_at))
+            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.updated_at))
+            .ForMember(dest => dest.UserProfile, opt => opt.MapFrom(src => src.UserProfile))
+            .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.user_roles)).ReverseMap();
+
+            CreateMap<Role, DTOs.RequestDTOs.RoleDTO>()
+            .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.role_id))
+            .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.role_name)).ReverseMap();
+            
             CreateMap<Role, DTOs.ResponseDTOs.RoleDTO>()
             .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.role_id))
             .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.role_name)).ReverseMap();
 
-            CreateMap<UserProfile, UserProfileDTO>()
+            CreateMap<UserProfile, DTOs.RequestDTOs.UserProfileDTO>()
             .ForMember(dest => dest.ProfileId, opt => opt.MapFrom(src => src.profile_id))
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.user_id))
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.first_name))
@@ -31,9 +59,21 @@ namespace DestinyLimoServer.Common.Mapper
             .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.dob))
             .ForMember(dest => dest.LicenseNumber, opt => opt.MapFrom(src => src.license_number))
             .ForMember(dest => dest.LicenseIssueDate, opt => opt.MapFrom(src => src.license_issue_date))
-            .ForMember(dest => dest.LicenseExpiryDate, opt => opt.MapFrom(src => src.license_expiry_date))
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.created_at))
-            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.updated_at)).ReverseMap();
+            .ForMember(dest => dest.LicenseExpiryDate, opt => opt.MapFrom(src => src.license_expiry_date)).ReverseMap();
+
+            CreateMap<UserProfile, DTOs.ResponseDTOs.UserProfileDTO>()
+            .ForMember(dest => dest.ProfileId, opt => opt.MapFrom(src => src.profile_id))
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.user_id))
+            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.first_name))
+            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.last_name))
+            .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => src.avatar))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.address))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.email))
+            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.phone_number))
+            .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.dob))
+            .ForMember(dest => dest.LicenseNumber, opt => opt.MapFrom(src => src.license_number))
+            .ForMember(dest => dest.LicenseIssueDate, opt => opt.MapFrom(src => src.license_issue_date))
+            .ForMember(dest => dest.LicenseExpiryDate, opt => opt.MapFrom(src => src.license_expiry_date)).ReverseMap();
 
             CreateMap<EntityActionDTO, EntityAction>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.IdCol))

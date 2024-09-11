@@ -14,7 +14,7 @@ import { FormCheckComponent } from '@coreui/angular';
 import { invokeMaterialMCQFetchAPI, materialMCQFetchAPI_Success } from '@src/store/actions/material.action';
 import { selectMaterialCategorys, selectMaterialMCQs } from '@src/store/selectors/material.selector';
 
-import { invokeUserProfilesFetchAPI, UserProfilesFetchAPI_Success } from '@src/store/actions/user.action';
+import { invokeUserProfilesFetchAPI, UserProfilesFetchAPI_Success } from '@src/store/actions/user-profile.action';
 import { invokeUserExamsFetchAPI, UserExamsFetchAPI_Success } from '@src/store/actions/exam.action';
 import { selectUserExamsById } from '@src/store/selectors/exam.selector';
 
@@ -52,7 +52,7 @@ export class UserExamsComponent {
     else if (value === 'Pass') {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
-          
+
           var percentage = record['num_questions'] !== 0 ? (record['num_correct'] / record['num_questions'] * 100) : 0;
           percentage = Math.round(percentage);
           const pass = percentage >= 50 ? "Pass" : "Fail";
@@ -63,7 +63,7 @@ export class UserExamsComponent {
     else if (value === 'Fail') {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
-          
+
           var percentage = record['num_questions'] !== 0 ? (record['num_correct'] / record['num_questions'] * 100) : 0;
           percentage = Math.round(percentage);
           const pass = percentage >= 50 ? "Pass" : "Fail";
@@ -103,7 +103,7 @@ export class UserExamsComponent {
       this.categories = [...data];
     });
 
-    this.store.dispatch(invokeMaterialMCQFetchAPI({isPublic: false}));
+    this.store.dispatch(invokeMaterialMCQFetchAPI({ isPublic: false }));
 
     // Wait for the action to complete
     this.actions$.pipe(
@@ -146,7 +146,7 @@ export class UserExamsComponent {
     });
 
     // set data
-    this.store.dispatch(invokeUserExamsFetchAPI({onlyExamsNotStarted: false}));
+    this.store.dispatch(invokeUserExamsFetchAPI({ onlyExamsNotStarted: false }));
     this.actions$.pipe(
       ofType(UserExamsFetchAPI_Success),
       take(1)
@@ -515,7 +515,7 @@ export class UserExamsComponent {
       container: container!,
       columns: this.dataGridHelper?.columns,
 
- 
+
       widthMode: 'autoWidth',
       heightMode: 'autoHeight',
       autoFillHeight: false,
@@ -540,7 +540,7 @@ export class UserExamsComponent {
         scrollSliderCornerRadius: 6,
         hoverOn: false,
         barToSide: false,
-        width:16,
+        width: 16,
       },
       defaultStyle: {
         autoWrapText: true,

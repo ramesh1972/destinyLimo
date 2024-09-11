@@ -1,9 +1,9 @@
-import { UserProfile } from '../models/UserProfile';
+import { User } from '../models/User';
 
 // state interface
 export interface UserState {
-    loggedInUser?: UserProfile;
-    allUserProfiles: UserProfile[];
-    userProfile?: UserProfile;
-    newUserProfile?: UserProfile;
+    loggedInUser?: User;
+    allUsers: User[];
+    newUser?: User;
+    currentUser?: User;
 }

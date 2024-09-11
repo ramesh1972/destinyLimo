@@ -38,6 +38,9 @@ import { userAskedQuestionReducer } from '@src/store/reducers/user-question.redu
 import { UserAskedQuestionEffect } from '@src/store/effects/user-question.effect';
 import { userReducer } from '@src/store/reducers/user.reducer';
 import { UserEffect } from '@src/store/effects/user.effect';
+import { userProfileReducer } from '@src/store/reducers/user-profile.reducer';
+import { UserProfileEffect } from '@src/store/effects/user-profile.effect';
+
 import { ConsoleComponent } from '@src/components/console/console.component';
 
 @NgModule({
@@ -57,6 +60,8 @@ import { ConsoleComponent } from '@src/components/console/console.component';
         EffectsModule.forFeature([UserAskedQuestionEffect]),
         StoreModule.forFeature('users', userReducer),
         EffectsModule.forFeature([UserEffect]),
+        StoreModule.forFeature('user_profiles', userProfileReducer),
+        EffectsModule.forFeature([UserProfileEffect]),
         AppComponent, LandingComponent, ConsoleComponent,
         ConsoleModule
     ],

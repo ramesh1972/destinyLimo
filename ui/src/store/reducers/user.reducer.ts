@@ -1,18 +1,17 @@
 // // import the interface
 import { createReducer, on } from '@ngrx/store';
 
-import { UserProfile } from '../models/UserProfile';
 import { UserState } from '../states/user.state';
-import { UserProfilesFetchAPI_Success, UserProfileCreateAPI_Success, UserProfileFetchAPI_Success, UserProfileUpdateAPI_Success, AuthenticateUser_Success } from '../actions/user.action';
-import { logoutUser } from '../actions/user.action';
+import { approveRejectUser, approveRejectUser_Success, AuthenticateUser_Success, changePassword_Success, forgotPassword_Success, lockUser_Success, logoutUser, logoutUser_Success, registerUser_Success, resetPassword_Success, UsersFetchAPI_Success } from '../actions/user.action';
 
 //create a dummy initial state
 export const initialState: UserState = {
   loggedInUser: undefined,
-  allUserProfiles: [],
-  userProfile: undefined,
-  newUserProfile: undefined
+  allUsers: [],
+  newUser: undefined,
+  currentUser: undefined
 };
+
 
 export const userReducer = createReducer(
   initialState,
@@ -21,23 +20,41 @@ export const userReducer = createReducer(
     return { ...state, loggedInUser: loggedInUser };
   }),
 
-  on(logoutUser, (state) => {
+  on(registerUser_Success, (state, { registeredUser }) => {
+    return { ...state, newUser: registeredUser };
+  }),
+
+  on(resetPassword_Success, (state, { updatedUser }) => {
+    return { ...state, currentUser: updatedUser };
+  }),
+
+  on(changePassword_Success, (state, { updatedUser }) => {
+    return { ...state, currentUser: updatedUser };
+  }),
+
+  on(forgotPassword_Success, (state, { updatedUser }) => {
+    return { ...state, currentUser: updatedUser };
+  }),
+  
+  on(approveRejectUser_Success, (state, { updatedUser }) => {
+    return { ...state, currentUser: updatedUser };
+  }),
+
+  on(lockUser_Success, (state, { updatedUser }) => {
+    return { ...state, currentUser: updatedUser };
+  }),
+  
+  on(logoutUser_Success, (state) => {
     return { ...state, loggedInUser: undefined };
   }),
 
-  on(UserProfilesFetchAPI_Success, (state, { allUserProfiles }) => {
-    return { ...state, allUserProfiles: allUserProfiles };
+  on(UsersFetchAPI_Success, (state, { allUsers }) => {
+    return { ...state, allUsers: allUsers };
   }),
 
-  on(UserProfileFetchAPI_Success, (state, { userProfile }) => {
-    return { ...state, userProfile: userProfile };
-  }),
 
-  on(UserProfileUpdateAPI_Success, (state, { updatedUserProfile }) => {
-    return { ...state, userProfile: updatedUserProfile };
-  }),
 
-  on(UserProfileCreateAPI_Success, (state, { newUserProfile }) => {
-    return { ...state, newUserProfile: newUserProfile };
-  }),
+
+
+
 );

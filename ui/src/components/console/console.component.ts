@@ -39,7 +39,7 @@ export class ConsoleComponent {
 
   isVisible: boolean = true;
   loggedInUser?: UserProfile;
-  loggedInUserRole: number = -1;
+  loggedInUserRole: number = 1;
 
   ngOnInit() {
     console.log('console component initialized');
@@ -48,7 +48,7 @@ export class ConsoleComponent {
     this.visibilityService.setHomeVisible(false);
     this.visibilityService.setConsoleVisible(true);
 
-    this.store.select(selectLoggedInUser).subscribe((user: any) => {
+/*     this.store.select(selectLoggedInUser).subscribe((user: any) => {
       console.log('console User:', user);
       this.loggedInUser = user;
 
@@ -62,7 +62,7 @@ export class ConsoleComponent {
       console.log('console visible:', visible);
       this.isVisible = visible;
       this.cdr.detectChanges();
-    });
+    }); */
 
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {

@@ -1,7 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
 import { UserState } from '../states/user.state';
-import { UserProfile } from '../models/UserProfile';
 
 export const UserFeatureKey = 'users';
 
@@ -12,37 +11,32 @@ export const selectLoggedInUser = createSelector(
   (state: UserState) => state.loggedInUser
 );
 
-export const selectUserProfiles = createSelector(
+export const selectUsers = createSelector(
   selectUserState,
-  (state: UserState) => state.allUserProfiles
+  (state: UserState) => state.allUsers
 );
 
-export const selectUserProfile = createSelector(
+export const selectUser = createSelector(
   selectUserState,
-  (state: UserState) => state.userProfile
+  (state: UserState) => state.currentUser
 );
 
-export const selectNewUserProfile = createSelector(
+export const selectNewUser = createSelector(
   selectUserState,
-  (state: UserState) => state.newUserProfile
+  (state: UserState) => state.newUser
 );
 
-export const selectUserProfileById = (userId: number) => createSelector(
+export const selectUserById = (userId: number) => createSelector(
   selectUserState,
-  (state: UserState) => state.allUserProfiles.find(userProfile => userProfile.userId === userId)
+  (state: UserState) => state.allUsers.find(user => user.userId === userId)
 );
 
-export const selectUserProfileByUserName = (userName: string) => createSelector(
+export const selectUserByUserName = (userName: string) => createSelector(
   selectUserState,
-  (state: UserState) => state.allUserProfiles.find(userProfile => userProfile.username === userName)
+  (state: UserState) => state.allUsers.find(user => user.username === userName)
 );
 
-export const selectUserProfileByEmail = (email: string) => createSelector(
+export const selectUserByEmail = (email: string) => createSelector(
   selectUserState,
-  (state: UserState) => state.allUserProfiles.find(userProfile => userProfile.email === email)
-);
-
-export const selectUserProfileByPhone = (phone: string) => createSelector(
-  selectUserState,
-  (state: UserState) => state.allUserProfiles.find(userProfile => userProfile.phoneNumber === phone)
+  (state: UserState) => state.allUsers.find(user => user.email === email)
 );

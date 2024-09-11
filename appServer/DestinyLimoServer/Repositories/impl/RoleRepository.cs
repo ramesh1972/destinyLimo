@@ -21,5 +21,19 @@ namespace DestinyLimoServer.Repositories.impl
         {
             return await QueryFirstOrDefaultAsync("SELECT * FROM Role WHERE RoleName = @RoleName", new { RoleName = roleName });
         }
+
+        public async Task<IEnumerable<UserRole>> GetUserRoles(int userId)
+        {
+            BaseRepository<UserRole> userRoleRepo = new BaseRepository<UserRole>(_context, "user_roles", "user_role_id");
+
+            return await userRoleRepo.QueryAsync("SELECT * FROM user_roles WHERE user_id = @userId", new { userId = userId });
+        }
+
+        public async Task<IEnumerable<UserRole>> GetAllUsersRoles()
+        {
+            BaseRepository<UserRole> userRoleRepo = new BaseRepository<UserRole>(_context, "user_roles", "user_role_id");
+
+            return await userRoleRepo.GetAllAsync();
+        }
     }
 }

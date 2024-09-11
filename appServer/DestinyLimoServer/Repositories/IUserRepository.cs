@@ -9,11 +9,29 @@ namespace DestinyLimoServer.Repositories
         Task<User> GetUserById(int userId);
         Task<User> GetUserByUsername(string username);
         Task<User> GetUserByEmail(string email);
-        Task<int> AddAsync(User entity, string[]? cols = null);
-        Task<bool> UpdateAsync(User entity, int id, string[]? cols = null);
-        Task<bool> DeleteAsync(int id);
-        Task<bool> DeleteSoftAsync(int id);
-        Task<int> AuthenticateUser(string username, string password);
         Task<IEnumerable<Role>> GetUserRolesByUserId(int userId);
+
+        Task<IEnumerable<User>> GetUsersByRole(string roleName, bool active = true, bool approved = true);
+        Task<IEnumerable<User>> GetUsersByRoleId(int roleId, bool active = true, bool approved = true);
+
+
+        // --------------------------------------------
+        Task<User> RegisterUser(User user, UserProfile userProfile);
+
+        // --------------------------------------------
+        Task<User> AuthenticateUser(string userName, string password);
+        Task<User> LogoutUser();
+        Task<User> ChangePassword(int userId, string oldPassword, string newPassword);
+        Task<User> ForgotPassword(string email);
+        Task<User> ResetPassword(int userId, string newPassword);
+
+        // --------------------------------------------
+        Task<User> ApproveRejectUser(int userId, bool isApproved, string approveRejectReason, int approvedRejectedBy);
+        Task<User> LockUser(int userId, bool isLocked);
+
+        // --------------------------------------------
+        Task<User> UpdateUser(User user);
+        Task<User> DeleteUser(int userId);
+        Task<User> DeleteSoftUser(int userId);
     }
 }

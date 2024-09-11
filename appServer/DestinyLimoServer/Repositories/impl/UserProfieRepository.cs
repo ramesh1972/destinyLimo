@@ -63,20 +63,5 @@ namespace DestinyLimoServer.Repositories.impl
 
             return user!;
         }
-
-        public async Task<IEnumerable<UserProfile>> GetApprovedUsers()
-        {
-            return await QueryAsync("SELECT * FROM user_profiles T1 INNER JOIN users T2 ON T1.user_id = T2.user_id WHERE T2.active = true AND T2.approved = true");
-        }
-
-        public async Task<IEnumerable<UserProfile>> GetUsersByRole(string roleName, bool active = true, bool approved = true)
-        {
-            return await QueryAsync("SELECT * FROM user_profiles T1 INNER JOIN users T2 ON T1.user_id = T2.user_id WHERE T2.active = @active AND T2.approved = @approved AND T2.role_id = (SELECT role_id FROM roles WHERE role_name = @roleName)", new { active = active, approved = approved, roleName = roleName });
-        }
-
-        public async Task<IEnumerable<UserProfile>> GetUsersByRoleId(int roleId, bool active = true, bool approved = true)
-        {
-            return await QueryAsync("SELECT * FROM user_profiles T1 INNER JOIN users T2 ON T1.user_id = T2.user_id WHERE T2.active = @active AND T2.approved = @approved AND T2.role_id = @roleId", new { active = active, approved = approved, roleId = roleId });
-        }
     }
 }
