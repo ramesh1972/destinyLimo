@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5293:5293"
+    network_mode: "host"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
