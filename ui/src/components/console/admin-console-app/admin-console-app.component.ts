@@ -14,7 +14,7 @@ import { AdminDefaultLayoutComponent } from './layout';
   imports: [RouterOutlet, AdminDefaultLayoutComponent]
 })
 export class AdminConsoleAppComponent implements OnInit {
-  title = 'CoreUI Angular Admin Template';
+  title = 'Destiny Limo LMS - Admin Console';
 
   constructor(
     private router: Router,

@@ -38,8 +38,8 @@ namespace DestinyLimoServer.Controllers
                 userDTO.Roles = userRolesDTO;
 
 
-                var userProfileDto = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(user);
-                userDTO.UserProfile = userProfileDto;
+                var userProfile = await _repository.UserProfile.GetUserById(user.user_id);
+                userDTO.UserProfile = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(userProfile);
                 return Ok(userDTO);
             }
         }

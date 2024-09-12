@@ -14,7 +14,7 @@ import { LearnerDefaultLayoutComponent } from './layout';
   imports: [RouterOutlet, LearnerDefaultLayoutComponent]
 })
 export class LearnerConsoleAppComponent implements OnInit {
-  title = 'CoreUI Angular Admin Template';
+  title = 'Destiny Limo LMS - Learner\'s Console';
 
   constructor(
     private router: Router,
