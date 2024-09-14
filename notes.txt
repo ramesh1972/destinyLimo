@@ -17,6 +17,7 @@ D) all
         4) vimeo integration
         5) check all pages and all ACTIONS - some are not done
         6) check all pages and layout, theme
+        7) font, size, color, family, weight
         
 C) PAGES
 C1)----> Admin console
