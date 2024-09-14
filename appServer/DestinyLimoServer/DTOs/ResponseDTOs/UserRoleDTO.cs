@@ -1,6 +1,6 @@
-namespace DestinyLimoServer.Models
+namespace DestinyLimoServer.DTOs.ResponseDTOs
 {
-    public class UserRole
+    public class UserRoleDTO
     {
         public int user_role_id { get; set; }
 

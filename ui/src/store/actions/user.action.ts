@@ -8,7 +8,7 @@ import { UserProfile } from '../models/UserProfile';
 // register
 export const registerUser = createAction(
   '[User API] Register User',
-  props<{ user: User, userProfile: UserProfile }>()
+  props<{ user: User}>()
 );
 
 export const registerUser_Success = createAction(

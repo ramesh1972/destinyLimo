@@ -2,11 +2,11 @@ namespace DestinyLimoServer.Models
 {
     public class User
     {
-        public int user_id { get; set; }
+        public int? user_id { get; set; }
 
         public required string username { get; set; }
 
-        //public string password_hash { get; set; }
+        public string? password_hash { get; set; }
 
         public string? email { get; set; }
 
@@ -26,7 +26,7 @@ namespace DestinyLimoServer.Models
 
         public DateTime? updated_at { get; set; }
 
-        public IEnumerable<UserRole>? user_roles { get; set; }
+        public IEnumerable<Role>? user_roles { get; set; }
 
         public UserProfile? UserProfile { get; set;}
     }

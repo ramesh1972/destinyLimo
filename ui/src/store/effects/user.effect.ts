@@ -25,7 +25,7 @@ export class UserEffect {
       ofType(registerUser),
       mergeMap((action) => {
         return this.userService
-          .registerUser(action.user, action.userProfile)
+          .registerUser(action.user)
           .pipe(map((data: User) => registerUser_Success({ registeredUser: data as User }))
           );
       }));

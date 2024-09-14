@@ -48,7 +48,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["isApproved"] == true && record["approveRejectReason"] == null;
+          return record["isApproved"] == true;
         }
       }]);
     }
@@ -56,7 +56,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["isApproved"] == false && record["approveRejectReason"] == null;
+          return record["isApproved"] == false && (record["approveRejectReason"] == "" || record["approveRejectReason"] == null);
         }
       }]);
     }
@@ -64,7 +64,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["isLocked"] == true && record["approveRejectReason"] == null;
+          return record["isLocked"] == true && (record["approveRejectReason"] == "" || record["approveRejectReason"] == null);
         }
       }]);
     }
@@ -72,7 +72,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["approveRejectReason"] != null;
+          return record["approveRejectReason"] != "" && record["approveRejectReason"]  != null && record["isApproved"] == false;
         }
       }]);
     }

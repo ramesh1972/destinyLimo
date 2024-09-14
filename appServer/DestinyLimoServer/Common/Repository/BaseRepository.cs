@@ -272,7 +272,7 @@ namespace DestinyLimoServer.Common.Repository
         {
             if (cols == null)
             {
-                return string.Join(", ", typeof(T).GetProperties().Select(p => p.Name).Where(p => p != _idColumn));
+                return string.Join(", ", typeof(T).GetProperties().Where(p => (p.PropertyType.IsValueType || p.PropertyType == typeof(string)) && p.Name != _idColumn && p.Name != "created_at" && p.Name != "updated_at").Select(p => p.Name));
             }
             else
             {
@@ -290,7 +290,7 @@ namespace DestinyLimoServer.Common.Repository
         {
             if (cols == null)
             {
-                return string.Join(", ", typeof(T).GetProperties().Select(p => "@" + p.Name).Where(p => p != "@" + _idColumn));
+                return string.Join(", ", typeof(T).GetProperties().Where(p => (p.PropertyType.IsValueType || p.PropertyType == typeof(string)) && p.Name != _idColumn && p.Name != "created_at" && p.Name != "updated_at").Select(p => "@" + p.Name));
             }
             else
             {
@@ -303,7 +303,7 @@ namespace DestinyLimoServer.Common.Repository
         {
             if (cols == null)
             {
-                return string.Join(", ", typeof(T).GetProperties().Select(p => p.Name + " = @" + p.Name));
+                return string.Join(", ", typeof(T).GetProperties().Where(p => (p.PropertyType.IsValueType || p.PropertyType == typeof(string)) && p.Name != _idColumn && p.Name != "created_at").Select(p => p.Name + " = @" + p.Name));
             }
             else
             {

@@ -1,8 +1,8 @@
-import { Role } from "./Role";
+import { UserRole } from "./UserRole";
 import { UserProfile } from "./UserProfile";
 
-export interface User {
-    userId: number;                 // Maps to `UserId`
+export class User {
+    userId?: number;                 // Maps to `UserId`
     username?: string;              // Maps to `Username`
     password?: string;              // Maps to `Password`
     
@@ -14,10 +14,10 @@ export interface User {
 
     isLocked?: boolean;             // Maps to `IsLocked`
     isDeleted?: boolean;            // Maps to `IsDeleted`
-    createdAt: Date;                // Maps to `CreatedAt`
+    createdAt?: Date;                // Maps to `CreatedAt`
     updatedAt?: Date;               // Maps to `UpdatedAt`, nullable Date
 
     userProfile? : UserProfile;
-    roles?: Role[];                 // Maps to `Roles`,
+    roles?: UserRole[];                 // Maps to `Roles`,
   }
   

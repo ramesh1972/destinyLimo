@@ -41,6 +41,12 @@ D) COMMON all
 E) AUTO
 1) assign new exam if perido more than 2 years
 
+F) HOME
+1) contact us
+2) news letter
+3) footer
+4) terms & conditions
+
 ISSUES
 ------
 1) try to isolate css/scss for course master and coreui

@@ -22,6 +22,6 @@ namespace DestinyLimoServer.DTOs.ResponseDTOs
 
         public UserProfileDTO? UserProfile { get; set; }
 
-        public IEnumerable<RoleDTO>? Roles { get; set; }
+        public IEnumerable<UserRoleDTO>? Roles { get; set; }
     }
 }

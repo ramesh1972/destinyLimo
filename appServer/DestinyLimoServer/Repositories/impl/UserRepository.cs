@@ -7,12 +7,6 @@ namespace DestinyLimoServer.Repositories.impl
 {
     public class UserRepository(DapperContext dapperContext) : BaseRepository<User>(dapperContext, "users", "user_id"), IUserRepository
     {
-        public async Task<IEnumerable<Role>> GetUserRolesByUserId(int userId)
-        {
-            BaseRepository<Role> roleRepo = new BaseRepository<Role>(_context, "roles", "role_id");
-
-            return await roleRepo.QueryAsync("SELECT r.role_id, r.role_name FROM roles r JOIN user_roles ur ON r.role_id = ur.role_id WHERE ur.user_id = @userId AND r.is_deleted = false", new { userId = userId });
-        }
 
         public async Task<IEnumerable<User>> GetUsers(bool inactive = true, bool is_deleted = false)
         {
@@ -49,19 +43,27 @@ namespace DestinyLimoServer.Repositories.impl
             return await QueryAsync("SELECT * FROM users T1 INNER JOIN user_role T2 ON T1.user_id = T2.user_id WHERE T1.is_active = @active AND T2.is_approved = @approved AND T2.role_id = @roleId", new { active = active, approved = approved, roleId = roleId });
         }
 
-        public async Task<User> RegisterUser(User user, UserProfile userProfile)
+        public async Task<User?> RegisterUser(User user, UserProfile userProfile)
         {
+            // add in user table
             int userId = await AddAsync(user);
             if (userId == -1)
             {
                 return null;
             }
 
+            // add in user_profile table
             userProfile.user_id = userId;
-            IUserProfileRepository userProfileRepo = new UserProfileRepository(_context);
+            UserProfileRepository userProfileRepo = new UserProfileRepository(_context);
 
             await userProfileRepo.AddAsync(userProfile);
 
+            // add in user_roles table
+            // TODO: assuming the role is driver for now
+            var sql = "INSERT INTO user_roles (user_id, role_id) VALUES (@userId, 2)";
+            await ExecuteAsync(sql, new { userId = userId });
+
+            // get the whole object
             return await GetUserById(userId);
         }
 
@@ -127,7 +129,7 @@ namespace DestinyLimoServer.Repositories.impl
         // --------------------------------------------
         public async Task<User> UpdateUser(User user)
         {
-            await UpdateAsync(user, user.user_id);
+            await UpdateAsync(user, user.user_id ?? -1);
             return user;
         }
 

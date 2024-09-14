@@ -9,14 +9,13 @@ namespace DestinyLimoServer.Repositories
         Task<User> GetUserById(int userId);
         Task<User> GetUserByUsername(string username);
         Task<User> GetUserByEmail(string email);
-        Task<IEnumerable<Role>> GetUserRolesByUserId(int userId);
 
         Task<IEnumerable<User>> GetUsersByRole(string roleName, bool active = true, bool approved = true);
         Task<IEnumerable<User>> GetUsersByRoleId(int roleId, bool active = true, bool approved = true);
 
 
         // --------------------------------------------
-        Task<User> RegisterUser(User user, UserProfile userProfile);
+        Task<User?> RegisterUser(User user, UserProfile userProfile);
 
         // --------------------------------------------
         Task<User> AuthenticateUser(string userName, string password);

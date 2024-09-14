@@ -53,8 +53,8 @@ export class ConsoleComponent {
       this.loggedInUser = user;
 
       if (user && user.roles && user.roles.length > 0) {
-        console.log('console User Role:', user.roles[0].roleId);
-        this.loggedInUserRole = user.roles[0].roleId;
+        console.log('console User Role:', user.roles[0].role_id);
+        this.loggedInUserRole = user.roles[0].role_id;
       }
     });
 

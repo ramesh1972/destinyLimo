@@ -13,15 +13,10 @@ export class UserService {
   constructor(private _http: HttpClient) { }
 
   // --------------------------------------------
-  registerUser(user: User, userProfile: UserProfile): Observable<User> {
+  registerUser(user: User): Observable<User> {
     console.log("User service :", environment.baseURL);
 
-    const userRegisterJSON = {
-      "user": user,
-      "userProfile": userProfile
-    };
-
-    return this._http.post<User>(environment.baseURL + "User", userRegisterJSON);
+    return this._http.post<User>(environment.baseURL + "User", user);
   }
 
   // --------------------------------------------

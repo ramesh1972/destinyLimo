@@ -33,13 +33,13 @@ namespace DestinyLimoServer.Controllers
             {
                 var userDTO = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>(user);
 
-                var userRoles = await _repository.User.GetUserRolesByUserId(user.user_id);
-                var userRolesDTO = _mapper.Map<IEnumerable<DTOs.ResponseDTOs.RoleDTO>>(userRoles);
+                var userRoles = await _repository.Role.GetUserRoles(user.user_id ?? -1);
+                var userRolesDTO = _mapper.Map<IEnumerable<DTOs.ResponseDTOs.UserRoleDTO>>(userRoles);
                 userDTO.Roles = userRolesDTO;
 
-
-                var userProfile = await _repository.UserProfile.GetUserById(user.user_id);
+                var userProfile = await _repository.UserProfile.GetUserById(user.user_id ?? -1);
                 userDTO.UserProfile = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(userProfile);
+
                 return Ok(userDTO);
             }
         }
@@ -50,7 +50,7 @@ namespace DestinyLimoServer.Controllers
             var users = await _repository.User.GetUsers(includeInActive ?? true, includeDeleted ?? false);
             System.Console.WriteLine("Users: " + users);
 
-            var userDto = _mapper.Map<IEnumerable<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>>(users);
+            var usersDto = _mapper.Map<IEnumerable<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>>(users);
 
             // get all the profiles
             var userProfiles = await _repository.UserProfile.GetUsers(includeInActive ?? true, includeDeleted ?? false);
@@ -60,24 +60,27 @@ namespace DestinyLimoServer.Controllers
             var userRolesList = await _repository.Role.GetAllUsersRoles();
 
             // map the userDTO to the userProfiles, roles and userRoles
-            foreach (var user in userDto)
+            foreach (var userDto in usersDto)
             {
-                var userProfile = userProfiles.FirstOrDefault(x => x.user_id == user.UserId);
+                var userProfile = userProfiles.FirstOrDefault(x => x.user_id == userDto.UserId);
                 if (userProfile != null)
                 {
-                    user.UserProfile = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(userProfile);
+                    userDto.UserProfile = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(userProfile);
                 }
 
-                var userRoles = userRolesList.Where(x => x.UserId == user.UserId);
+                var userRoles = userRolesList.Where(x => x.user_id == userDto.UserId);
                 if (userRoles != null)
                 {
-                    var roles = userRoles.Select(x => new Role { role_id = x.RoleId, role_name = rolesList.FirstOrDefault(y => y.role_id == x.RoleId).role_name });
-                    var rolesDTO = _mapper.Map<IEnumerable<DTOs.ResponseDTOs.RoleDTO>>(roles);
-                    user.Roles = rolesDTO;
+                    var rolesDTO = _mapper.Map<IEnumerable<DTOs.ResponseDTOs.UserRoleDTO>>(userRoles);
+                    userDto.Roles = rolesDTO;
                 }
             }
 
-            return Ok(userDto);
+            // get only the drivers 
+            // TODO: make it more generic for any role
+            int driverRoleId = 2;
+            usersDto = usersDto.Where(x => x.Roles!.Any(y => y.role_id == driverRoleId));
+            return Ok(usersDto);
         }
 
         [HttpGet("profile/{includeInActive?}/{includeDeleted?}")]
@@ -138,22 +141,28 @@ namespace DestinyLimoServer.Controllers
                 return UnprocessableEntity(ModelState);
             }
 
+            // inputs to register
             var userEntity = _mapper.Map<User>(user);
 
             var userProfile = user.UserProfile;
             var userProfileEntity = _mapper.Map<UserProfile>(userProfile);
 
-            User newUser = await _repository.User.RegisterUser(userEntity, userProfileEntity);
+            // register
+            User? newUser = await _repository.User.RegisterUser(userEntity, userProfileEntity);
             if (newUser == null)
             {
                 _logger.LogError("Unable to register user");
                 return Ok(false);
             }
 
-            UserProfile newUserProfile = await _repository.UserProfile.GetUserById(newUser.user_id);
-            userEntity.UserProfile = newUserProfile;
+            // set output
+            UserProfile newUserProfile = await _repository.UserProfile.GetUserById(newUser.user_id ?? -1);
 
-            DestinyLimoServer.DTOs.ResponseDTOs.UserDTO userDTO = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>(userEntity);
+            IEnumerable<UserRole> userRoles = await _repository.Role.GetUserRoles(newUser.user_id ?? -1);
+        
+            DestinyLimoServer.DTOs.ResponseDTOs.UserDTO userDTO = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>(newUser);
+            userDTO.UserProfile = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(newUserProfile);
+            userDTO.Roles = _mapper.Map<IEnumerable<DestinyLimoServer.DTOs.ResponseDTOs.UserRoleDTO>>(userRoles);
 
             return Ok(userDTO);
         }

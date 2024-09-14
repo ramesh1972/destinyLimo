@@ -14,85 +14,300 @@
             <c-row class="justify-content-center">
               <c-col md="9" xl="6">
                 <c-card class="mx-4">
-                  <form cForm style="padding: 10px;">
+                  <form cForm style="padding: 10px;" [formGroup]="registerForm" (ngSubmit)="onRegister()" novalidate>
                     <h1>Register Yourself</h1>
 
-                    <div
-                      style="padding: 20px;padding-bottom:5px;margin-bottom:20px;background-color: antiquewhite;border: 1px solid lightgray;border-radius: 4px">
+                    <div class="register-part">
                       <c-input-group class="mb-3">
-                        <span cInputGroupText>
-                          <svg cIcon name="cilUser"></svg>
-                        </span>
-                        <input autoComplete="name" cFormControl placeholder="Select Username" />
+                        <label class="form-field" cInputGroupText for="username">User Name</label>
+                        <input class="form-control" id="username" formControlName="username" autoComplete="off"
+                          cFormControl placeholder="Enter Username" required [valid]="registerForm.controls['username'].touched && registerForm.controls['username'].valid
+                                                                          ? true
+                                                                          : (submitted || registerForm.controls['username'].touched) && registerForm.controls['username'].invalid
+                                                                          ? false
+                                                                          : undefined" />
+                        <c-form-feedback *ngIf="submitted || registerForm.controls['username'].invalid"
+                          [valid]="!(submitted || registerForm.controls['username'].invalid)">
+                          <ng-container *ngIf="registerForm.controls['username'].errors as errors">
+                            <div class="error-text" *ngIf="errors['required']">Username is required</div>
+                            <div class="error-text" *ngIf="errors['minlength']">
+                              {{ formErrors['username'].minLength }}
+                            </div>
+                            <div class="error-text" *ngIf="errors['noSpaces']">
+                              {{ formErrors['username'].noSpaces }}
+                            </div>
+                          </ng-container>
+                        </c-form-feedback>
                       </c-input-group>
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText style="width:153px">New Password</span>
-                        <input cFormControl placeholder="Password" type='password' />
+
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['password'] as ctrl">
+                        <label cInputGroupText class="form-field" for="password">New Password</label>
+                        <input class="form-control" id="password" formControlName="password" cFormControl
+                          placeholder="Password" type='password' required [valid]="
+                                                  ctrl.touched && ctrl.valid
+                                                    ? true
+                                                    : (submitted || ctrl.touched) && ctrl.invalid
+                                                    ? false
+                                                    : undefined
+                                                " />
+                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                          <ng-container *ngIf="ctrl.errors as errors">
+                            <div class="error-text" *ngIf="errors['required']">Password is required</div>
+                            <div class="error-text" *ngIf="errors['minlength']">
+                              {{ formErrors['password'].minLength }}
+                            </div>
+                            <div class="error-text" *ngIf="errors['pattern']">
+                              {{ formErrors['password'].pattern }}
+                            </div>
+                          </ng-container>
+                        </c-form-feedback>
                       </c-input-group>
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText>Confirm Password</span>
-                        <input cFormControl placeholder="Confirm Password" type='password' />
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['confirmPassword'] as ctrl">
+                        <label cInputGroupText class="form-field" for="confirmPassword">Confirm Password</label>
+                        <input class="form-control" id="confirmPassword" formControlName="confirmPassword" cFormControl
+                          placeholder="Confirm Password" type='password' required [valid]="
+                        ctrl.touched && ctrl.valid
+                          ? true
+                          : (submitted || ctrl.touched) && ctrl.invalid
+                          ? false
+                          : undefined
+                      " />
+                        <c-form-feedback *ngIf=" submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                          <ng-container *ngIf="ctrl.errors as errors">
+                            <div class="error-text" *ngIf="errors['required']">Confirm Password is required</div>
+                            <div class="error-text" *ngIf="errors['minlength']">
+                              {{ formErrors['password'].minLength }}
+                            </div>
+                            <div class="error-text" *ngIf="errors['pattern']">
+                              {{ formErrors['password'].pattern }}
+                            </div>
+                            <div class="error-text" *ngIf="errors['passwordMismatch']">
+                              {{ formErrors['confirmPassword'].passwordMismatch }}
+                            </div>
+                          </ng-container>
+                        </c-form-feedback>
                       </c-input-group>
                     </div>
 
-                    <div
-                      style="padding: 20px;padding-bottom:5px;margin-bottom:20px;background-color: antiquewhite;border: 1px solid lightgray;border-radius: 4px">
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText>&#64;</span>
-                        <input autoComplete="firstName" cFormControl placeholder="First Name" />
-                        &nbsp;
-                        <span cInputGroupText>&#64;</span>
-                        <input autoComplete="lastName" cFormControl placeholder="Last Name" />
+                    <div class="register-part">
+                      <c-input-group class="mb-3 w-100" style="justify-content: space-between;">
+                        <div style="display: flex;flex-direction: row;">
+                          <label cInputGroupText class="form-field" for="firstName" style="width:100px">First
+                            Name</label>
+                          <div style="width: 100%;display: flex;flex-direction: column;">
+                            <input class="form-control-2-col"
+                              id="firstName" formControlName="firstName" cFormControl placeholder="First Name" required
+                              [valid]="
+                          registerForm.controls['firstName'].touched && registerForm.controls['firstName'].valid
+                          ? true
+                          : (submitted || registerForm.controls['firstName'].touched) && registerForm.controls['firstName'].invalid
+                          ? false
+                          : undefined
+                      " />
+                            <c-form-feedback *ngIf=" submitted || registerForm.controls['firstName'].invalid"
+                              [valid]="!(submitted || registerForm.controls['firstName'].invalid)">
+                              <ng-container *ngIf="registerForm.controls['firstName'].errors as errors">
+                                <div class="error-text" *ngIf="errors['required']">First Name is required</div>
+                              </ng-container>
+                            </c-form-feedback>
+                          </div>
+                        </div>
+                        <div style="display: flex;flex-direction: row;;">
+
+                          <label cInputGroupText class="form-field" for="lastName" style="width:100px">Last Name</label>
+                          <div style="width: 100%;display: flex;flex-direction: column;">
+                            <input class="form-control-2-col" id="lastName"
+                              formControlName="lastName" cFormControl placeholder="Last Name" required [valid]="
+                          registerForm.controls['lastName'].touched && registerForm.controls['lastName'].valid
+                          ? true
+                          : (submitted || registerForm.controls['lastName'].touched) && registerForm.controls['lastName'].invalid
+                          ? false
+                          : undefined
+                      " />
+                            <c-form-feedback *ngIf=" submitted || registerForm.controls['lastName'].invalid"
+                              [valid]="!(submitted || registerForm.controls['lastName'].invalid)">
+                              <ng-container *ngIf="registerForm.controls['lastName'].errors as errors">
+                                <div class="error-text" *ngIf="errors['required']">Last Name is required</div>
+                              </ng-container>
+                            </c-form-feedback>
+                          </div>
+                        </div>
                       </c-input-group>
 
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText>Photo</span>
-                        <input autoComplete="photo" cFormControl placeholder="Photo" type='file' />
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['avatar'] as ctrl">
+                        <label cInputGroupText class="form-field" for="avatar" style="width:70px">Photo</label>
+                        <input class="form-control" id="avatar" formControlName="avatar" cFormControl
+                          placeholder="Upload Photo" required type='file' [valid]="
+                                                  ctrl.touched && ctrl.valid
+                                                    ? true
+                                                    : (submitted || ctrl.touched) && ctrl.invalid
+                                                    ? false
+                                                    : undefined
+                                                "/>
+                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                          <ng-container *ngIf="ctrl.errors as errors">
+                            <div class="error-text" *ngIf="errors['required']">Photo is required</div>
+                          </ng-container>
+                        </c-form-feedback>
                       </c-input-group>
 
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText>
-                          Date of Birth
-                        </span>
-                        <input cFormControl placeholder="Date of Birth" type="date" />
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['dob'] as ctrl" >
+                        <label cInputGroupText class="form-field" for="dob" style="width:110px">Date of Birth</label>
+                        <input class="form-control" id="dob" formControlName="dob" cFormControl
+                          placeholder="Upload Photo" required type='date' [valid]="
+                                                  ctrl.touched && ctrl.valid
+                                                    ? true
+                                                    : (submitted || ctrl.touched) && ctrl.invalid
+                                                    ? false
+                                                    : undefined
+                                                "/>
+                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                          <ng-container *ngIf="ctrl.errors as errors">
+                            <div class="error-text" *ngIf="errors['required']">DOB is required</div>
+                          </ng-container>
+                        </c-form-feedback>
                       </c-input-group>
                     </div>
 
-                    <div
-                      style="padding: 20px;padding-bottom:5px;margin-bottom:20px;background-color: antiquewhite;border: 1px solid lightgray;border-radius: 4px;">
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText style="width:80px">&#64;</span>
-                        <input autoComplete="email" cFormControl placeholder="Email" />
-                      </c-input-group>
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText style="width:80px">Mobile</span>
-                        <input autoComplete="mobile" cFormControl placeholder="Mobile Number" />
+                    <div class="register-part">
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['email'] as ctrl">
+                        <label cInputGroupText class="form-field" style="width:80px" for="email">Email</label>
+                        <input [valid]="
+                              ctrl.touched && ctrl.valid
+                                ? true
+                                : (submitted || ctrl.touched) && ctrl.invalid
+                                ? false
+                                : undefined
+                            " autocomplete="off" cFormControl formControlName="email" id="email" placeholder="Email"
+                          required type="email" />
+                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                          <ng-container *ngIf="ctrl.errors as errors">
+                            <div class="error-text" *ngIf="errors['required']">Email is required</div>
+                            <div class="error-text" *ngIf="errors['email']">
+                              {{ formErrors.email?.email }}
+                            </div>
+                          </ng-container>
+                        </c-form-feedback>
                       </c-input-group>
 
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText style="width:80px">Address</span>
-                        <textarea autoComplete="address" rows=4 cFormControl placeholder="Address"></textarea>
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['mobile'] as ctrl">
+                        <label cInputGroupText class="form-field" style="width:80px" for="mobile">Mobile</label>
+                        <input [valid]="
+                              ctrl.touched && ctrl.valid
+                                ? true
+                                : (submitted || ctrl.touched) && ctrl.invalid
+                                ? false
+                                : undefined
+                            " autocomplete="off" cFormControl formControlName="mobile" id="mobile" placeholder="Mobile"
+                          required />
+                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                          <ng-container *ngIf="ctrl.errors as errors">
+                            <div class="error-text" *ngIf="errors['required']">Mobile is required</div>
+                          </ng-container>
+                        </c-form-feedback>
+                      </c-input-group>
+
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['address'] as ctrl">
+                        <label cInputGroupText class="form-field" style="width:80px" for="address">Address</label>
+                        <textarea rows="4" [valid]="
+                              ctrl.touched && ctrl.valid
+                                ? true
+                                : (submitted || ctrl.touched) && ctrl.invalid
+                                ? false
+                                : undefined
+                            " cFormControl formControlName="address" id="address" placeholder="Address" required
+                          style="height: 60px;"></textarea>
+                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                          <ng-container *ngIf="ctrl.errors as errors">
+                            <div class="error-text" *ngIf="errors['required']">Address is required</div>
+                          </ng-container>
+                        </c-form-feedback>
                       </c-input-group>
                     </div>
 
-                    <div
-                      style="padding: 20px;padding-bottom:5px;margin-bottom:0px;background-color: antiquewhite;border: 1px solid lightgray;border-radius: 4px">
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText>License Number</span>
-                        <input autoComplete="license" cFormControl placeholder="License Number" />
+                    <div class="register-part">
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['license'] as ctrl">
+                        <label cInputGroupText class="form-field" for="license">License Number</label>
+                        <input [valid]="
+                              ctrl.touched && ctrl.valid
+                                ? true
+                                : (submitted || ctrl.touched) && ctrl.invalid
+                                ? false
+                                : undefined
+                            " autocomplete="off" cFormControl formControlName="license" id="license"
+                          placeholder="License Number" required />
+                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                          <ng-container *ngIf="ctrl.errors as errors">
+                            <div class="error-text" *ngIf="errors['required']">License is required</div>
+                          </ng-container>
+                        </c-form-feedback>
                       </c-input-group>
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText style="width: 100px;">Issue Date</span>
-                        <input autoComplete="doi" cFormControl placeholder="License Date of Issue" type="date" />
-                      </c-input-group>
-                      <c-input-group class="mb-3">
-                        <span cInputGroupText style="width: 100px;">Expiry Date</span>
-                        <input autoComplete="doe" cFormControl placeholder="License Date of Expiry" type="date" />
+
+                      <c-input-group class="mb-3 w-100" style="justify-content: space-between;">
+                        <div style="display: flex;flex-direction: row; justify-content: space-evenly;">
+                          <label cInputGroupText class="form-field" for="issueDate" style="width:100px">Issue
+                            Date</label>
+                          <div style="width: 100%;display: flex;flex-direction: column;">
+                            <input class="form-control-2-col"
+                              id="issueDate" formControlName="issueDate" cFormControl placeholder="Issue Date" required
+                              [valid]="
+                          registerForm.controls['issueDate'].touched && registerForm.controls['issueDate'].valid
+                          ? true
+                          : (submitted || registerForm.controls['issueDate'].touched) && registerForm.controls['issueDate'].invalid
+                          ? false
+                          : undefined
+                      " type="date" />
+                            <c-form-feedback *ngIf=" submitted || registerForm.controls['issueDate'].invalid"
+                              [valid]="!(submitted || registerForm.controls['issueDate'].invalid)">
+                              <ng-container *ngIf="registerForm.controls['issueDate'].errors as errors">
+                                <div class="error-text" *ngIf="errors['required']">Issue Date is required</div>
+                              </ng-container>
+                            </c-form-feedback>
+                          </div>
+                        </div>
+                        <div style="display: flex;flex-direction: row;;">
+
+                          <label cInputGroupText class="form-field" for="expiryDate" style="width:100px">Expiry
+                            Date</label>
+                          <div style="width: 100%;display: flex;flex-direction: column;">
+                            <input class="form-control-2-col" id="expiryDate"
+                              formControlName="expiryDate" cFormControl placeholder="Expiry Date" required [valid]="
+                          registerForm.controls['expiryDate'].touched && registerForm.controls['expiryDate'].valid
+                          ? true
+                          : (submitted || registerForm.controls['expiryDate'].touched) && registerForm.controls['expiryDate'].invalid
+                          ? false
+                          : undefined
+                      " type="date" />
+                            <c-form-feedback *ngIf=" submitted || registerForm.controls['expiryDate'].invalid"
+                              [valid]="!(submitted || registerForm.controls['expiryDate'].invalid)">
+                              <ng-container *ngIf="registerForm.controls['expiryDate'].errors as errors">
+                                <div class="error-text" *ngIf="errors['required']">Expiry Date is required</div>
+                              </ng-container>
+                            </c-form-feedback>
+                          </div>
+                        </div>
                       </c-input-group>
                     </div>
 
-                    <div class="d-grid" style="justify-content: center;padding:10px;border:0px">
-                      <button cButton color="primary" style="width: 180px;height:60px;text-align: center;">Register</button>
+
+                    <div class="d-grid" style="display: flex;flex-direction: column;">
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['accept'] as ctrl" style="padding:4px;padding-left:20px;background-color: orange;">
+                        <c-form-check>
+                          <input [valid]="ctrl.valid ? true : submitted && ctrl.invalid ? false : undefined"
+                            cFormCheckInput formControlName="accept" id="accept" required type="checkbox" />
+                          <label cFormCheckLabel for="accept" style="margin-left: -20px">I accept the <a href="#">terms & conditions</a></label>
+                          <c-form-feedback *ngIf="submitted && ctrl.invalid" [valid]="false">
+                            <ng-container *ngIf="ctrl.errors as errors">
+                              <div class="error-text" *ngIf="errors['required']">You have to accept our Terms and Conditions</div>
+                            </ng-container>
+                          </c-form-feedback>
+                        </c-form-check>
+                      </c-input-group>
+                      <div style="text-align: center;">
+                        <button type="submit" cButton color="primary"
+                          style="width: 180px;height:60px;align-self: center; text-align:center;">Register</button>
+                      </div>
+
                     </div>
                   </form>
                 </c-card>

@@ -12,6 +12,7 @@ namespace DestinyLimoServer.Common.Mapper
             CreateMap<User, DTOs.RequestDTOs.UserDTO>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.user_id))
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.username))
+            .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.password_hash))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.email))
             .ForMember(dest => dest.IsApproved, opt => opt.MapFrom(src => src.is_approved))
             .ForMember(dest => dest.ApproveRejectReason, opt => opt.MapFrom(src => src.approved_rejected_reason))
@@ -47,6 +48,14 @@ namespace DestinyLimoServer.Common.Mapper
             .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.role_id))
             .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.role_name)).ReverseMap();
 
+            CreateMap<UserRole, DTOs.ResponseDTOs.UserRoleDTO>()
+            .ForMember(dest => dest.user_role_id, opt => opt.MapFrom(src => src.user_role_id))
+            .ForMember(dest => dest.user_id, opt => opt.MapFrom(src => src.user_id))
+            .ForMember(dest => dest.role_id, opt => opt.MapFrom(src => src.role_id))
+            .ForMember(dest => dest.role_name, opt => opt.MapFrom(src => src.role_name))
+            .ForMember(dest => dest.created_at, opt => opt.MapFrom(src => src.created_at))
+            .ForMember(dest => dest.updated_at, opt => opt.MapFrom(src => src.updated_at)).ReverseMap();
+
             CreateMap<UserProfile, DTOs.RequestDTOs.UserProfileDTO>()
             .ForMember(dest => dest.ProfileId, opt => opt.MapFrom(src => src.profile_id))
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.user_id))
@@ -54,7 +63,6 @@ namespace DestinyLimoServer.Common.Mapper
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.last_name))
             .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => src.avatar))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.address))
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.email))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.phone_number))
             .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.dob))
             .ForMember(dest => dest.LicenseNumber, opt => opt.MapFrom(src => src.license_number))
@@ -68,7 +76,6 @@ namespace DestinyLimoServer.Common.Mapper
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.last_name))
             .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => src.avatar))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.address))
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.email))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.phone_number))
             .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.dob))
             .ForMember(dest => dest.LicenseNumber, opt => opt.MapFrom(src => src.license_number))
