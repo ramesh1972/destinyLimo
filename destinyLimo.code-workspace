@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../../../data/clients/uploads/destiny-uploads"
+		},
+		{
+			"path": "../builds"
 		}
 	],
 	"settings": {

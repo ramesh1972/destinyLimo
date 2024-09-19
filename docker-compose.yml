@@ -8,6 +8,9 @@ services:
     ports:
       - "5293:5293"
     network_mode: "host"
+    volumes:
+      - /var/clients/webforless/destiny-limo/prod/uploads:/uploads
+
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
