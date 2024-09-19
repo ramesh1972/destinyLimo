@@ -39,7 +39,7 @@ export class ConsoleComponent {
 
   isVisible: boolean = true;
   loggedInUser?: UserProfile;
-  loggedInUserRole?: number = 0;
+  loggedInUserRole?: number;
 
   ngOnInit() {
     console.log('console component initialized');

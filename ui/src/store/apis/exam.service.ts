@@ -41,4 +41,9 @@ export class ExamService {
     console.log("Exam service :", userId);
     return this._http.post(environment.baseURL + "Exam/" + userId, null);
   }
+
+  createExamByAdmin(userId: number): Observable<any> {
+    console.log("Exam service :", userId);
+    return this._http.post(environment.baseURL + "Exam/admin/" + userId, null);
+  }
 }

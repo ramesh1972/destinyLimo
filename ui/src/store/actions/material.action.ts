@@ -49,6 +49,52 @@ export const materialTextFetchAPI_Success = createAction(
   props<{ allMaterialTexts: MaterialText[] }>()
 );
 
+export const invokeMaterialText_CreateAPI = createAction(
+  '[MaterialText API] Invoke MaterialText Create API',
+  props<{ materialText: MaterialText }>()
+);
+
+export const materialText_CreateAPI_Success = createAction(
+  '[MaterialText API] Create API Success',
+  props<{ materialText: any }>()
+);
+
+export const invokeMaterialText_CreateAPI_Failure = createAction(
+  '[MaterialText API] Create API Failure',
+  props<{ error: any }>()
+);
+
+export const invokeMaterialText_UpdateAPI = createAction(
+  '[MaterialText API] Invoke MaterialText Update API',
+  props<{ materialText: MaterialText }>()
+);
+
+export const materialText_UpdateAPI_Success = createAction(
+  '[MaterialText API] Update API Success',
+  props<{ materialText: MaterialText }>()
+);
+
+export const invokeMaterialText_UpdateAPI_Failure = createAction(
+  '[MaterialText API] Update API Failure',
+  props<{ error: any }>()
+);
+
+export const invokeMaterialText_DeleteAPI = createAction(
+  '[MaterialText API] Invoke MaterialText Delete API',
+  props<{ material_id: number }>()
+);
+
+export const materialText_DeleteAPI_Success = createAction(
+  '[MaterialText API] Delete API Success',
+  props<{ success: boolean }>()
+);
+
+export const invokeMaterialText_DeleteAPI_Failure = createAction(
+  '[MaterialText API] Delete API Failure',
+  props<{ error: any }>()
+);
+
+
 // fetch MaterialVideo
 export const invokeMaterialVideoFetchAPI = createAction(
   '[MaterialVideo API] Invoke MaterialVideo Fetch API',
@@ -93,12 +139,12 @@ export const materialMCQ_UpdateAPI_Success = createAction(
 
 export const invokeMaterialMCQ_DeleteAPI = createAction(
   '[MaterialMCQ API] Invoke MaterialMCQ Delete API',
-  props<{ question_id: number }>()
+  props<{ material_id: number }>()
 );
 
 export const materialMCQ_DeleteAPI_Success = createAction(
   '[MaterialMCQ API] Delete API Success',
-  props<{ question_id: number }>()
+  props<{ success: boolean }>()
 );
 
 

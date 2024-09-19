@@ -57,8 +57,16 @@ export class CategoriesComponent {
       console.log("categories fetch dispatched");
 
       this.store.select(selectMaterialCategorys).subscribe((data: any) => {
-        console.log('categories fetched', data);
-        this.dataGridHelper!.setData(data);
+
+        const categories = data.map((category: any) => {
+          return {
+            ...category,
+            material_category_id: category.id
+          };
+        });
+
+        console.log('categories fetched', categories);
+        this.dataGridHelper!.setData(categories);
 
         // ----> draw the table
         this.drawVTable();

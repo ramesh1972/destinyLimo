@@ -43,7 +43,7 @@ export class RegisterFormValidationService {
             username: {
                 required: 'Username is required',
                 minLength: `Username must be ${this.formRules.usernameMin} characters or more`,
-                noSpaces: 'Username cannot contain spaces'
+                pattern: 'Username must not contain spaces and special characters'
             },
             email: {
                 required: 'required',

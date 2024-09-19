@@ -15,4 +15,6 @@ export interface MaterialState {
     files: MaterialFile[];
     texts: MaterialText[];
     mcqs: MaterialMCQ[];
+    materialText?: MaterialText;
+    materialMCQ?: MaterialMCQ;
 }

@@ -9,16 +9,26 @@ using DestinyLimoServer.DTOs.RequestDTOs;
 using DestinyLimoServer.DTOs.ResponseDTOs;
 using DestinyLimoServer.Models;
 using Org.BouncyCastle.Crypto.Prng;
+using DestinyLimoServer.Common.Uploader;
+using Newtonsoft.Json;
 
 namespace DestinyLimoServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(IRepositoryManager repository, IMapper mapper, ILogger logger) : ControllerBase
+    public class UserController(IRepositoryManager repository, IMapper mapper, ILogger logger, IConfiguration configuration) : ControllerBase
     {
         private readonly IRepositoryManager _repository = repository;
         private readonly IMapper _mapper = mapper;
         private readonly ILogger _logger = logger;
+        private readonly IConfiguration _configuration = configuration;
+
+        public class ApiResponse<T>
+        {
+            public bool? Success { get; set; }
+            public string? Message { get; set; }
+            public T? Data { get; set; }
+        }
 
         [HttpPost("authenticate")]
         public async Task<IActionResult> authenicateUser([FromBody] UserLoginDTO loginDTO)
@@ -26,8 +36,13 @@ namespace DestinyLimoServer.Controllers
             User user = await _repository.User.AuthenticateUser(loginDTO.Username, loginDTO.Password);
             if (user == null)
             {
-                _logger.LogInformation("User with username: {username} is not authenticated.", loginDTO.Username);
-                return NotFound();
+                _logger.LogInformation("User with username: {username} is not found", loginDTO.Username);
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Invalid username or password",
+                    Data = null
+                });
             }
             else
             {
@@ -40,8 +55,121 @@ namespace DestinyLimoServer.Controllers
                 var userProfile = await _repository.UserProfile.GetUserById(user.user_id ?? -1);
                 userDTO.UserProfile = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(userProfile);
 
+                if (userDTO.IsLocked)
+                {
+                    return BadRequest(new ApiResponse<object>
+                    {
+                        Success = false,
+                        Message = "Account is locked",
+                        Data = userDTO
+                    });
+                }
+                else if (!userDTO.IsApproved)
+                {
+                    return BadRequest(new ApiResponse<object>
+                    {
+                        Success = false,
+                        Message = "Account not approved",
+                        Data = userDTO
+                    });
+                }
+
                 return Ok(userDTO);
             }
+        }
+
+        [HttpPost("approveReject")]
+        public async Task<IActionResult> ApproveUser([FromBody] ApproveRejectDTO approveRejectDTO)
+        {
+            User user = await _repository.User.GetUserById(approveRejectDTO.UserId);
+            if (user == null)
+            {
+                _logger.LogInformation("User with id: {id} is not found", approveRejectDTO.UserId);
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "User not found",
+                    Data = null
+                });
+            }
+
+            await _repository.User.ApproveRejectUser(approveRejectDTO.UserId, approveRejectDTO.IsApproved, approveRejectDTO.ApproveRejectReason, approveRejectDTO.ApprovedRejectedBy);
+
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                Message = "User approved successfully",
+                Data = null
+            });
+        }
+
+        [HttpPost("lockUser")]
+        public async Task<IActionResult> LockUser([FromBody] LockUnlockUserDTO userDTO)
+        {
+            User user = await _repository.User.GetUserById(userDTO.UserId);
+            if (user == null)
+            {
+                _logger.LogInformation("User with id: {id} is not found", userDTO.UserId);
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "User not found",
+                    Data = null
+                });
+            }
+
+            await _repository.User.LockUser(userDTO.UserId, userDTO.IsLocked);
+
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                Message = "User locked successfully",
+                Data = null
+            });
+        }
+
+
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPassword)
+        {
+            User user = await _repository.User.GetUserByUsername(resetPassword.Username);
+            if (user == null)
+            {
+                _logger.LogInformation("User with username: {username} is not found", resetPassword.Username);
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Invalid username",
+                    Data = null
+                });
+            }
+            if (user.is_locked)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Account is locked",
+                    Data = null
+                });
+            }
+            else if (!user.is_approved)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Account not approved",
+                    Data = null
+                });
+            }
+
+            await _repository.User.ResetPassword(user.user_id ?? -1, resetPassword.NewPassword);
+
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                Message = "Password reset successfully. Login with your new password",
+                Data = null
+            });
         }
 
         [HttpGet("{includeInActive?}/{includeDeleted?}")]
@@ -127,8 +255,10 @@ namespace DestinyLimoServer.Controllers
         }
 
         [HttpPost]
-        async public Task<IActionResult> CreateUserAsync([FromBody] DestinyLimoServer.DTOs.RequestDTOs.UserDTO user)
+        async public Task<IActionResult> CreateUserAsync([FromForm] DestinyLimoServer.DTOs.RequestDTOs.UserDTOJsonString userJSON)
         {
+            DTOs.RequestDTOs.UserDTO user = JsonConvert.DeserializeObject<DTOs.RequestDTOs.UserDTO>(userJSON.user)!;
+
             if (user == null)
             {
                 _logger.LogError("UserForCreationDto object sent from client is null.");
@@ -147,6 +277,17 @@ namespace DestinyLimoServer.Controllers
             var userProfile = user.UserProfile;
             var userProfileEntity = _mapper.Map<UserProfile>(userProfile);
 
+            // Handle avatar file
+            var avatar = HttpContext.Request.Form.Files[0];
+            if (avatar != null && avatar.Length > 0)
+            {
+                FileUploader fileUploader = new FileUploader(_logger, _configuration);
+                await fileUploader.UploadFileAsync(avatar, UploadFilePaths.ProfilePicture);
+            }
+
+            // extract the avatar file name
+            userProfileEntity.avatar = Path.GetFileName(userProfileEntity.avatar) ?? "default-avatar.png";
+
             // register
             User? newUser = await _repository.User.RegisterUser(userEntity, userProfileEntity);
             if (newUser == null)
@@ -159,7 +300,7 @@ namespace DestinyLimoServer.Controllers
             UserProfile newUserProfile = await _repository.UserProfile.GetUserById(newUser.user_id ?? -1);
 
             IEnumerable<UserRole> userRoles = await _repository.Role.GetUserRoles(newUser.user_id ?? -1);
-        
+
             DestinyLimoServer.DTOs.ResponseDTOs.UserDTO userDTO = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>(newUser);
             userDTO.UserProfile = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(newUserProfile);
             userDTO.Roles = _mapper.Map<IEnumerable<DestinyLimoServer.DTOs.ResponseDTOs.UserRoleDTO>>(userRoles);
@@ -183,9 +324,11 @@ namespace DestinyLimoServer.Controllers
             return CreatedAtRoute("UserById", new { id = id }, user);
         }
 
-        [HttpPut("{id}")]
-        async public Task<IActionResult> UpdateUserAsync(int id, [FromBody] DestinyLimoServer.DTOs.RequestDTOs.UserDTO user)
+        [HttpPut()]
+        async public Task<IActionResult> UpdateUserAsync([FromForm] DestinyLimoServer.DTOs.RequestDTOs.UserDTOJsonString userJSON)
         {
+            DTOs.RequestDTOs.UserDTO user = JsonConvert.DeserializeObject<DTOs.RequestDTOs.UserDTO>(userJSON.user)!;
+
             if (user == null)
             {
                 _logger.LogError("UserForUpdateDto object sent from client is null.");
@@ -199,20 +342,40 @@ namespace DestinyLimoServer.Controllers
             }
 
             User userEntity = _mapper.Map<User>(user);
-            userEntity.user_id = id;
             await _repository.User.UpdateUser(userEntity);
 
             var userProfile = user.UserProfile;
 
             if (userProfile != null)
             {
-                userProfile.UserId = id;
+                if (HttpContext.Request.Form.Files.Count > 0)
+                {
+                    var avatar = HttpContext.Request.Form.Files[0];
+                    if (avatar != null && avatar.Length > 0)
+                    {
+                        FileUploader fileUploader = new FileUploader(_logger, _configuration);
+                        await fileUploader.UploadFileAsync(avatar, UploadFilePaths.ProfilePicture);
+                    }
+                }
+
+                userProfile.UserId = userEntity.user_id;
                 var userProfileEntity = _mapper.Map<UserProfile>(userProfile);
-                userProfileEntity.user_id = id;
-                await _repository.UserProfile.UpdateAsync(userProfileEntity, id);
+                await _repository.UserProfile.UpdateAsync(userProfileEntity, userEntity.user_id ?? -1);
+
+                var userResponseDTO = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserDTO>(userEntity);
+
+                var userProfileResponseDTO = _mapper.Map<DestinyLimoServer.DTOs.ResponseDTOs.UserProfileDTO>(userProfileEntity);
+                userResponseDTO.UserProfile = userProfileResponseDTO;
+
+                // get the roles
+                var userRoles = await _repository.Role.GetUserRoles(userEntity.user_id ?? -1);
+                var userRolesDTO = _mapper.Map<IEnumerable<DTOs.ResponseDTOs.UserRoleDTO>>(userRoles);
+                userResponseDTO.Roles = userRolesDTO;
+
+                return Ok(userResponseDTO);
             }
 
-            return CreatedAtRoute("UserById", new { id = userEntity.user_id }, userEntity);
+            return BadRequest("User profile is required");
         }
     }
 }

@@ -2,14 +2,15 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { UserState } from '../states/user.state';
-import { approveRejectUser, approveRejectUser_Success, AuthenticateUser_Success, changePassword_Success, forgotPassword_Success, lockUser_Success, logoutUser, logoutUser_Success, registerUser_Success, resetPassword_Success, UsersFetchAPI_Success } from '../actions/user.action';
+import { approveRejectUser, approveRejectUser_Success, AuthenticateUser_Success, changePassword_Success, forgotPassword_Success, lockUser_Success, logoutUser, logoutUser_Success, registerUser_Success, resetPassword_Success, updateUser_Success, UsersFetchAPI_Success } from '../actions/user.action';
 
 //create a dummy initial state
 export const initialState: UserState = {
   loggedInUser: undefined,
   allUsers: [],
   newUser: undefined,
-  currentUser: undefined
+  currentUser: undefined,
+  message: undefined
 };
 
 
@@ -36,12 +37,12 @@ export const userReducer = createReducer(
     return { ...state, currentUser: updatedUser };
   }),
   
-  on(approveRejectUser_Success, (state, { updatedUser }) => {
-    return { ...state, currentUser: updatedUser };
+  on(approveRejectUser_Success, (state, { message }) => {
+    return { ...state, message: message };
   }),
 
-  on(lockUser_Success, (state, { updatedUser }) => {
-    return { ...state, currentUser: updatedUser };
+  on(lockUser_Success, (state, { message }) => {
+    return { ...state, message: message };
   }),
   
   on(logoutUser_Success, (state) => {
@@ -52,9 +53,8 @@ export const userReducer = createReducer(
     return { ...state, allUsers: allUsers };
   }),
 
-
-
-
-
+  on(updateUser_Success, (state, { updatedUser }) => {  
+    return { ...state, currentUser: updatedUser, loggedInUser: updatedUser };
+  }),
 
 );

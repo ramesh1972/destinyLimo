@@ -18,10 +18,10 @@
     width: 30%;
     width: 300px;
     height: 200px;
-    background-color: rgb(182, 239, 182, .8);
-    border: 2px white solid;
+    background-color: rgb(182, 239, 182, .7);
+    border: 6px white solid;
     border-radius: 10px;
-    box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);
+      box-shadow: rgba(0, 0, 0, 0.3) 1px 1px 2px 2px;
 }
 
 .spaced-item {

@@ -3,7 +3,7 @@ import { createReducer, on } from '@ngrx/store';
 
 import { UserExam } from '../models/Exam';
 import { ExamState } from '../states/exam.state';
-import { ExamFetchById_Success, UserExamByIdFetchAPI_Success, UserExamsFetchAPI_Success,  UserExamsForUserFetchAPI_Success, createUserExamSuccess } from '../actions/exam.action';
+import { ExamFetchById_Success, UserExamByIdFetchAPI_Success, UserExamsFetchAPI_Success,  UserExamsForUserFetchAPI_Success, createUserExamSuccess, createUserExamSuccessByAdmin } from '../actions/exam.action';
 
 //create a dummy initial state
 export const initialState: ExamState = {
@@ -35,5 +35,9 @@ export const examReducer = createReducer(
   on(createUserExamSuccess, (state, { newExam }) => {
     return { ...state, newExam: newExam };
   }),
+
+  on(createUserExamSuccessByAdmin, (state, { newExam }) => {
+    return { ...state, newExam: newExam };
+  })
 );
 

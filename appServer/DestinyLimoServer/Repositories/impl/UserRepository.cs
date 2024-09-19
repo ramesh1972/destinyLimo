@@ -70,14 +70,15 @@ namespace DestinyLimoServer.Repositories.impl
         // --------------------------------------------
         public async Task<User> AuthenticateUser(string username, string password)
         {
-            User user = await QueryFirstOrDefaultAsync("SELECT user_id FROM users WHERE username = @username AND password_hash = @password", new { username = username, password = password });
+            User user = await QueryFirstOrDefaultAsync("SELECT * FROM users WHERE username = @username AND password_hash = @password", new { username = username, password = password });
             return user;
         }
 
-        public async Task<User> LogoutUser()
+        public async Task<User?> LogoutUser()
         {
             // TODO: add login related table and update the login status
-            return null;
+            await Task.Delay(0);
+            return null!;
         }
 
         // TODO: hash the password
@@ -86,7 +87,7 @@ namespace DestinyLimoServer.Repositories.impl
             User user = await QueryFirstOrDefaultAsync("SELECT user_id FROM users WHERE user_id = @userId AND password_hash = @oldPassword", new { userId = userId, oldPassword = oldPassword });
             if (user == null)
             {
-                return user;
+                return null!;
             }
 
             await ExecuteAsync("UPDATE users SET password_hash = @newPassword WHERE user_id = @userId", new { userId = userId, newPassword = newPassword });
@@ -99,7 +100,7 @@ namespace DestinyLimoServer.Repositories.impl
             User user = await QueryFirstOrDefaultAsync("SELECT user_id FROM users WHERE email = @email", new { email = email });
             if (user == null)
             {
-                return user;
+                return null!;
             }
 
             // TODO send email with password reset link
@@ -114,9 +115,11 @@ namespace DestinyLimoServer.Repositories.impl
         }
 
         // --------------------------------------------
-        public async Task<User> ApproveRejectUser(int userId, bool isApproved, string approveRejectReason, int approvedRejectedBy)
+        public async Task<User> ApproveRejectUser(int userId, bool isApproved = true, string? approveRejectReason = "", int approvedRejectedBy = 2)
         {
-            await ExecuteAsync("UPDATE users SET is_approved = @isApproved, approve_reject_reason = @approveRejectReason, approved_rejected_by = @approvedRejectedBy WHERE user_id = @userId", new { userId = userId, isApproved = isApproved, approveRejectReason = approveRejectReason, approvedRejectedBy = approvedRejectedBy });
+            string dateNow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            await ExecuteAsync("UPDATE users SET is_approved = @isApproved, approved_rejected_reason = @approveRejectReason, approved_rejected_by = @approvedRejectedBy, approved_rejected_datetime='" + dateNow + "' " + " WHERE user_id = @userId", new { userId = userId, isApproved = isApproved, approveRejectReason = approveRejectReason, approvedRejectedBy = approvedRejectedBy });
             return await GetUserById(userId);
         }
 
@@ -129,8 +132,9 @@ namespace DestinyLimoServer.Repositories.impl
         // --------------------------------------------
         public async Task<User> UpdateUser(User user)
         {
-            await UpdateAsync(user, user.user_id ?? -1);
-            return user;
+            var sql = "UPDATE users SET email = @email WHERE user_id = @userId";
+            await ExecuteAsync(sql, new { email = user.email, userId = user.user_id });
+            return await GetUserById((int)user.user_id!);
         }
 
         public async Task<User> DeleteUser(int userId)

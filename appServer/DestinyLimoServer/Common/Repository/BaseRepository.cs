@@ -98,6 +98,7 @@ namespace DestinyLimoServer.Common.Repository
 
             return false;
         }
+            
 
         public async Task<bool> DeleteAsync(int id)
         {
@@ -268,7 +269,7 @@ namespace DestinyLimoServer.Common.Repository
             return model;
         }
 
-        private string GetInsertColumns(string[]? cols = null)
+        protected string GetInsertColumns(string[]? cols = null)
         {
             if (cols == null)
             {
@@ -286,7 +287,7 @@ namespace DestinyLimoServer.Common.Repository
             return typeof(T).GetProperty(colName)?.PropertyType.Name ?? "string";
         }
 
-        private string GetInsertParameters(string[]? cols = null)
+        protected string GetInsertParameters(string[]? cols = null)
         {
             if (cols == null)
             {
@@ -299,7 +300,7 @@ namespace DestinyLimoServer.Common.Repository
             }
         }
 
-        private string GetUpdateColumns(string[]? cols = null)
+        protected string GetUpdateColumns(string[]? cols = null)
         {
             if (cols == null)
             {

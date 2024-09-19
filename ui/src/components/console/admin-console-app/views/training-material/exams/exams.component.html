@@ -53,7 +53,7 @@
                 <c-card-header class="title_header" style="background-color: rgba(208, 208, 49, .2)">
 
                     <div class="card-title" style="width:calc(100% - 400px);margin-bottom: 55px;font-size:16px">
-                        <c-input-group class="mb-3" style="width:calc(100% - 300px);font-size:16px;margin-top:15px">
+                        <c-input-group class="mb-3" style="font-size:16px;margin-top:15px">
                             <span cInputGroupText>Description</span>
                             <input aria-label="Description" cFormControl placeholder="Description"
                                 [ngModel]="mcq.description" (ngModelChange)="mcq.description = $event" />
@@ -63,8 +63,7 @@
                         <c-input-group style="width:400px;text-align:right;font-size:16px;padding:4px;justify-content: end;">
                             <span cInputGroupText>Category</span>
                             <c-dropdown
-                                style="font-size:16px;z-index: 999;max-height: 350px;"
-                                (ngModelChange)="mcq.category_name = $event">
+                                style="font-size:16px;z-index: 999;max-height: 350px;">
                                 <button cButton cDropdownToggle
                                     color="secondary">{{getCurrentCategoryName(mcq)}}</button>
                                 <ul cDropdownMenu dark style="max-height: 200px; overflow-y: scroll;">
@@ -90,25 +89,25 @@
                     <div class="form-check">
                         <c-form-check [switch]="true"
                             style="display: flex; flex-direction: row; vertical-align: middle; align-items: center;margin-bottom:6px">
-                            <input cFormCheckInput id="answer_1" type="checkbox" [checked]="mcq.correct_1">
+                            <input cFormCheckInput id="answer_1" type="checkbox" [checked]="mcq.correct_1" [ngModel]="mcq.correct_1" (ngModelChange)="mcq.correct_1 = $event" >
                             <input aria-label="Choice 1" cFormControl placeholder="Choice 1" [ngModel]="mcq.answer_1"
                                 (ngModelChange)="mcq.answer_1 = $event" />
                         </c-form-check>
                         <c-form-check [switch]="true"
                             style="display: flex; flex-direction: row; vertical-align: middle; align-items: center;margin-bottom:6px">
-                            <input cFormCheckInput id="answer_2" type="checkbox" [checked]="mcq.correct_2">
+                            <input cFormCheckInput id="answer_2" type="checkbox" [checked]="mcq.correct_2" [ngModel]="mcq.correct_2" (ngModelChange)="mcq.correct_2 = $event">
                             <input aria-label="Choice 2" cFormControl placeholder="Choice 2" [ngModel]="mcq.answer_2"
                                 (ngModelChange)="mcq.answer_2 = $event" />
                         </c-form-check>
                         <c-form-check [switch]="true"
                             style="display: flex; flex-direction: row; vertical-align: middle; align-items: center;margin-bottom:6px">
-                            <input cFormCheckInput id="answer_3" type="checkbox" [checked]="mcq.correct_3">
+                            <input cFormCheckInput id="answer_3" type="checkbox" [checked]="mcq.correct_3" [ngModel]="mcq.correct_3" (ngModelChange)="mcq.correct_3 = $event">
                             <input aria-label="Choice 3" cFormControl placeholder="Choice 3" [ngModel]="mcq.answer_3"
                                 (ngModelChange)="mcq.answer_3 = $event" />
                         </c-form-check>
                         <c-form-check [switch]="true"
                             style="display: flex; flex-direction: row; vertical-align: middle; align-items: center;margin-bottom:6px">
-                            <input cFormCheckInput id="answer_4" type="checkbox" [checked]="mcq.correct_4">
+                            <input cFormCheckInput id="answer_4" type="checkbox" [checked]="mcq.correct_4" [ngModel]="mcq.correct_4" (ngModelChange)="mcq.correct_4 = $event">
                             <input aria-label="Choice 4" cFormControl placeholder="Choice 4" [ngModel]="mcq.answer_4"
                                 (ngModelChange)="mcq.answer_4 = $event" />
                         </c-form-check>

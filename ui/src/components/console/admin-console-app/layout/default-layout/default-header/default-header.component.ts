@@ -27,6 +27,10 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { delay, filter, map, tap } from 'rxjs/operators';
+import { selectLoggedInUser } from '@src/store/selectors/user.selector';
+import { FilePaths } from '@src/components/common/file-paths';
+import { Store } from '@ngrx/store';
+import { logoutUser } from '@src/store/actions/user.action';
 
 @Component({
   selector: 'app-admin-default-header',
@@ -52,7 +56,10 @@ export class AdminDefaultHeaderComponent extends HeaderComponent {
     return this.colorModes.find(mode=> mode.name === currentMode)?.icon ?? 'cilSun';
   });
 
-  constructor() {
+  loggedInUser: any;
+  avatarURL: any;
+
+  constructor(private store: Store) {
     super();
     this.#colorModeService.localStorageItemName.set('coreui-free-angular-admin-template-theme-default');
     this.#colorModeService.eventName.set('ColorSchemeChange');
@@ -72,6 +79,28 @@ export class AdminDefaultHeaderComponent extends HeaderComponent {
 
   @Input() sidebarId: string = 'sidebar1';
 
+  ngOnInit() {
+    this.store.select(selectLoggedInUser).subscribe((user: any) => {
+      if (!user) {
+        return;
+      }
+      
+      console.log('header User:', user);
+      this.loggedInUser = user;
+      this.avatarURL = FilePaths.GetAvatarPath(user.userProfile.avatar);
+
+      console.log('header User:', this.avatarURL);
+    });
+  }
+
+  onLogout() {
+    this.store.dispatch(logoutUser());
+    this.loggedInUser = undefined;
+
+    // redirect to home page
+    window.location.href = '/';
+  }
+  
   public newMessages = [
     {
       id: 0,

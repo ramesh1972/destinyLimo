@@ -62,24 +62,5 @@ export const navItems: INavData[] = [
       text: 'new',
       color: 'primary'
     }
-  },
-  {
-    name: 'Account',
-    title: true
-  },
-  {
-    name: 'Edit Profile',
-    url: '/learner/console/profile/edit-profile',
-    iconComponent: { name: 'cil-user' }
-  },
-  {
-    name: 'Change Password',
-    url: '/learner/console/profile/change-password',
-    iconComponent: { name: 'cil-lock-locked' }
-  },
-  {
-    name: 'Logout',
-    url: '/learner/console/logout',
-    iconComponent: {name: 'cil-account-logout'}
-  },
+  }
 ];

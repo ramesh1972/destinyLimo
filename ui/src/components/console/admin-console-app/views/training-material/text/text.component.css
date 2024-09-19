@@ -3,13 +3,29 @@
     max-width: 800px;
   }
   
-  .card-title[contenteditable="true"] {
+  .card-title {
     border-bottom: 1px dotted #ccc;
     padding-bottom: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
     cursor: text;
   }
   
+  .card-title-header-text {
+    border-bottom: 1px dotted #ccc;
+    cursor: text;
+    width: calc(100% - 300px);
+    margin-bottom: 0px;
+  }
+
+
+  .card-title-category {
+    padding-bottom: 5px;
+    cursor: text;
+    width: 300px;
+    justify-content: right;
+    text-align: right;
+}
+
   .form-check span[contenteditable="true"] {
     border-bottom: 1px dotted #ccc;
     padding-bottom: 3px;
@@ -36,13 +52,21 @@
   .title_header {
     flex-direction: column;
   }
+
+  .card-title-header-text {
+    border-bottom: 1px dotted #ccc;
+    cursor: text;
+    width: 100%;
+    margin-bottom: 0px;
+  }
+
   .grid-container {
       margin-top: 0px;
   }
 
   .grid-header-row {
-      flex-direction: column;
       align-items: start;
+      margin-bottom: 10px;
   }
   .search-row {
       display: none;

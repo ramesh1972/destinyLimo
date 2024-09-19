@@ -10,7 +10,7 @@ export class User {
     isApproved?: boolean;           // Maps to `IsApproved
     approveRejectReason?: string;   // Maps to `ApproveRejectReason`
     approvedRejectedDate?: Date;    // Maps to `ApprovedRejectedDate`, nullable Date
-    approvedRejectedBy?: string;    // Maps to `ApprovedRejectedBy`
+    approvedRejectedBy?: number;    // Maps to `ApprovedRejectedBy`
 
     isLocked?: boolean;             // Maps to `IsLocked`
     isDeleted?: boolean;            // Maps to `IsDeleted`

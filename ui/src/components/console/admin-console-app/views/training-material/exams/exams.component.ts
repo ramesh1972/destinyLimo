@@ -12,9 +12,10 @@ import { FormModule, FormCheckComponent } from '@coreui/angular';
 import { ButtonDirective } from '@coreui/angular';
 
 import { AccordianParentComponent } from '@src/components/common/components/accordian-parent/accordian-parent.component';
-import { invokeMaterialMCQFetchAPI, materialMCQFetchAPI_Success } from '@src/store/actions/material.action';
+import { invokeMaterialMCQFetchAPI, materialMCQ_CreateAPI_Success, materialMCQ_DeleteAPI_Success, materialMCQ_UpdateAPI_Success, materialMCQFetchAPI_Success } from '@src/store/actions/material.action';
 import { invokeMaterialMCQ_CreateAPI, invokeMaterialMCQ_UpdateAPI, invokeMaterialMCQ_DeleteAPI } from '@src/store/actions/material.action';
 import { selectMaterialCategorys, selectMaterialMCQs } from '@src/store/selectors/material.selector';
+import { MaterialMCQ } from '@src/store/models/MaterialMCQ';
 
 @Component({
   selector: 'app-exams',
@@ -48,7 +49,7 @@ export class ExamsComponent {
       this.categories = [...data];
     });
 
-    this.store.dispatch(invokeMaterialMCQFetchAPI({isPublic: false}));
+    this.store.dispatch(invokeMaterialMCQFetchAPI({ isPublic: false }));
 
     // Wait for the action to complete
     this.actions$.pipe(
@@ -68,6 +69,7 @@ export class ExamsComponent {
 
           return {
             ...mcq,
+            id: mcq.id,
             title: mcq.question_text || 'MCQ Question',
             category_name: catName,
             editing: false,
@@ -88,15 +90,8 @@ export class ExamsComponent {
   selectCategory(categoryName: string, index: number): void {
     console.log('selectCategory', categoryName, index);
     this.selectedCategoryName = categoryName;
-    this.mcqs[index].category_name = categoryName; // Update the mcq object if needed
   }
 
-  adjustTextareaHeight(event: Event): void {
-    console.log('adjustTextareaHeight');
-    const textarea = event.target as HTMLTextAreaElement;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-  }
 
   onAdd() {
     console.log('component onAdd');
@@ -135,78 +130,75 @@ export class ExamsComponent {
 
   onDelete(i: number) {
     this.mcqs[i].is_deleted = true;
-    this.store.dispatch(invokeMaterialMCQ_DeleteAPI(this.mcqs[i].question_id));
+    this.store.dispatch(invokeMaterialMCQ_DeleteAPI({ material_id: this.mcqs[i].material_id }));
 
-    this.selectedCategoryName = '';
+    this.actions$.pipe(
+      ofType(materialMCQ_DeleteAPI_Success),
+      take(1)
+    ).subscribe((data: any) => {
+      console.log("content fetch dispatched", data);
 
-    // remove from the list array
-    this.mcqs.splice(i, 1);
+      if (data.success)
+        this.mcqs.splice(i, 1);
+      this.selectedCategoryName = '';
 
-    this.mcqs[i].editing = false;
-    this.mcqs[i].adding = false;
+
+    });
   }
 
   onSave(i: number) {
     console.log('component save', i);
 
-    this.selectedCategoryName = '';
+    var mcqChanged: MaterialMCQ = this.mcqs[i];
+
+    if (this.selectedCategoryName !== '') {
+      mcqChanged.category_name = this.selectedCategoryName; // Update the mcq object if needed
+      mcqChanged.material_category_id = this.categories.find((cat: any) => cat.category_name === this.selectedCategoryName)?.id;
+    }
 
     if (this.mcqs[i].adding) {
       this.store.dispatch(invokeMaterialMCQ_CreateAPI({
-        materialMCQ: {
-          question_id: -1,
-          material_id: -1,
-          category_name: this.mcqs[i].category_name,
-          thumbnail: '',
-          background_img: '',
-          material_type_id: this.mcqs[i].content_type_id,
-          material_category_id: this.categories.find((cat: any) => cat.category_name === this.mcqs[i].category_name)?.id || -1,
-          title: this.mcqs[i].title,
-          description: this.mcqs[i].description,
-          question_text: this.mcqs[i].question_text,
-          answer_1: this.mcqs[i].answer_1,
-          answer_2: this.mcqs[i].answer_2,
-          answer_3: this.mcqs[i].answer_3,
-          answer_4: this.mcqs[i].answer_4,
-          correct_1: this.mcqs[i].correct_1,
-          correct_2: this.mcqs[i].correct_2,
-          correct_3: this.mcqs[i].correct_3,
-          correct_4: this.mcqs[i].correct_4,
-          is_public: this.mcqs[i].is_public,
-          is_active: this.mcqs[i].is_active,
-          is_deleted: this.mcqs[i].is_deleted
-        }
+        materialMCQ: mcqChanged
       }));
+
+      this.actions$.pipe(
+        ofType(materialMCQ_CreateAPI_Success),
+        take(1)
+      ).subscribe((data: any) => {
+        console.log("content fetch dispatched", data);
+
+        const newMCQ: any = { ...data.materialMCQ };
+        const catName = this.categories.find((cat: any) => cat.id === newMCQ.material_category_id)?.category_name;
+        console.log('catName', catName);
+        newMCQ.category_name = catName;
+        newMCQ.editing = false;
+        newMCQ.adding = false;
+
+        this.mcqs[i] = newMCQ;
+        this.selectedCategoryName = '';
+      });
     } else if (this.mcqs[i].editing) {
       this.store.dispatch(invokeMaterialMCQ_UpdateAPI({
-        materialMCQ: {
-          question_id: this.mcqs[i].question_id,
-          material_id: this.mcqs[i].material_id,
-          category_name: this.mcqs[i].category_name,
-          thumbnail: this.mcqs[i].thumbnail,
-          background_img: this.mcqs[i].background_img,
-          material_type_id: this.mcqs[i].content_type_id,
-          material_category_id: this.categories.find((cat: any) => cat.category_name === this.mcqs[i].category_name)?.id || -1,
-          title: this.mcqs[i].title,
-          description: this.mcqs[i].description,
-          question_text: this.mcqs[i].question_text,
-          answer_1: this.mcqs[i].answer_1,
-          answer_2: this.mcqs[i].answer_2,
-          answer_3: this.mcqs[i].answer_3,
-          answer_4: this.mcqs[i].answer_4,
-          correct_1: this.mcqs[i].correct_1,
-          correct_2: this.mcqs[i].correct_2,
-          correct_3: this.mcqs[i].correct_3,
-          correct_4: this.mcqs[i].correct_4,
-          is_public: this.mcqs[i].is_public,
-          is_active: this.mcqs[i].is_active,
-          is_deleted: this.mcqs[i].is_deleted
-        }
+        materialMCQ: mcqChanged
       }));
+
+      this.actions$.pipe(
+        ofType(materialMCQ_UpdateAPI_Success),
+        take(1)
+      ).subscribe((data: any) => {
+        console.log("content fetch dispatched", data);
+
+        const newMCQ: any = { ...data.materialMCQ };
+        const catName = this.categories.find((cat: any) => cat.id === newMCQ.material_category_id)?.category_name;
+        console.log('catName', catName);
+        newMCQ.category_name = catName;
+        newMCQ.editing = false;
+        newMCQ.adding = false;
+
+        this.mcqs[i] = newMCQ;
+        this.selectedCategoryName = '';
+      });
     }
-  
-    this.mcqs[i].editing = false;
-    this.mcqs[i].adding = false;
   }
 
   onCancel(i: number) {

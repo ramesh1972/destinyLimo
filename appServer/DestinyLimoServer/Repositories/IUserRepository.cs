@@ -19,13 +19,13 @@ namespace DestinyLimoServer.Repositories
 
         // --------------------------------------------
         Task<User> AuthenticateUser(string userName, string password);
-        Task<User> LogoutUser();
+        Task<User?> LogoutUser();
         Task<User> ChangePassword(int userId, string oldPassword, string newPassword);
         Task<User> ForgotPassword(string email);
         Task<User> ResetPassword(int userId, string newPassword);
 
         // --------------------------------------------
-        Task<User> ApproveRejectUser(int userId, bool isApproved, string approveRejectReason, int approvedRejectedBy);
+        Task<User> ApproveRejectUser(int userId, bool isApproved = true, string? approveRejectReason = "", int approvedRejectedBy = 2);
         Task<User> LockUser(int userId, bool isLocked);
 
         // --------------------------------------------

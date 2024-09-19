@@ -15,7 +15,7 @@ namespace DestinyLimoServer.DTOs.ResponseDTOs
         public int num_correct { get; set; }
         public int num_wrong { get; set; }
         public int min_correct_answers_for_pass { get; set; }
-        public IEnumerable<MaterialMCQDTO>? ExamQuestions { get; set; }
+        public IEnumerable<DestinyLimoServer.DTOs.ResponseDTOs.MaterialMCQDTO>? ExamQuestions { get; set; }
         public IEnumerable<UserExamAnswerDTO>? UserExamAnswers { get; set; }
     }
 }

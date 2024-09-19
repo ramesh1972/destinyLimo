@@ -7,10 +7,13 @@ import { CommonModule } from '@angular/common';
 import { CardModule, ButtonDirective, GridModule, BorderDirective, ButtonGroupComponent, FormCheckLabelDirective } from '@coreui/angular';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
+import { environment } from '@src/environments/environment';
+
 import { MaterialCategory } from '@src/store/models/MaterialCategory';
 import { invokeMaterialCategoryFetchAPI, invokeMaterialFileFetchAPI, materialCategoryFetchAPI_Success, materialFileFetchAPI_Success } from '@src/store/actions/material.action';
 import { selectMaterialCategorys, selectMaterialFiles } from '@src/store/selectors/material.selector';
 import { MaterialFile } from '@src/store/models/MaterialFile';
+import { FilePaths } from '@src/components/common/file-paths';
 
 @Component({
   selector: 'app-courses',
@@ -65,22 +68,20 @@ export class CoursesComponent {
     this.actions$.pipe(
       ofType(materialFileFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("files fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log('files fetched', data);
 
-      this.store.select(selectMaterialFiles).subscribe((data: any) => {
-        console.log('files fetched', data);
+      this.files = data.allMaterialFiles.map((file: any) => {
+        return {
+          ...file,
+          file_name: FilePaths.GetTrainingMaterialFileURL(file.file_name),
 
-        this.files = data.map((file: any) => {
-          return {
-            ...file,
-            category_name: this.categories.find((cat: MaterialCategory) => file.material_category_id == cat.id)?.category_name
-          };
-        });
-
-        console.log("modified files :", this.files);
+          category_name: this.categories.find((cat: MaterialCategory) => file.material_category_id == cat.id)?.category_name
+        };
       });
-    })
+
+      console.log("modified files :", this.files);
+    });
   }
 
   fileTypeIcon(fileName: string): string {
@@ -99,10 +100,16 @@ export class CoursesComponent {
       case 'txt':
         return '/images/icons/files/typora-48.png';
       case 'jpg':
-        return '/images/icons/files/jpg-50-32.png';
+        return '/images/icons/files/image.webp';
+      case 'jpeg':
+        return '/images/icons/files/image.webp';
+      case 'png':
+        return '/images/icons/files/image.webp';
+      case 'mp4':
+        return '/images/icons/files/video.png';
       // Add more cases as needed
       default:
-        return '/images/icons/files/default-icon.png';
+        return '/images/icons/files/default-file-icon.png';
     }
   }
 

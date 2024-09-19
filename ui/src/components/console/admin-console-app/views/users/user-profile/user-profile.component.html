@@ -11,24 +11,37 @@
           <form cForm style="padding: 10px;">
             <div class="user-profile-container" style="background-color: lightgoldenrodyellow;">
               <c-input-group class="mb-3" style="justify-content: center;">
-                <label class="user-profile-status" [ngStyle]="{'background-color': user?.userStatusBGColor }" style="border-top-right-radius: 6px;border-bottom-right-radius: 6px;">User is
+                <label class="user-profile-status" [ngStyle]="{'background-color': user?.userStatusBGColor }"
+                  style="border-top-right-radius: 6px;border-bottom-right-radius: 6px;">User is
                   {{user?.userStatus}}</label>
-                <div class="user-profile-reject-row" *ngIf="user?.userStatus === 'Approved' || user?.userStatus === 'Pending Approval'">
-                  <span class="user-profile-field" style="width: 120px;height: 30px;padding:2px;padding-left:6px;">Reject Reason</span>
-                  <input class="user-profile-label" style="width: calc(100% - 115px);padding:2px;padding-left:6px;margin-right: -2px;height: 30px;"
-                    value="{{user?.approveRejectReason}}" placeholder="Enter reject reason" />
+                <div class="user-profile-reject-row"
+                  *ngIf="user?.userStatus === 'Approved' || user?.userStatus === 'Pending Approval'">
+                  <span class="user-profile-field"
+                    style="width: 120px;height: 30px;padding:2px;padding-left:6px;">Reject Reason</span>
+                  <input class="user-profile-label"
+                    style="width: calc(100% - 115px);padding:2px;padding-left:6px;margin-right: -2px;height: 30px;"
+                    name="approveRejectReason" value="{{user?.approveRejectReason}}"
+                    [(ngModel)]="user.approveRejectReason" placeholder="Enter reject reason" />
                 </div>
-                <div class="d-flex flex-row" style="justify-content: center;padding:10px;border:0px;margin-bottom: -5px;">
-                  <button *ngIf="user?.userStatus === 'Pending Approval' || user?.userStatus === 'Rejected'" cButton color="primary"
-                    style="width: fit-content;height:40px;text-align: center;">{{user?.userStatus === 'Rejected' ? 'Approve Again': 'Approve'}}</button>
-                  <button *ngIf="user?.userStatus === 'Approved' || user?.userStatus === 'Pending Approval'" cButton
-                    color="warning" style="width: fit-content;height:40px;margin-left:10px; text-align: center">Reject</button>
-                  <button *ngIf="user?.userStatus !== 'Locked'" cButton color="primary"
-                    variant="outline"
-                    style="width: fit-content; height:40px; margin-left:10px;text-align: center;">Lock</button>
-                  <button *ngIf="user?.userStatus === 'Locked'" cButton color="primary"
-                    variant="outline"
-                    style="width: fit-content;height:40px;margin-left:10px;text-align: center;">Unlock</button>
+                <div style="display: flex;flex-direction:column;justify-content: center;align-items: center;">
+                 
+                  <div class="d-flex flex-row"
+                    style="justify-content: center;padding:10px;border:0px;margin-bottom: -5px;">
+                    <button *ngIf="user?.userStatus === 'Pending Approval' || user?.userStatus === 'Rejected'" cButton
+                      color="primary" style="width: fit-content;height:40px;text-align: center;"
+                      (click)="onApprove()">{{user?.userStatus === 'Rejected' ? 'Approve Again': 'Approve'}}</button>
+                    <button *ngIf="user?.userStatus === 'Approved' || user?.userStatus === 'Pending Approval'" cButton
+                      color="warning" style="width: fit-content;height:40px;margin-left:10px; text-align: center"
+                      (click)="onReject()">Reject</button>
+                    <button *ngIf="user?.userStatus !== 'Locked'" cButton color="primary" variant="outline"
+                      style="width: fit-content; height:40px; margin-left:10px;text-align: center;"
+                      (click)="onLock()">Lock</button>
+                    <button *ngIf="user?.userStatus === 'Locked'" cButton color="primary" variant="outline"
+                      style="width: fit-content;height:40px;margin-left:10px;text-align: center;"
+                      (click)="onUnlock()">Unlock</button>
+                  </div>
+                  <label *ngIf="successResponse !== ''"
+                    style="color: green; margin-left: 10px;margin-top: 10px;font-size: 18px;">{{successResponse}}</label>
                 </div>
 
               </c-input-group>

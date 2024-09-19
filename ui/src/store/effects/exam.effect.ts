@@ -7,7 +7,7 @@ import { Observable, throwError } from 'rxjs';
 import { UserExam } from '../models/Exam';
 import { ExamService } from '../apis/exam.service';
 
-import { invokeUserExamsFetchAPI, UserExamsFetchAPI_Success, invokeUserExamsForUserFetchAPI, UserExamsForUserFetchAPI_Success, invokeUserExamByIdFetchAPI, UserExamByIdFetchAPI_Success, invokeUserExamCreateAPI, createUserExamSuccess, invokeSubmitUserExamAPI, ExamFetchById_Success, invokeExamByIdFetchAPI } from '../actions/exam.action';
+import { invokeUserExamsFetchAPI, UserExamsFetchAPI_Success, invokeUserExamsForUserFetchAPI, UserExamsForUserFetchAPI_Success, invokeUserExamByIdFetchAPI, UserExamByIdFetchAPI_Success, invokeUserExamCreateAPI, createUserExamSuccess, invokeSubmitUserExamAPI, ExamFetchById_Success, invokeExamByIdFetchAPI, invokeCreateUserExamByAdmin, createUserExamSuccessByAdmin } from '../actions/exam.action';
 import { UserExamAnswer } from '../models/UserExamAnswer';
 
 @Injectable()
@@ -92,5 +92,17 @@ export class ExamEffect {
           );
       }));
   });
-};
+
+  createUserExamByAdmin$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(invokeCreateUserExamByAdmin),
+      switchMap(action => {
+        return this.UserExamService
+          .createExamByAdmin(action.userId)
+          .pipe(map((data: UserExam) => createUserExamSuccessByAdmin({ newExam: data as UserExam }))
+          );
+      }));
+  });
+}
+
 

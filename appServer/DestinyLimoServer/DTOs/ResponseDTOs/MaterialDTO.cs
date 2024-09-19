@@ -2,7 +2,8 @@ namespace DestinyLimoServer.DTOs.ResponseDTOs
 {
     public class MaterialDTO
     {
-        public int Id { get; set; }
+        public int id { get; set; }
+        public int material_id { get; set; }
         public int material_type_id { get; set; }
         public int? material_category_id { get; set; }
         public string? title { get; set; }

@@ -39,13 +39,13 @@
                 </div>
                 <c-card class="mb-3"
                     style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);background-color: rgb(195 225 209 / 70%);">
-                    <img [cCardImg] src="./images/backgrounds/courses.jpg"
+                    <img [cCardImg] src="/images/backgrounds/courses.jpg"
                         style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
 
                     <span cCardTitle class="overlay-text-title">{{video.title}}</span>
 
                     <c-card-body class="card-body-container">
-                        <video width="100%" controls>
+                        <video width="100%" controls height="100">
                             <source [src]="video.url" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>

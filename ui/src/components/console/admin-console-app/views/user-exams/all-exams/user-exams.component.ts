@@ -24,6 +24,7 @@ import { selectExamAnswers } from '@src/store/selectors/exam.selector';
 import { DataGridComponentHelper } from '@src/components/common/components/grid-parent/data-grid.helper';
 
 import { UserExamAnswersComponent } from './exam/user-exam-answers.component';
+import { FilePaths } from '@src/components/common/file-paths';
 
 @Component({
   selector: 'app-user-exams',
@@ -142,7 +143,13 @@ export class UserExamsComponent {
     ).subscribe((data: any) => {
       console.log("users fetch dispatched", data);
 
-      this.users = [...data.allUserProfiles];
+      this.users = data.allUserProfiles.map((user: any) => {
+        const avatarURL = FilePaths.GetAvatarPath(user.avatar || 'blank-avatar.webp');
+        return {
+          ...user,
+          avatar: avatarURL
+        };
+      });
     });
 
     // set data
@@ -153,7 +160,9 @@ export class UserExamsComponent {
     ).subscribe((data: any) => {
       console.log("exams fetch dispatched", data);
 
-      const exams = data.allExams.map((exam: any) => {
+      var data2 = data.allExams.filter((exam: any) => exam.userId !== 1);
+
+      const exams = data2.map((exam: any) => {
 
         var user = this.users.find((user: any) => user.userId === exam.userId);
         if (user !== undefined && user !== null)
@@ -161,7 +170,7 @@ export class UserExamsComponent {
         return {
           ...exam,
           userFullName: user ? user.firstName + " " + user.lastName : "Not Found",
-          avatar: user ? user.avatar : 'images/avatars/blank-avatar.webp',
+          avatar: user.avatar
         };
       });
 

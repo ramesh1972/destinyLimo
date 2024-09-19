@@ -6,4 +6,5 @@ export interface UserState {
     allUsers: User[];
     newUser?: User;
     currentUser?: User;
+    message?: any;
 }

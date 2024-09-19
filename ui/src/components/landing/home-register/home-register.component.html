@@ -13,55 +13,55 @@
           <c-container>
             <c-row class="justify-content-center">
               <c-col md="9" xl="6">
-                <c-card class="mx-4">
-                  <form cForm style="padding: 10px;" [formGroup]="registerForm" (ngSubmit)="onRegister()" novalidate>
+                <c-card class="mx-4" style="padding: 20px;">
+                  <form cForm  [formGroup]="registerForm" (ngSubmit)="onRegister()" novalidate>
                     <h1>Register Yourself</h1>
 
                     <div class="register-part">
-                      <c-input-group class="mb-3">
+                      <c-input-group class="mb-3" *ngIf="registerForm.controls['username'] as ctrl">
                         <label class="form-field" cInputGroupText for="username">User Name</label>
                         <input class="form-control" id="username" formControlName="username" autoComplete="off"
-                          cFormControl placeholder="Enter Username" required [valid]="registerForm.controls['username'].touched && registerForm.controls['username'].valid
-                                                                          ? true
-                                                                          : (submitted || registerForm.controls['username'].touched) && registerForm.controls['username'].invalid
-                                                                          ? false
-                                                                          : undefined" />
-                        <c-form-feedback *ngIf="submitted || registerForm.controls['username'].invalid"
-                          [valid]="!(submitted || registerForm.controls['username'].invalid)">
-                          <ng-container *ngIf="registerForm.controls['username'].errors as errors">
+                          cFormControl placeholder="Enter Username" required [valid]="
+                          ctrl.touched && ctrl.valid
+                            ? true
+                            : (submitted || ctrl.touched) && ctrl.invalid
+                            ? false
+                            : undefined " />
+                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                          <ng-container *ngIf="ctrl.errors as errors">
                             <div class="error-text" *ngIf="errors['required']">Username is required</div>
                             <div class="error-text" *ngIf="errors['minlength']">
                               {{ formErrors['username'].minLength }}
                             </div>
-                            <div class="error-text" *ngIf="errors['noSpaces']">
-                              {{ formErrors['username'].noSpaces }}
+                            <div class="error-text" *ngIf="errors['pattern']">
+                              {{ formErrors['username'].pattern }}
                             </div>
                           </ng-container>
                         </c-form-feedback>
                       </c-input-group>
 
-                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['password'] as ctrl">
-                        <label cInputGroupText class="form-field" for="password">New Password</label>
-                        <input class="form-control" id="password" formControlName="password" cFormControl
-                          placeholder="Password" type='password' required [valid]="
-                                                  ctrl.touched && ctrl.valid
-                                                    ? true
-                                                    : (submitted || ctrl.touched) && ctrl.invalid
-                                                    ? false
-                                                    : undefined
-                                                " />
-                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
-                          <ng-container *ngIf="ctrl.errors as errors">
-                            <div class="error-text" *ngIf="errors['required']">Password is required</div>
-                            <div class="error-text" *ngIf="errors['minlength']">
-                              {{ formErrors['password'].minLength }}
-                            </div>
-                            <div class="error-text" *ngIf="errors['pattern']">
-                              {{ formErrors['password'].pattern }}
-                            </div>
-                          </ng-container>
-                        </c-form-feedback>
-                      </c-input-group>
+                        <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['password'] as ctrl">
+                          <label cInputGroupText class="form-field" for="password">New Password</label>
+                          <input class="form-control" id="password" formControlName="password" cFormControl
+                            placeholder="Password" type='password' required [valid]="
+                                                    ctrl.touched && ctrl.valid
+                                                      ? true
+                                                      : (submitted || ctrl.touched) && ctrl.invalid
+                                                      ? false
+                                                      : undefined
+                                                  " />
+                          <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                            <ng-container *ngIf="ctrl.errors as errors">
+                              <div class="error-text" *ngIf="errors['required']">Password is required</div>
+                              <div class="error-text" *ngIf="errors['minlength']">
+                                {{ formErrors['password'].minLength }}
+                              </div>
+                              <div class="error-text" *ngIf="errors['pattern']">
+                                {{ formErrors['password'].pattern }}
+                              </div>
+                            </ng-container>
+                          </c-form-feedback>
+                        </c-input-group>
                       <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['confirmPassword'] as ctrl">
                         <label cInputGroupText class="form-field" for="confirmPassword">Confirm Password</label>
                         <input class="form-control" id="confirmPassword" formControlName="confirmPassword" cFormControl
@@ -95,9 +95,8 @@
                           <label cInputGroupText class="form-field" for="firstName" style="width:100px">First
                             Name</label>
                           <div style="width: 100%;display: flex;flex-direction: column;">
-                            <input class="form-control-2-col"
-                              id="firstName" formControlName="firstName" cFormControl placeholder="First Name" required
-                              [valid]="
+                            <input class="form-control-2-col" id="firstName" formControlName="firstName" cFormControl
+                              placeholder="First Name" required [valid]="
                           registerForm.controls['firstName'].touched && registerForm.controls['firstName'].valid
                           ? true
                           : (submitted || registerForm.controls['firstName'].touched) && registerForm.controls['firstName'].invalid
@@ -116,8 +115,8 @@
 
                           <label cInputGroupText class="form-field" for="lastName" style="width:100px">Last Name</label>
                           <div style="width: 100%;display: flex;flex-direction: column;">
-                            <input class="form-control-2-col" id="lastName"
-                              formControlName="lastName" cFormControl placeholder="Last Name" required [valid]="
+                            <input class="form-control-2-col" id="lastName" formControlName="lastName" cFormControl
+                              placeholder="Last Name" required [valid]="
                           registerForm.controls['lastName'].touched && registerForm.controls['lastName'].valid
                           ? true
                           : (submitted || registerForm.controls['lastName'].touched) && registerForm.controls['lastName'].invalid
@@ -135,23 +134,31 @@
                       </c-input-group>
 
                       <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['avatar'] as ctrl">
-                        <label cInputGroupText class="form-field" for="avatar" style="width:70px">Photo</label>
-                        <input class="form-control" id="avatar" formControlName="avatar" cFormControl
-                          placeholder="Upload Photo" required type='file' [valid]="
+                        <div style="display: flex;flex-direction: column; justify-content: space-between;">
+                          <div style="display: flex; flex-direction: row;">
+                            <label cInputGroupText class="form-field" for="avatar" style="width:70px">Photo</label>
+                            <input class="form-control" id="avatar" formControlName="avatar" cFormControl
+                              placeholder="Upload Photo" required type='file' [valid]="
                                                   ctrl.touched && ctrl.valid
                                                     ? true
                                                     : (submitted || ctrl.touched) && ctrl.invalid
                                                     ? false
                                                     : undefined
-                                                "/>
-                        <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
-                          <ng-container *ngIf="ctrl.errors as errors">
-                            <div class="error-text" *ngIf="errors['required']">Photo is required</div>
-                          </ng-container>
-                        </c-form-feedback>
+                                                " (change)="onFileChange($event)" />
+                          </div>
+                          <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
+                            <ng-container *ngIf="ctrl.errors as errors">
+                              <div class="error-text" *ngIf="errors['required']">Photo is required</div>
+                            </ng-container>
+                          </c-form-feedback>
+                          <div *ngIf="avatarPreview" class="avatar-preview">
+                            <img [src]="avatarPreview" alt="Avatar Preview"
+                              style="max-width: 100px; max-height: 100px; margin-top: 10px;" />
+                          </div>
+                        </div>
                       </c-input-group>
 
-                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['dob'] as ctrl" >
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['dob'] as ctrl">
                         <label cInputGroupText class="form-field" for="dob" style="width:110px">Date of Birth</label>
                         <input class="form-control" id="dob" formControlName="dob" cFormControl
                           placeholder="Upload Photo" required type='date' [valid]="
@@ -160,7 +167,7 @@
                                                     : (submitted || ctrl.touched) && ctrl.invalid
                                                     ? false
                                                     : undefined
-                                                "/>
+                                                " />
                         <c-form-feedback *ngIf="submitted || ctrl.invalid" [valid]="!(submitted || ctrl.invalid)">
                           <ng-container *ngIf="ctrl.errors as errors">
                             <div class="error-text" *ngIf="errors['required']">DOB is required</div>
@@ -248,9 +255,8 @@
                           <label cInputGroupText class="form-field" for="issueDate" style="width:100px">Issue
                             Date</label>
                           <div style="width: 100%;display: flex;flex-direction: column;">
-                            <input class="form-control-2-col"
-                              id="issueDate" formControlName="issueDate" cFormControl placeholder="Issue Date" required
-                              [valid]="
+                            <input class="form-control-2-col" id="issueDate" formControlName="issueDate" cFormControl
+                              placeholder="Issue Date" required [valid]="
                           registerForm.controls['issueDate'].touched && registerForm.controls['issueDate'].valid
                           ? true
                           : (submitted || registerForm.controls['issueDate'].touched) && registerForm.controls['issueDate'].invalid
@@ -270,8 +276,8 @@
                           <label cInputGroupText class="form-field" for="expiryDate" style="width:100px">Expiry
                             Date</label>
                           <div style="width: 100%;display: flex;flex-direction: column;">
-                            <input class="form-control-2-col" id="expiryDate"
-                              formControlName="expiryDate" cFormControl placeholder="Expiry Date" required [valid]="
+                            <input class="form-control-2-col" id="expiryDate" formControlName="expiryDate" cFormControl
+                              placeholder="Expiry Date" required [valid]="
                           registerForm.controls['expiryDate'].touched && registerForm.controls['expiryDate'].valid
                           ? true
                           : (submitted || registerForm.controls['expiryDate'].touched) && registerForm.controls['expiryDate'].invalid
@@ -291,14 +297,17 @@
 
 
                     <div class="d-grid" style="display: flex;flex-direction: column;">
-                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['accept'] as ctrl" style="padding:4px;padding-left:20px;background-color: orange;">
+                      <c-input-group class="mb-3 w-100" *ngIf="registerForm.controls['accept'] as ctrl"
+                        style="padding:4px;padding-left:20px;background-color: orange;">
                         <c-form-check>
                           <input [valid]="ctrl.valid ? true : submitted && ctrl.invalid ? false : undefined"
                             cFormCheckInput formControlName="accept" id="accept" required type="checkbox" />
-                          <label cFormCheckLabel for="accept" style="margin-left: -20px">I accept the <a href="#">terms & conditions</a></label>
+                          <label cFormCheckLabel for="accept" style="margin-left: -20px">I accept the <a href="#">terms
+                              & conditions</a></label>
                           <c-form-feedback *ngIf="submitted && ctrl.invalid" [valid]="false">
                             <ng-container *ngIf="ctrl.errors as errors">
-                              <div class="error-text" *ngIf="errors['required']">You have to accept our Terms and Conditions</div>
+                              <div class="error-text" *ngIf="errors['required']">You have to accept our Terms and
+                                Conditions</div>
                             </ng-container>
                           </c-form-feedback>
                         </c-form-check>

@@ -17,6 +17,7 @@ import { invokeUserQuestionsFetchAPI, UserQuestionsFetchAPI_Success } from '@src
 import { UserAskedQuestion } from '@src/store/models/UserAskedQuestion';
 import { GridParentComponent } from '../../../../../common/components/grid-parent/grid-parent.component';
 import { UserProfile } from '@src/store/models/UserProfile';
+import { FilePaths } from '@src/components/common/file-paths';
 
 @Component({
   selector: 'app-faqs',
@@ -110,13 +111,14 @@ export class FAQsComponent {
 
         return {
           id: q.id,
+          user_question_id: q.id,
           asked_question: q.question,
           admin_answer: q.answer,
           date_asked: q.dateAsked,
           date_answered: q.dateAnswered,
           user_id: q.askedBy,
           userFullName: user ? user.firstName + " " + user.lastName : "Not Found",
-          avatar: user ? user.avatar : 'images/avatars/blank-avatar.webp',
+          avatar: user ? FilePaths.GetAvatarPath(user.avatar!) : "",
           is_active: q.is_active,
           is_deleted: q.is_deleted,
           is_public: q.is_public
@@ -136,8 +138,8 @@ export class FAQsComponent {
       {
         title: "Asked By", field: "user_id",
         cellType: 'text',
-        width: 110,
-        maxWidth: 150,
+        width: 200,
+        maxWidth: 200,
         sort: true,
         textStick: true,
         columnResizeMode: 'none',
@@ -163,7 +165,7 @@ export class FAQsComponent {
           });
 
           const containerLeft: any = new VTable.CustomLayout.Group({
-            width: 150,
+            width: 200,
 
             display: 'flex',
             flexDirection: 'row',

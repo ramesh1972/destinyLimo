@@ -20,13 +20,12 @@
 
                 <li class="menu_item menu_mm"><a routerLink="/home/posts" routerLinkActive="active" ariaCurrentWhenActive="page">Blogs</a></li>
                 <li class="menu_item menu_mm"><a routerLink="/home/about-us" routerLinkActive="active" ariaCurrentWhenActive="page">About Us</a></li>
-                <li class="menu_item menu_mm"><a routerLink="/contact" routerLinkActive="active" ariaCurrentWhenActive="page">Contact</a></li>
 
                 <li class="menu_item menu_mm"><a *ngIf="this.loggedInUser === undefined" routerLink="/home/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</a></li>
                 <li class="menu_item menu_mm"><a *ngIf="this.loggedInUser" routerLink="/home/console" routerLinkActive="active" ariaCurrentWhenActive="page">Console</a></li>
                 <li class="menu_item menu_mm"><a *ngIf="this.loggedInUser === undefined" routerLink="/home/register" routerLinkActive="active"
                     ariaCurrentWhenActive="page" style="color: black;">Register</a></li>
-                <li class="menu_item menu_mm"><a *ngIf="this.loggedInUser" routerLink="/home/logout" routerLinkActive="active"
+                <li class="menu_item menu_mm"><a *ngIf="this.loggedInUser" routerLinkActive="active"
                     ariaCurrentWhenActive="page" (click)="onLogout()">Log Out</a></li>
 
             </ul>

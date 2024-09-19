@@ -5,6 +5,7 @@ using DestinyLimoServer.Models; // Add this using directive for Content
 using DestinyLimoServer.Repositories; // Add this using directive for IRepositoryManager
 using DestinyLimoServer.Repositories.impl; // Add this using directive for RepositoryManager
 using AutoMapper; // Add this using directive for IMapper
+using Microsoft.Extensions.FileProviders; // Add this using directive for PhysicalFileProvider
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,7 +75,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IMaterialCategoryRepository, MaterialCategoryRepository>();
 builder.Services.AddScoped<IBulkUpdateRepository, BulkUpdateRepository>();
-builder.Services.AddScoped<IMaterialRepository<MaterialFile>, MaterialRepository<MaterialFile>>();  
+builder.Services.AddScoped<IMaterialRepository<MaterialFile>, MaterialRepository<MaterialFile>>();
 builder.Services.AddScoped<IMaterialRepository<MaterialText>, MaterialRepository<MaterialText>>();
 builder.Services.AddScoped<IMaterialRepository<MaterialVideo>, MaterialRepository<MaterialVideo>>();
 builder.Services.AddScoped<IMaterialRepository<MaterialMCQ>, MaterialRepository<MaterialMCQ>>();
@@ -89,6 +90,28 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Serve static files from the "UploadedFiles" folder
+var uploadPath = configuration.GetSection("Uploads").GetValue<string>("Destination") ?? throw new Exception("Upload path is null.");
+var fileserverPath = configuration.GetSection("Uploads").GetValue<string>("FileServePath") ?? throw new Exception("File serve path is null.");
+
+// Custom middleware to handle CORS for static files
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+    context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    await next.Invoke();
+});
+
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadPath),
+    RequestPath = fileserverPath
+});
+
+app.UseRouting();
 
 //app.UseHttpsRedirection();
 app.MapControllers();

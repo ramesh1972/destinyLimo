@@ -58,19 +58,35 @@ export class MaterialService {
     return this._http.delete(environment.baseURL + "TrainingMaterial/" + Id);
   }
 
+  // for text
+  updateTrainingMaterialText(trainingMaterialText: MaterialText): Observable<any> {
+    console.log("TrainingMaterialText service :", trainingMaterialText);
+    return this._http.put(environment.baseURL + "material/text/", trainingMaterialText);
+  }
+
+  createTrainingMaterialText(trainingMaterialText: MaterialText): Observable<any> {
+    console.log("TrainingMaterialText service :", trainingMaterialText);
+    return this._http.post(environment.baseURL + "material/text/", trainingMaterialText);
+  }
+
+  deleteTrainingMaterialText(Id: number): Observable<any> {
+    console.log("TrainingMaterialText service :", Id);
+    return this._http.delete(environment.baseURL + "material/text/" + Id);
+  }
+
   // for MCQs
   updateTrainingMaterialMCQ(trainingMaterialMCQ: MaterialMCQ): Observable<any> {
     console.log("TrainingMaterialMCQ service :", trainingMaterialMCQ);
-    return this._http.post(environment.baseURL + "TrainingMaterialMCQ/" + trainingMaterialMCQ.question_id, trainingMaterialMCQ);
+    return this._http.put(environment.baseURL + "material/mcq/", trainingMaterialMCQ);
   }
 
   createTrainingMaterialMCQ(trainingMaterialMCQ: MaterialMCQ): Observable<any> {
     console.log("TrainingMaterialMCQ service :", trainingMaterialMCQ);
-    return this._http.post(environment.baseURL + "TrainingMaterialMCQ", trainingMaterialMCQ);
+    return this._http.post(environment.baseURL + "material/mcq/", trainingMaterialMCQ);
   }
 
   deleteTrainingMaterialMCQ(Id: number): Observable<any> {
     console.log("TrainingMaterialMCQ service :", Id);
-    return this._http.delete(environment.baseURL + "TrainingMaterialMCQ/" + Id);
+    return this._http.delete(environment.baseURL + "material/mcq/" + Id);
   }
 }

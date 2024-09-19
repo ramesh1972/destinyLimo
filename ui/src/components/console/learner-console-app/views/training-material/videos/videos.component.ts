@@ -11,6 +11,7 @@ import { MaterialCategory } from '@src/store/models/MaterialCategory';
 import { invokeMaterialCategoryFetchAPI, materialCategoryFetchAPI_Success, invokeMaterialVideoFetchAPI, materialVideoFetchAPI_Success } from '@src/store/actions/material.action';
 import { selectMaterialCategorys, selectMaterialVideos } from '@src/store/selectors/material.selector';
 import { MaterialVideo } from '@src/store/models/MaterialVideo';
+import { FilePaths } from '@src/components/common/file-paths';
 
 @Component({
   selector: 'app-videos',
@@ -62,14 +63,23 @@ export class VideosComponent {
       console.log("content fetch dispatched");
 
       this.store.select(selectMaterialVideos).subscribe((data: any) => {
-        console.log('content fetched', data);
+        console.log('videos fetched', data);
+
+        
 
         this.videos = data.map((video: any) => {
+          const isURL = video.url.startsWith('http');
+
+          const url = isURL ? video.url : FilePaths.GetTrainingMaterialFileURL(video.url);
           return {
             ...video,
-            category_name: this.categories.find((c: any) => c.id === video.material_category_id)?.category_name
+            url: url,
+            
+            category_name: this.categories.find((c: any) => c.id === video.material_category_id)?.category_name || 'Not Categorized'
           };
         });
+
+        console.log('videos modifiled', this.videos);
       });
     });
   }

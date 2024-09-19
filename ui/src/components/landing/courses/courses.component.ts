@@ -13,12 +13,13 @@ import {
   AccordionComponent,
   AccordionItemComponent,
   TemplateIdDirective,
-  
+
 } from '@coreui/angular';
 import { CardModule, ButtonDirective, GridModule, BorderDirective, ButtonGroupComponent, FormCheckLabelDirective } from '@coreui/angular';
 import { MaterialCategory } from '@src/store/models/MaterialCategory';
 import { invokeMaterialCategoryFetchAPI, invokeMaterialFileFetchAPI, invokeMaterialMCQFetchAPI, invokeMaterialVideoFetchAPI, materialCategoryFetchAPI_Success, materialFileFetchAPI_Success, materialMCQFetchAPI_Success, materialVideoFetchAPI_Success } from '@src/store/actions/material.action';
 import { selectMaterialCategorys, selectMaterialFiles, selectMaterialMCQs, selectMaterialVideos } from '@src/store/selectors/material.selector';
+import { FilePaths } from '@src/components/common/file-paths';
 
 
 @Component({
@@ -62,48 +63,49 @@ export class CoursesComponent {
       });
     });
 
-    
-    this.store.dispatch(invokeMaterialFileFetchAPI({isPublic: true}));
+
+    this.store.dispatch(invokeMaterialFileFetchAPI({ isPublic: true }));
     this.actions$.pipe(
       ofType(materialFileFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("files fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log('files fetched', data);
 
-      this.store.select(selectMaterialFiles).subscribe((data: any) => {
-        console.log('files fetched', data);
-
-        this.files = data.map((file: any) => {
-          return {
-            ...file,
-            category_name: this.categories.find((cat: MaterialCategory) => file.material_category_id == cat.id)?.category_name
-          };
-        });
-
-        console.log("modified files :", this.files);
+      this.files = data.allMaterialFiles.map((file: any) => {
+        return {
+          ...file,
+          file_name: FilePaths.GetTrainingMaterialFileURL(file.file_name),
+          category_name: this.categories.find((cat: MaterialCategory) => file.material_category_id == cat.id)?.category_name
+        };
       });
+
+      console.log("modified files :", this.files);
     });
 
-    this.store.dispatch(invokeMaterialVideoFetchAPI({isPublic: true}));
+
+    this.store.dispatch(invokeMaterialVideoFetchAPI({ isPublic: true }));
     this.actions$.pipe(
       ofType(materialVideoFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("content fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log('videos fetched', data);
 
-      this.store.select(selectMaterialVideos).subscribe((data: any) => {
-        console.log('content fetched', data);
+      this.videos = data.allMaterialVideos.map((video: any) => {
+        const isURL = video.url.startsWith('http');
 
-        this.videos = data.map((video: any) => {
-          return {
-            ...video,
-            category_name: this.categories.find((c: any) => c.id === video.material_category_id)?.category_name
-          };
-        });
+        const url = isURL ? video.url : FilePaths.GetTrainingMaterialFileURL(video.url);
+
+        return {
+          ...video,
+          url: url,
+          category_name: this.categories.find((c: any) => c.id === video.material_category_id)?.category_name || 'Not Categorized'
+        };
       });
+
+      console.log("modified videos :", this.videos);
     });
 
-    this.store.dispatch(invokeMaterialMCQFetchAPI({isPublic: true}));
+    this.store.dispatch(invokeMaterialMCQFetchAPI({ isPublic: true }));
 
     // Wait for the action to complete
     this.actions$.pipe(
@@ -145,13 +147,21 @@ export class CoursesComponent {
         return '/images/icons/files/excel-85-48.png';
       case 'pptx':
         return '/images/icons/files/powerpoint-33-48.png';
+      case 'ppt':
+        return '/images/icons/files/powerpoint-33-48.png';
       case 'txt':
         return '/images/icons/files/typora-48.png';
       case 'jpg':
-        return '/images/icons/files/jpg-50-32.png';
+        return '/images/icons/files/image.webp';
+      case 'jpeg':
+        return '/images/icons/files/image.webp';
+      case 'png':
+        return '/images/icons/files/image.webp';
+      case 'mp4':
+        return '/images/icons/files/video.png';
       // Add more cases as needed
       default:
-        return '/images/icons/files/default-icon.png';
+        return '/images/icons/files/default-file-icon.png';
     }
   }
 }

@@ -85,6 +85,21 @@ namespace DestinyLimoServer.Controllers
             }
         }
 
+        [HttpPost("admin/{userId}")]
+        async public Task<IActionResult> AddNewExamByAdminAsync(int userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state");
+                return UnprocessableEntity(ModelState);
+            }
+
+            // create a record of the new exam
+            int newExamId = await _repository.Exam.AddNewExamAsync(userId);
+
+            return Ok(newExamId);
+        }
+
         [HttpPost("{userId}")]
         async public Task<IActionResult> AddNewExamAsync(int userId)
         {

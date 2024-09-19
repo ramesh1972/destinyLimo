@@ -60,6 +60,17 @@ export const createUserExamSuccess = createAction(
   props<{ newExam: UserExam }>()
 );
 
+
+export const invokeCreateUserExamByAdmin = createAction(
+  '[UserExam API] Create UserExam',
+  props<{ userId: number }>()
+);
+
+export const createUserExamSuccessByAdmin = createAction(
+  '[UserExam API] Create UserExam Success',
+  props<{ newExam: UserExam }>()
+);
+
 export const invokeSubmitUserExamAPI = createAction(
   '[UserExam API] Invoke Submit UserExam API',
   props<{ exam: UserExam }>()

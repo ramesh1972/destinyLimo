@@ -7,9 +7,8 @@
         <div style="border: 2px solid blue">
             <c-card *ngIf="!(text.editing || text.adding)">
                 <c-card-header class="title_header">
-                    <span class="card-title title-header-text">{{ text.title }}</span><br />
-                    <span class="card-title"
-                        style="width:300px;margin-bottom: 60px;text-align:right;font-size:16px">Category:
+                    <span class="card-title-header-text">{{ text.title }}</span>
+                    <span class="card-title" class="card-title-category">Category:
                         {{text.category_name}}</span><br />
                 </c-card-header>
 
@@ -31,8 +30,7 @@
                         <c-input-group style="width:400px;text-align:right;font-size:16px;padding:4px;justify-content: end;">
                             <span cInputGroupText>Category</span>
                             <c-dropdown
-                                style="font-size:16px;z-index: 999;max-height: 350px;"
-                                (ngModelChange)="text.category_name = $event">
+                                style="font-size:16px;z-index: 999;max-height: 350px;">
                                 <button cButton cDropdownToggle
                                     color="secondary">{{getCurrentCategoryName(text)}}</button>
                                 <ul cDropdownMenu dark style="max-height: 200px; overflow-y: scroll;">

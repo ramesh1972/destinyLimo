@@ -18,6 +18,10 @@ import { LearnerDefaultLayoutComponent } from '../components/console/learner-con
 import { invokeContentFetchAPI } from '../store/actions/content.action';
 import { invokeMaterialCategoryFetchAPI } from '../store/actions/material.action';
 import { VisibilityService } from '@src/components/common/VisibilityService';
+import { AuthenticateUser_Success, invokeAuthenticateUser } from '@src/store/actions/user.action';
+import { Actions, ofType } from '@ngrx/effects';
+import { selectMaterialCategorys } from '@src/store/selectors/material.selector';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -28,32 +32,47 @@ import { VisibilityService } from '@src/components/common/VisibilityService';
 })
 export class AppComponent {
 
-  constructor(private store: Store,  private iconSetService: IconSetService, 
-    private visibilityService: VisibilityService, private cdr: ChangeDetectorRef ) {
-        // iconSet singleton
-        this.iconSetService.icons = { ...iconSubset };
+  constructor(private store: Store, private iconSetService: IconSetService,
+    private visibilityService: VisibilityService, private cdr: ChangeDetectorRef, private actions$: Actions) {
+    // iconSet singleton
+    this.iconSetService.icons = { ...iconSubset };
   }
 
-  title = 'destiny-limo';
-  isHomeVisible: boolean = true;
-  isConsoleVisible: boolean = false;
-  
+  title = 'Destiny Limo LMS';
+  isHomeVisible: boolean = false;
+  isConsoleVisible: boolean = true;
+
   ngOnInit() {
     console.log('App component initialized');
 
     this.store.dispatch(invokeContentFetchAPI());
     this.store.dispatch(invokeMaterialCategoryFetchAPI());
+    
+         this.visibilityService.homeVisible$.subscribe((visible: any) => {
+          this.isHomeVisible = visible;
+          this.isConsoleVisible = !visible;
+          this.cdr.detectChanges(); 
+        });
+    
+        this.visibilityService.consoleVisible$.subscribe((visible: any) => {
+          this.isConsoleVisible = visible;
+          this.isHomeVisible = !visible;
+          this.cdr.detectChanges();
+        });
 
-     this.visibilityService.homeVisible$.subscribe((visible: any) => {
-      this.isHomeVisible = visible;
-      this.isConsoleVisible = !visible;
-      this.cdr.detectChanges(); 
-    });
+    // dummy login : TODO remove
+    //this.dummyLogin();
+  }
 
-    this.visibilityService.consoleVisible$.subscribe((visible: any) => {
-      this.isConsoleVisible = visible;
-      this.isHomeVisible = !visible;
-      this.cdr.detectChanges();
+  dummyLogin() {
+     this.store.dispatch(invokeAuthenticateUser({ userName: 'driver1', password: 'Driver1' }));
+    //this.store.dispatch(invokeAuthenticateUser({ userName: 'admin', password: 'Admin1' }));
+
+     this.actions$.pipe(
+      ofType(AuthenticateUser_Success),
+      take(1)
+    ).subscribe((data: any) => {
+      console.log("auth success", data);
     });
   }
 }

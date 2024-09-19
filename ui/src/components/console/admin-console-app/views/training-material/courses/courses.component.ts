@@ -8,11 +8,14 @@ import { InputEditor, TextAreaEditor, ListEditor } from '@visactor/vtable-editor
 
 import { MaterialCategory } from '@src/store/models/MaterialCategory';
 import { invokeMaterialCategoryFetchAPI, invokeMaterialFileFetchAPI, materialCategoryFetchAPI_Success, materialFileFetchAPI_Success } from '@src/store/actions/material.action';
-import { selectMaterialCategorys, selectMaterialFiles } from '@src/store/selectors/material.selector';
+import { selectMaterialCategorys } from '@src/store/selectors/material.selector';
 
 import { GridParentComponent } from '../../../../../common/components/grid-parent/grid-parent.component';
 import { DataGridComponentHelper } from '@src/components/common/components/grid-parent/data-grid.helper';
 import { DataGridFileUploadEditor } from '@src/components/common/components/grid-parent/data-grid-file-upload.editor';
+import { DataGridDropDownEditor } from '@src/components/common/components/grid-parent/data-grid-drop-down.editor';
+
+import { FilePaths } from '@src/components/common/file-paths';
 
 @Component({
   selector: 'app-courses',
@@ -46,12 +49,13 @@ export class CoursesComponent {
     ];
 
     this.dataGridHelper?.setTableInfo('training_material_files', "file_id", true, defaultColumns);
+    this.dataGridHelper?.setParentTableInfo("training_material", "material_id");
 
     // set columns
     this.dataGridHelper?.setColumns(this.getColDefs());
 
     this.setEditHanders();
-    
+
     // set data
     this.store.dispatch(invokeMaterialCategoryFetchAPI());
     this.actions$.pipe(
@@ -65,33 +69,31 @@ export class CoursesComponent {
 
         this.categories = [...data];
       });
-    })
-
+    });
 
     this.store.dispatch(invokeMaterialFileFetchAPI({ isPublic: false }));
     this.actions$.pipe(
       ofType(materialFileFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("files fetch dispatched");
+    ).subscribe((data2: any) => {
+      console.log("files fetch dispatched", data2.allMaterialFiles);
 
-      this.store.select(selectMaterialFiles).subscribe((data: any) => {
-        console.log('files fetched', data);
+      const files = data2.allMaterialFiles.map((file: any) => {
+        var cat_option = { value: file.material_category_id, label: this.categories.find((c: any) => c.id === file.material_category_id)?.category_name.toUpperCase() };
 
-        const files = data.map((file: any) => {
-          return {
-            ...file,
-            category_name: this.categories.find((cat: MaterialCategory) => file.material_category_id == cat.id)?.category_name
-          };
-        });
-
-        console.log("modified files :", files)
-        this.dataGridHelper!.setData(files);
-
-        // ----> draw the table
-        this.drawVTable();
+        return {
+          ...file,
+          file_name: FilePaths.GetTrainingMaterialFileURL(file.file_name),
+          cat_option: cat_option,
+        };
       });
-    })
+
+      console.log("modified files :", files)
+      this.dataGridHelper!.setData(files);
+
+      // ----> draw the table
+      this.drawVTable();
+    });
   }
 
   setEditHanders() {
@@ -102,14 +104,25 @@ export class CoursesComponent {
 
       changedValues.push({ field: 'file_name', value: value.fileName });
       changedValues.push({ field: 'file', value: value.file });
-      changedValues.push({ field: 'fileType', value: value.fileType });
 
       return changedValues;
     }
 
     const handler = { col: 'file_name', handler: uploadFileHandler };
 
-    this.dataGridHelper?.setEditorHandlers([handler]);
+    const selectCatHandler = (record: any, value: any) => {
+      console.log("select cat handler", record, value);
+
+      var changedValues = [];
+
+      changedValues.push({ field: 'material_category_id', value: value.value });
+
+      return changedValues;
+    }
+
+    const catHandler = { col: 'cat_option', handler: selectCatHandler };
+
+    this.dataGridHelper?.setEditorHandlers([handler, catHandler]);
   }
 
   // columns definition
@@ -132,7 +145,7 @@ export class CoursesComponent {
         }
       },
       {
-        title: "Category", field: "category_name",
+        title: "Category", field: "cat_option",
         editor: 'cat-selector',
         cellType: 'text',
         width: 150,
@@ -141,7 +154,7 @@ export class CoursesComponent {
           textBaseline: "middle",
         },
         fieldFormat: (record: any) => {
-          return record.category_name !== null && record.category_name !== undefined ? record.category_name.toUpperCase() : '';
+          return record.cat_option !== null && record.cat_option !== undefined ? record.cat_option.label?.toUpperCase() : '';
         }
       },
       {
@@ -163,7 +176,6 @@ export class CoursesComponent {
         columnResizeMode: 'none',
         disableColumnResize: true,
         fieldFormat: (record: any) => {
-          console.log("the record ", record);
           let fileName = record.file_name?.fileName ?? record?.file_name ?? '';
 
           if (fileName !== '') {
@@ -172,7 +184,7 @@ export class CoursesComponent {
             fileName = parts[parts.length - 1];
             return fileName;
           }
-          
+
           return record.file_name?.fileName ?? record?.file_name ?? 'Click to upload';
         },
         style: {
@@ -216,7 +228,7 @@ export class CoursesComponent {
         scrollSliderCornerRadius: 6,
         hoverOn: false,
         barToSide: false,
-        width:16,
+        width: 16,
       },
       defaultStyle: {
         autoWrapText: true,
@@ -243,8 +255,12 @@ export class CoursesComponent {
   drawVTable() {
 
     // editiors
-    const ListEditorConfig: any = { values: this.categories.map((c: any) => c.category_name) };//, keys: this.categories.map((c: any) => c.id) };
-    const list_editor = new ListEditor(ListEditorConfig);
+    const dropDownOptions = this.categories.map((c: any) => {
+      return { value: c.id, label: c.category_name.toUpperCase() };
+    });
+
+    const ListEditorConfig: any = { options: dropDownOptions };
+    const list_editor = new DataGridDropDownEditor(ListEditorConfig);
 
     const file_upload_editor = new DataGridFileUploadEditor({}, 'Upload Document');
 
@@ -267,15 +283,37 @@ export class CoursesComponent {
 
   // set table events
   setTableEvents() {
-    this.dataGridHelper?.table?.on('click_cell', (args: any) => {
-      const { col, row } = args;
-      if (col === 3) {
-        let fileName = args.dataValue;
-        fileName = fileName;
-        console.log('file name', fileName);
+    let clickTimeout: any;
 
-        window.open(fileName, '_blank');
+    this.dataGridHelper?.table?.on('click_cell', (args: any) => {
+      if (clickTimeout) {
+        clearTimeout(clickTimeout);
+        clickTimeout = null;
       }
+
+      clickTimeout = setTimeout(() => {
+        console.log('click cell', args);
+
+        const { col, row } = args;
+        if (col === 3) {
+          let fileName = args.dataValue;
+          fileName = fileName;
+          console.log('file name', fileName);
+
+          window.open(fileName, '_blank');
+        }
+      }, 300);
+    });
+
+    this.dataGridHelper?.table?.on('dblclick_cell', (args: any) => {
+      if (clickTimeout) {
+        clearTimeout(clickTimeout);
+        clickTimeout = null;
+      }
+
+      console.log('double click cell', args);
+      // cancel cascading
+      args.cancel = true;
     });
   }
 }

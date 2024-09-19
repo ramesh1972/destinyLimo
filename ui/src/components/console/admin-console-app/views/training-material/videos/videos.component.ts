@@ -15,6 +15,9 @@ import { DataGridFileUploadEditor } from '@src/components/common/components/grid
 import { DataGridVideoEditor } from '@src/components/common/components/grid-parent/data-grid-video.editor';
 import { cilLineWeight } from '@coreui/icons';
 import { BorderDirective } from '@coreui/angular';
+import { environment } from '@src/environments/environment';
+import { DataGridDropDownEditor } from '@src/components/common/components/grid-parent/data-grid-drop-down.editor';
+import { FilePaths } from '@src/components/common/file-paths';
 
 @Component({
   selector: 'app-videos',
@@ -48,6 +51,7 @@ export class VideosComponent {
     ];
 
     this.dataGridHelper?.setTableInfo('training_material_videos', "video_id", true, defaultColumns);
+    this.dataGridHelper?.setParentTableInfo("training_material", "material_id");
 
     // set columns
     this.dataGridHelper?.setColumns(this.getColDefs());
@@ -68,7 +72,7 @@ export class VideosComponent {
 
         this.categories = [...data];
       });
-    })
+    });
 
     this.store.dispatch(invokeMaterialVideoFetchAPI({ isPublic: false }));
     this.actions$.pipe(
@@ -81,12 +85,19 @@ export class VideosComponent {
         console.log('content fetched', data);
 
         const data2 = data.map((d: any) => {
+          console.log('processing content', d.url);
+          var isURL: string = d.url.toLowerCase().startsWith('http') ? 'url' : 'file';
+
+          var videoFilePath = FilePaths.GetTrainingMaterialVideoURL(d.url);
+
+          var cat_option = { value: d.material_category_id, label: this.categories.find((c: any) => c.id === d.material_category_id)?.category_name.toUpperCase() };
           return {
             ...d,
-            video2: { video: d.url, type: d.url.toLowerCase().startsWith('http') ? 'url' : 'file', is_vimeo: d.is_vimeo }
+            cat_option: cat_option,
+            video2: { video: isURL === 'url' ? d.url : videoFilePath, type: isURL, is_vimeo: d.is_vimeo }
           };
         });
-        
+
         console.log('content processed', data2);
         this.dataGridHelper!.setData(data2);
 
@@ -114,7 +125,7 @@ export class VideosComponent {
         fieldFormat: (record: any) => record.title !== null && record.title !== undefined ? record.title.toUpperCase() : ''
       },
       {
-        title: "Category", field: "category_name",
+        title: "Category", field: "cat_option",
         editor: 'cat-selector',
         cellType: 'text',
         width: 100,
@@ -123,8 +134,9 @@ export class VideosComponent {
           textBaseline: "middle",
         },
         fieldFormat: (record: any) => {
-          return record.category_name !== null && record.category_name !== undefined ? record.category_name.toUpperCase() : '';
+          return record.cat_option !== null && record.cat_option !== undefined ? record.cat_option?.label?.toUpperCase() : '';
         }
+
       },
       {
         title: "Video Description", field: "description",
@@ -150,7 +162,7 @@ export class VideosComponent {
           lineHeight: 60,
         },
         fieldFormat: (record: any) => {
-          return record.video2.file !== null && record.video2.file !== undefined  ? URL.createObjectURL(record.video2.file) : record.video2.video;
+          return record.video2.isURL === 'file' ? URL.createObjectURL(record.video2.video) : record.video2.video;
         }
       },
       {
@@ -169,6 +181,14 @@ export class VideosComponent {
           autoWrapText: true,
         },
         fieldFormat: (record: any) => {
+          // if this is a file then streip the http and path and return the file name
+          console.log('video2', record.video2);
+          if (record.video2.type === 'file') {
+            console.log('file', record.video2.video);
+            const parts = record.video2.video.split('/');
+            return parts[parts.length - 1];
+          }
+
           return record.video2.video;
         },
       }
@@ -184,14 +204,25 @@ export class VideosComponent {
       changedValues.push({ field: 'url', value: value.video });
       changedValues.push({ field: 'is_vimeo', value: value.is_vimeo });
       changedValues.push({ field: 'file', value: value.file });
-      changedValues.push({ field: 'fileType', value: value.fileType });
 
       return changedValues;
     }
 
     const handler = { col: 'video2', handler: videoEditHandler };
 
-    this.dataGridHelper?.setEditorHandlers([handler]);
+    const selectCatHandler = (record: any, value: any) => {
+      console.log("select cat handler", record, value);
+
+      var changedValues = [];
+
+      changedValues.push({ field: 'material_category_id', value: value.value });
+
+      return changedValues;
+    }
+
+    const catHandler = { col: 'cat_option', handler: selectCatHandler };
+
+    this.dataGridHelper?.setEditorHandlers([handler, catHandler]);
   }
 
   getTableOptions() {
@@ -220,14 +251,14 @@ export class VideosComponent {
 
     option.theme = VTable.themes.BRIGHT.extends({
       underlayBackgroundColor: 'transparent',
-       scrollStyle: {
+      scrollStyle: {
         visible: 'always',
         scrollSliderColor: 'purple',
         scrollRailColor: '#bac3cc',
         scrollSliderCornerRadius: 6,
         hoverOn: false,
         barToSide: false,
-        width:16,
+        width: 16,
       },
       defaultStyle: {
         autoWrapText: true,
@@ -259,8 +290,16 @@ export class VideosComponent {
   drawVTable() {
 
     // editiors
-    const ListEditorConfig: any = { values: this.categories.map((c: any) => c.category_name), keys: this.categories.map((c: any) => c.id) };
-    const list_editor = new ListEditor(ListEditorConfig);
+    // editiors
+    const dropDownOptions = this.categories.map((c: any) => {
+      return { value: c.id, label: c.category_name.toUpperCase() };
+    });
+
+    const ListEditorConfig: any = { options: dropDownOptions };
+    const list_editor = new DataGridDropDownEditor(ListEditorConfig);
+
+    const file_upload_editor = new DataGridFileUploadEditor({}, 'Upload Document');
+
 
     const videoEditorConfig = { is_vimeo: false, url: '' };
     const video_editor = new DataGridVideoEditor(videoEditorConfig);

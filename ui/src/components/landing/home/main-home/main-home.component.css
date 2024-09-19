@@ -1,0 +1,30 @@
+.slide_background {
+    animation: zoomIn 50s cubic-bezier(0.28, 0.79, 0.62, -0.12) infinite;
+}
+
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  /* Zoom-in and out effect for the background */
+  @keyframes zoomIn {
+    0% {
+      background-size: 100%;
+    }
+  
+    50% {
+      background-size: 120%;
+      /* Zoom in by 10% */
+    }
+  
+    100% {
+      background-size: 100%;
+      /* Zoom back to original size */
+    }
+  }

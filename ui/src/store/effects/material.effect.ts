@@ -22,9 +22,16 @@ import {
   , invokeMaterialMCQFetchAPI, materialMCQFetchAPI_Success,
   invokeMaterialMCQ_UpdateAPI, materialMCQ_UpdateAPI_Success,
   invokeMaterialMCQ_CreateAPI, materialMCQ_CreateAPI_Success,
-  invokeMaterialMCQ_DeleteAPI, materialMCQ_DeleteAPI_Success
+  invokeMaterialMCQ_DeleteAPI, materialMCQ_DeleteAPI_Success,
+  invokeMaterialText_CreateAPI,
+  materialText_CreateAPI_Success,
+  invokeMaterialText_UpdateAPI,
+  materialText_UpdateAPI_Success,
+  invokeMaterialText_DeleteAPI,
+  materialText_DeleteAPI_Success
 
 } from '../actions/material.action';
+import { data } from '@visactor/vtable';
 
 @Injectable()
 export class MaterialEffect {
@@ -100,13 +107,46 @@ export class MaterialEffect {
       }));
   });
 
+  createMaterialText$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(invokeMaterialText_CreateAPI),
+      mergeMap((action: any) => {
+        return this.materialService
+          .createTrainingMaterialText(action.materialText)
+          .pipe(map((data: MaterialText) => materialText_CreateAPI_Success({  materialText: data }))
+          );
+      }));
+  });
+
+  updateMaterialText$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(invokeMaterialText_UpdateAPI),
+      mergeMap((action: any) => {
+        return this.materialService
+          .updateTrainingMaterialText(action.materialText)
+          .pipe(map((data: MaterialText) => materialText_UpdateAPI_Success({ materialText: data }))
+          );
+      }));
+  });
+
+  deleteMaterialText$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(invokeMaterialText_DeleteAPI),
+      mergeMap((action: any) => {
+        return this.materialService
+          .deleteTrainingMaterialText(action.material_id)
+          .pipe(map((data: boolean) => materialText_DeleteAPI_Success({ success: data }))
+          );
+      }));
+  } );
+  
   updateMaterialMCQ$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(invokeMaterialMCQ_UpdateAPI),
       mergeMap((action: any) => {
         return this.materialService
           .updateTrainingMaterialMCQ(action.materialMCQ)
-          .pipe(map(() => materialMCQ_UpdateAPI_Success({ materialMCQ: action.materialMCQ }))
+          .pipe(map((data: MaterialMCQ) => materialMCQ_UpdateAPI_Success({ materialMCQ: data }))
           );
       }));
   });
@@ -117,7 +157,7 @@ export class MaterialEffect {
       mergeMap((action: any) => {
         return this.materialService
           .createTrainingMaterialMCQ(action.materialMCQ)
-          .pipe(map(() => materialMCQ_CreateAPI_Success({ materialMCQ: action.materialMCQ }))
+          .pipe(map((data: MaterialMCQ) => materialMCQ_CreateAPI_Success({ materialMCQ: data }))
           );
       }));
   });
@@ -127,8 +167,8 @@ export class MaterialEffect {
       ofType(invokeMaterialMCQ_DeleteAPI),
       mergeMap((action: any) => {
         return this.materialService
-          .deleteTrainingMaterialMCQ(action.Id)
-          .pipe(map(() => materialMCQ_DeleteAPI_Success({ question_id: action.Id }))
+          .deleteTrainingMaterialMCQ(action.material_id)
+          .pipe(map((data: boolean) => materialMCQ_DeleteAPI_Success({ success: data }))
           );
       }));
   });

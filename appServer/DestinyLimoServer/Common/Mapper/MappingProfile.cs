@@ -85,6 +85,7 @@ namespace DestinyLimoServer.Common.Mapper
             CreateMap<EntityActionDTO, EntityAction>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.IdCol))
             .ForMember(dest => dest.IdColName, opt => opt.MapFrom(src => src.IdColName))
+            .ForMember(dest => dest.ParentTableName, opt => opt.MapFrom(src => src.ParentTableName))
             .ForMember(dest => dest.Action, opt => opt.MapFrom(src => src.Action))
             .ForMember(dest => dest.EntityActionRecords, opt => opt.MapFrom(src => src.Records)).ReverseMap();
 
@@ -98,9 +99,11 @@ namespace DestinyLimoServer.Common.Mapper
             .ForMember(dest => dest.category_description, opt => opt.MapFrom(src => src.category_description))
             .ForMember(dest => dest.is_active, opt => opt.MapFrom(src => src.is_active))
             .ForMember(dest => dest.is_deleted, opt => opt.MapFrom(src => src.is_deleted)).ReverseMap();
-
-            CreateMap<Material, MaterialDTO>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.material_id))
+            
+            // response
+            CreateMap<Material, DestinyLimoServer.DTOs.ResponseDTOs.MaterialDTO>()
+            .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.material_id))
+            .ForMember(dest => dest.material_id, opt => opt.MapFrom(src => src.material_id))
             .ForMember(dest => dest.material_type_id, opt => opt.MapFrom(src => src.material_type_id))
             .ForMember(dest => dest.material_category_id, opt => opt.MapFrom(src => src.material_category_id))
             .ForMember(dest => dest.title, opt => opt.MapFrom(src => src.title))
@@ -114,18 +117,18 @@ namespace DestinyLimoServer.Common.Mapper
             .ForMember(dest => dest.updated_at, opt => opt.MapFrom(src => src.updated_at)).ReverseMap();
 
             CreateMap<MaterialFile, MaterialFileDTO>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.file_id))
+            .ForMember(dest => dest.file_id, opt => opt.MapFrom(src => src.file_id))
             .ForMember(dest => dest.file_name, opt => opt.MapFrom(src => src.file_name)).ReverseMap();
 
-            CreateMap<MaterialText, MaterialTextDTO>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.text_id))
+            CreateMap<MaterialText, DestinyLimoServer.DTOs.ResponseDTOs.MaterialTextDTO>()
+            .ForMember(dest => dest.text_id, opt => opt.MapFrom(src => src.text_id))
             .ForMember(dest => dest.text, opt => opt.MapFrom(src => src.text)).ReverseMap();
 
             CreateMap<MaterialVideo, MaterialVideoDTO>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.video_id))
+            .ForMember(dest => dest.video_id, opt => opt.MapFrom(src => src.video_id))
             .ForMember(dest => dest.url, opt => opt.MapFrom(src => src.url)).ReverseMap();
 
-            CreateMap<MaterialMCQ, MaterialMCQDTO>()
+            CreateMap<MaterialMCQ, DestinyLimoServer.DTOs.ResponseDTOs.MaterialMCQDTO>()
             .ForMember(dest => dest.question_id, opt => opt.MapFrom(src => src.question_id))
             .ForMember(dest => dest.question_text, opt => opt.MapFrom(src => src.question_text))
             .ForMember(dest => dest.answer_1, opt => opt.MapFrom(src => src.answer_1))
@@ -136,6 +139,38 @@ namespace DestinyLimoServer.Common.Mapper
             .ForMember(dest => dest.correct_2, opt => opt.MapFrom(src => src.correct_2))
             .ForMember(dest => dest.correct_3, opt => opt.MapFrom(src => src.correct_3))
             .ForMember(dest => dest.correct_4, opt => opt.MapFrom(src => src.correct_4)).ReverseMap();
+
+            CreateMap<MaterialMCQ, DestinyLimoServer.DTOs.RequestDTOs.MaterialMCQDTO>()
+            .ForMember(dest => dest.question_id, opt => opt.MapFrom(src => src.question_id))
+            .ForMember(dest => dest.question_text, opt => opt.MapFrom(src => src.question_text))
+            .ForMember(dest => dest.answer_1, opt => opt.MapFrom(src => src.answer_1))
+            .ForMember(dest => dest.answer_2, opt => opt.MapFrom(src => src.answer_2))
+            .ForMember(dest => dest.answer_3, opt => opt.MapFrom(src => src.answer_3))
+            .ForMember(dest => dest.answer_4, opt => opt.MapFrom(src => src.answer_4))
+            .ForMember(dest => dest.correct_1, opt => opt.MapFrom(src => src.correct_1))
+            .ForMember(dest => dest.correct_2, opt => opt.MapFrom(src => src.correct_2))
+            .ForMember(dest => dest.correct_3, opt => opt.MapFrom(src => src.correct_3))
+            .ForMember(dest => dest.correct_4, opt => opt.MapFrom(src => src.correct_4)).ReverseMap();
+
+            // request
+            CreateMap<Material, DestinyLimoServer.DTOs.RequestDTOs.MaterialDTO>()
+            .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.material_id))
+            .ForMember(dest => dest.material_id, opt => opt.MapFrom(src => src.material_id))
+            .ForMember(dest => dest.material_type_id, opt => opt.MapFrom(src => src.material_type_id))
+            .ForMember(dest => dest.material_category_id, opt => opt.MapFrom(src => src.material_category_id))
+            .ForMember(dest => dest.title, opt => opt.MapFrom(src => src.title))
+            .ForMember(dest => dest.description, opt => opt.MapFrom(src => src.description))
+            .ForMember(dest => dest.thumbnail, opt => opt.MapFrom(src => src.thumbnail))
+            .ForMember(dest => dest.background_img, opt => opt.MapFrom(src => src.background_img))
+            .ForMember(dest => dest.is_public, opt => opt.MapFrom(src => src.is_public))
+            .ForMember(dest => dest.is_active, opt => opt.MapFrom(src => src.is_active))
+            .ForMember(dest => dest.is_deleted, opt => opt.MapFrom(src => src.is_deleted))
+            .ForMember(dest => dest.created_at, opt => opt.MapFrom(src => src.created_at))
+            .ForMember(dest => dest.updated_at, opt => opt.MapFrom(src => src.updated_at)).ReverseMap();
+
+            CreateMap<MaterialText, DestinyLimoServer.DTOs.RequestDTOs.MaterialTextDTO>()
+            .ForMember(dest => dest.text_id, opt => opt.MapFrom(src => src.text_id))
+            .ForMember(dest => dest.text, opt => opt.MapFrom(src => src.text)).ReverseMap();
 
             CreateMap<Content, ContentDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.content_id))

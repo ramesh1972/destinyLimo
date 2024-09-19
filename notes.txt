@@ -2,44 +2,32 @@ TO DO
 -----
 A) rich text editor control
 B) grid 
-        3) dropdowns - select id instead of name
         3) filter for categories
         4) Search
-        5) click on link to open file/url
-        6) bulk update - include inner joins with other tables, maintain order of creation of ids in case of inserts, delete parent record
-
 
 D) all 
-        1) response messages on all actions
-        1) ondelete - pop up diaglog
-        2) onleave without save - diaglog               
-        3) create category widget
+        1) response messages on all actions ( YES 1 hr)
+        1) ondelete - pop up diaglog (YES 15 mins)
+        2) onleave without save - diaglog (YES 15 mins)              
+        3) create category widget (20 mins)
         4) vimeo integration
-        5) check all pages and all ACTIONS - some are not done
-        6) check all pages and layout, theme
+        6) check all pages and layout, theme (1 hr)
         7) font, size, color, family, weight
         
 C) PAGES
 C1)----> Admin console
-8) users manage - grid, approve/reject in place edit, grouping, sortable, filters etc.
-11) next exam - (add new exam)
 13) certificate editor
-14) settings
 16) Overview dashboard
 
 C2) ----> Common console
-1) change password (need to update backend)
-2) Edit profile (need to update backend)
-1) alerts, notifications, badges, Avatar Menu
-4) logout from console
-5) the avatar menu
+1) change password (need to update backend) (1 hr)
+1) messages, badges
 
 D) COMMON all
 1) login page - use JWT
-2) registration page
 
 E) AUTO
-1) assign new exam if perido more than 2 years
+1) assign new exam if perido more than 2 years (15 mins)
 
 F) HOME
 1) contact us
@@ -50,18 +38,18 @@ F) HOME
 ISSUES
 ------
 1) try to isolate css/scss for course master and coreui
-1) something wrong on loading of images in landing page
-2) responsive design for landing page
+1) something wrong on loading of images in landing page (15 mins)
+2) responsive design for landing page (60 mins)
 2) responsive design for console pages  - when scrolling horizonatally
 3) responsive design for grids
-4) the content editor should be a rich editor....paragraph breaks are being ignored now
+4) the content editor should be a rich editor....paragraph breaks are being ignored now (20 mins)
 6) theme has issues
-7) date format
+7) date format (15 mins)
 8) check the filter tables
-9) restructure the assets
-9) file upload paths
-10) youtube/vimeo videos playback - need iframe
-11) move to top when a new menu is clicked
+9) restructure the assets (20 mins)
+9) file upload paths (20 mins)
+10) youtube/vimeo videos playback - need iframe (30 mins)
+11) move to top when a new menu is clicked (15 mins)
 12) dashboard menus are getting closed when clicked
 13) user exams - not responsive
 4) category select - only first word is coming

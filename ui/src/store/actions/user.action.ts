@@ -8,7 +8,7 @@ import { UserProfile } from '../models/UserProfile';
 // register
 export const registerUser = createAction(
   '[User API] Register User',
-  props<{ user: User}>()
+  props<{ user: User, avatar: File}>()
 );
 
 export const registerUser_Success = createAction(
@@ -32,13 +32,18 @@ export const AuthenticateUser_Success = createAction(
   props<{ loggedInUser: User }>()
 );
 
+export const AuthenticateUser_Failure = createAction(
+  '[User] Authenticate User Failure',
+  props<{ error: any }>()
+);
+
 export const logoutUser = createAction(
   '[User API] Logout User'
 );
 
 export const logoutUser_Success = createAction(
   '[User API] Logout User Success',
-  props<{ loggedInUser: User }>()
+  props<{ loggedInUser?: User }>()
 );
 
 export const logoutUser_Failure = createAction(
@@ -81,7 +86,7 @@ export const forgotPassword_Failure = createAction(
 // reset password
 export const resetPassword = createAction(
   '[User API] Reset Password',
-  props<{ userId: number, newPassword: string }>()
+  props<{ username: string, newPassword: string }>()
 );
 
 export const resetPassword_Success = createAction(
@@ -101,7 +106,7 @@ export const approveRejectUser = createAction(
 
 export const approveRejectUser_Success = createAction(
   '[User API] Approve/Reject User Success',
-  props<{ updatedUser: User }>()
+  props<{ message: any }>()
 );
 
 export const approveRejectUser_Failure = createAction(
@@ -116,7 +121,7 @@ export const lockUser = createAction(
 
 export const lockUser_Success = createAction(
   '[User API] Lock User Success',
-  props<{ updatedUser: User }>()
+  props<{ message: any }>()
 );
 
 export const lockUser_Failure = createAction(
@@ -141,7 +146,7 @@ export const UsersFetchAPI_Failure = createAction(
 
 export const updateUser = createAction(
   '[User API] Update User',
-  props<{ updatedUser: User }>()
+  props<{ updatedUser: User , avatar: File }>()
 );
 
 export const updateUser_Success = createAction(

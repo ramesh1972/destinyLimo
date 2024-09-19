@@ -7,19 +7,21 @@ using Newtonsoft.Json;
 using DestinyLimoServer.Repositories;
 using DestinyLimoServer.DTOs.RequestDTOs;
 using DestinyLimoServer.Models;
+using DestinyLimoServer.Common.Uploader;
 
 namespace DestinyLimoServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BulkUpdateController(IBulkUpdateRepository repository, IMapper mapper, ILogger logger) : ControllerBase
+    public class BulkUpdateController(IBulkUpdateRepository repository, IMapper mapper, ILogger logger, IConfiguration configuration) : ControllerBase
     {
         private readonly IBulkUpdateRepository _repository = repository;
         private readonly IMapper _mapper = mapper;
         private readonly ILogger _logger = logger;
+        private readonly IConfiguration _configuration = configuration;
 
         [HttpPost("{tableName}")]
-        [RequestSizeLimit(100_000_000)] 
+        [RequestSizeLimit(100_000_000)]
         async public Task<IActionResult> BulkUpdate(string tableName, [FromForm] BulkUpdateDTO bulkUpdateDTO)
         {
             // Deserialize actions
@@ -39,16 +41,17 @@ namespace DestinyLimoServer.Controllers
 
             // Process files
             List<IFormFile> files = HttpContext.Request.Form.Files.ToList();
-            Directory.CreateDirectory("uploads");
+            FileUploader fileUploader = new FileUploader(_logger, _configuration);
 
             foreach (var file in files)
             {
                 if (file!.Length > 0)
                 {
-                    var filePath = Path.Combine("uploads", file.FileName);
-
-                    using var stream = new FileStream(filePath, FileMode.Create);
-                    await file.CopyToAsync(stream);
+                    if (tableName == "content")
+                        await fileUploader.UploadFileAsync(file, UploadFilePaths.Content);
+                    else if (tableName.Contains("training"))
+                        await fileUploader.UploadFileAsync(file, UploadFilePaths.TrainingMaterial);
+                
                 }
             }
 

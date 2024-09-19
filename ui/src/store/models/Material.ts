@@ -1,4 +1,5 @@
 export interface TrainingMaterial {
+    id: number;
     material_id: number;
     material_type_id: number;
     category_name: string;

@@ -6,6 +6,8 @@ namespace DestinyLimoServer.Models
 
         public string? IdColName { get; set; }
 
+        public string? ParentTableName { get; set; }
+
         public required string Action { get; set; }
 
         public List<EntityActionRecord>? EntityActionRecords { get; set; }

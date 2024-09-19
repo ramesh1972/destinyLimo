@@ -2,7 +2,7 @@ import { INavData } from '@coreui/angular';
 
 export const navItems: INavData[] = [
   {
-    name: 'Dashboard',
+    name: 'Dashboard (Sample)',
     url: '/admin/console/dashboard',
     iconComponent: { name: 'cil-speedometer' },
   },
@@ -94,11 +94,6 @@ export const navItems: INavData[] = [
       {
         name: "New Exams",
         url: '/admin/console/user-exams/new-exams',
-        icon: 'nav-icon-bullet'
-      },
-      {
-        name: 'Exam Results',
-        url: 'exam-results',
         icon: 'nav-icon-bullet'
       },
       {

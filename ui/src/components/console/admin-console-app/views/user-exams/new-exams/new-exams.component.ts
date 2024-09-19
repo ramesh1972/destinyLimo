@@ -15,7 +15,7 @@ import { invokeMaterialMCQFetchAPI, materialMCQFetchAPI_Success } from '@src/sto
 import { selectMaterialCategorys, selectMaterialMCQs } from '@src/store/selectors/material.selector';
 
 import { invokeUserProfilesFetchAPI, UserProfilesFetchAPI_Success } from '@src/store/actions/user-profile.action';
-import { invokeUserExamsFetchAPI, UserExamsFetchAPI_Success } from '@src/store/actions/exam.action';
+import { createUserExamSuccessByAdmin, invokeCreateUserExamByAdmin, invokeUserExamsFetchAPI, UserExamsFetchAPI_Success } from '@src/store/actions/exam.action';
 import { selectUserExamsById } from '@src/store/selectors/exam.selector';
 
 import { invokeUserExamByIdFetchAPI, UserExamByIdFetchAPI_Success } from '@src/store/actions/exam.action';
@@ -23,6 +23,7 @@ import { selectExamAnswers } from '@src/store/selectors/exam.selector';
 
 import { DataGridComponentHelper } from '@src/components/common/components/grid-parent/data-grid.helper';
 import { UserProfile } from '@src/store/models/UserProfile';
+import { FilePaths } from '@src/components/common/file-paths';
 
 interface UserExamsInfo {
   user: UserProfile,
@@ -66,7 +67,7 @@ export class NewExamsComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-        return record["num_exams_not_taken"] == 0;
+          return record["num_exams_not_taken"] == 0;
         }
       }]);
     }
@@ -80,6 +81,7 @@ export class NewExamsComponent {
   exams: any[] = [];
   users: any[] = [];
   userExamsInfo: UserExamsInfo[] = [];
+  newExamCreated: boolean = false;
 
   ngOnInit() {
     console.log('file component initialized');
@@ -103,40 +105,18 @@ export class NewExamsComponent {
 
         if (user !== undefined && user !== null)
           console.log("found user", user);
+
+        const avatarURL = FilePaths.GetAvatarPath(user?.avatar || '/images/avatars/blank-avatar.webp');
         return {
           ...exam,
           userFullName: user ? user.firstName + " " + user.lastName : "Not Found",
-          avatar: user ? user.avatar : 'images/avatars/blank-avatar.webp',
+          avatar: avatarURL
         };
       });
 
       console.log("modified files :", this.exams)
-
-      // users
-      this.store.dispatch(invokeUserProfilesFetchAPI());
-
-      this.actions$.pipe(
-        ofType(UserProfilesFetchAPI_Success),
-        take(1)
-      ).subscribe((data: any) => {
-        console.log("users fetch dispatched", data);
-
-        this.userExamsInfo = data.allUserProfiles.map((user: UserProfile) => {
-          return {
-            ...user,
-            userFullName: user ? user.firstName + " " + user.lastName : "Not Found",
-            avatar: user ? user.avatar : 'images/avatars/blank-avatar.webp',
-            num_exams_not_taken: this.exams.filter((exam: any) => exam.userId === user.userId)?.length,
-            new_exam_assigned_by_admin: false
-          }
-        });
-
-        this.dataGridHelper!.setData(this.userExamsInfo);
-
-        // ----> draw the table
-        this.drawVTable();
-      });
     });
+
   }
 
   // columns definition
@@ -276,7 +256,7 @@ export class NewExamsComponent {
         scrollSliderCornerRadius: 6,
         hoverOn: false,
         barToSide: false,
-        width:16,
+        width: 16,
       },
       defaultStyle: {
         autoWrapText: true,
@@ -311,6 +291,7 @@ export class NewExamsComponent {
   drawVTable() {
 
     const option = this.getTableOptions();
+    this.newExamCreated = false;
 
     // create table
     this.dataGridHelper?.createTable(option);
@@ -325,12 +306,20 @@ export class NewExamsComponent {
 
       if (changedValue === true) {
         console.log("adding new assignment");
-        // TODO
-        // add a new assignment
-        // disable this cell
+
+        this.store.dispatch(invokeCreateUserExamByAdmin({ userId: record.userId }));
+
+        this.actions$.pipe(
+          ofType(createUserExamSuccessByAdmin),
+          take(1)
+        ).subscribe((data: any) => {
+          this.newExamCreated = true;
+
+        });
+      }
+      else {
+        this.newExamCreated = false;
       }
     });
   }
-
-  // user exam answer
 }

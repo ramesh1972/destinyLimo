@@ -14,10 +14,10 @@
             <c-row class="justify-content-center">
               <c-col lg="7" md="9" xl="6">
                 <c-card class="mx-4">
-                  <c-card-body class="p-8">
+                  <c-card-body class="p-8" style="background-color: orange;">
                     <form cForm>
                       <h1>Login</h1>
-                      <c-input-group class="mb-3">
+                      <c-input-group class="mb-3" style="margin-top: 20px;">
                         <span cInputGroupText>
                           <svg cIcon name="cilUser"></svg>
                         </span>
@@ -29,6 +29,12 @@
                       </c-input-group>
                       <div class="d-grid" style="justify-content: center;">
                         <button cButton color="primary" style="width: 100px;" (click)="onLogin()">Login</button>
+                      </div>
+                      <div class="d-grid" style="justify-content: center;" *ngIf="errorMessage">
+                        <div class="error-text">{{errorMessage}}</div>
+                      </div>
+                      <div class="main_nav_item" style="justify-content: end;display: flex;margin-top: 25px;">
+                        <a routerLink="/home/forgot-password" routerLinkActive="active" ariaCurrentWhenActive="page">Forgot password?</a>
                       </div>
                     </form>
                   </c-card-body>

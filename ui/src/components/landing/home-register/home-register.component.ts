@@ -30,6 +30,7 @@ import { Store } from '@ngrx/store';
 import { registerUser, registerUser_Success } from '@src/store/actions/user.action';
 import { Actions, ofType } from '@ngrx/effects';
 import { take } from 'rxjs';
+import resizeImage from '@src/common/utils/imageUtils';
 
 /** passwords must match - custom validator */
 export class PasswordValidators {
@@ -46,16 +47,17 @@ export class PasswordValidators {
 }
 
 export class NoSpaceValidator {
-  static username(control: FormControl): ValidationErrors | null {
+  static username(control: AbstractControl): ValidationErrors | null {
     console.log('NoSpaceValidator', control.value);
     const uname = control.get('username');
-    if (uname?.value.indexOf(' ') >= 0) {
+    if (uname?.value.toString().indexOf(' ') >= 0) {
       console.log('found space');
       uname?.setErrors({ noSpaces: true });
       return { noSpaces: true };
     }
 
-    return { noSpaces: false };
+    uname?.setErrors(null);
+    return null;
   }
 }
 
@@ -98,6 +100,8 @@ export class HomeRegisterComponent {
   formControls!: string[];
 
   newUser: User = new User();
+  avatarFile: File | null = null;
+  avatarPreview: string | ArrayBuffer | null = null;
 
   createForm() {
     this.registerForm = this.formBuilder.group(
@@ -110,7 +114,7 @@ export class HomeRegisterComponent {
           [
             Validators.required,
             Validators.minLength(this.validationFormsService.formRules.usernameMin),
-            Validators.pattern(this.validationFormsService.formRules.nonEmpty),
+            Validators.pattern(this.validationFormsService.formRules.nonEmpty)
           ]
         ],
         email: ['', [Validators.required, Validators.email]],
@@ -137,12 +141,33 @@ export class HomeRegisterComponent {
       },
       {
         validators: [
-          PasswordValidators.confirmPassword,
-          NoSpaceValidator.username
+          PasswordValidators.confirmPassword
         ]
       }
     );
     this.formControls = Object.keys(this.registerForm.controls);
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      const file = input.files[0];
+
+      resizeImage(file, 100, 100, (resizedImage: File) => {
+        console.log('resized image', resizedImage);
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.avatarFile = resizedImage;
+          this.avatarPreview = reader.result;
+          this.registerForm.setValue({
+            avatar: reader.result
+          });
+        };
+
+        reader.readAsDataURL(resizedImage);
+      });
+    }
   }
 
   onValidate() {
@@ -156,8 +181,7 @@ export class HomeRegisterComponent {
     console.log('Register');
     console.warn(this.onValidate(), this.registerForm.status);
 
-
-    //if (this.onValidate()) {
+    if (this.onValidate()) {
       console.warn(this.registerForm.value);
 
       console.log(this.registerForm.value);
@@ -167,16 +191,15 @@ export class HomeRegisterComponent {
         email: this.registerForm.value.email,
         isApproved: false,
         approveRejectReason: '',
-        approvedRejectedDate: new Date(),
-        approvedRejectedBy: '',
+        approvedRejectedBy: -1,
         isLocked: false,
         isDeleted: false,
 
         userProfile: {
           firstName: this.registerForm.value.firstName,
           lastName: this.registerForm.value.lastName,
-          avatar: this.registerForm.value.avatar,
           dob: this.registerForm.value.dob,
+          avatar: this.registerForm.value.avatar,
           phoneNumber: this.registerForm.value.mobile,
           address: this.registerForm.value.address,
           licenseNumber: this.registerForm.value.license,
@@ -187,8 +210,10 @@ export class HomeRegisterComponent {
         roles: [{ role_id: 2 }]
       };
 
+      // resize the image
+      
       console.log("new user", this.newUser);
-      this.store.dispatch(registerUser({ user: this.newUser }));
+      this.store.dispatch(registerUser({ user: this.newUser, avatar: this.avatarFile! }));
 
       this.actions$.pipe(
         ofType(registerUser_Success),
@@ -199,6 +224,6 @@ export class HomeRegisterComponent {
         this.newUser = data.user;
         console.log("new user", this.newUser);
       });
-    //}
+    }
   }
 }

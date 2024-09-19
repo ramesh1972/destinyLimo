@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../../data/clients/uploads/destiny-uploads"
+		}
+	],
+	"settings": {
+		"java.dependency.syncWithFolderExplorer": false,
+		"java.project.explorer.showNonJavaResources": false
+	}
+}

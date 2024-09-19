@@ -12,10 +12,11 @@ import { CardModule } from '@coreui/angular';
 import { FormModule, FormCheckComponent } from '@coreui/angular';
 import { ButtonDirective } from '@coreui/angular';
 
-import { invokeMaterialTextFetchAPI,materialTextFetchAPI_Success } from '@src/store/actions/material.action';
+import { invokeMaterialText_CreateAPI, invokeMaterialText_DeleteAPI, invokeMaterialText_UpdateAPI, invokeMaterialTextFetchAPI, materialText_CreateAPI_Success, materialText_DeleteAPI_Success, materialText_UpdateAPI_Success, materialTextFetchAPI_Success } from '@src/store/actions/material.action';
 import { selectMaterialCategorys, selectMaterialTexts } from '@src/store/selectors/material.selector';
 
 import { AccordianParentComponent } from '@src/components/common/components/accordian-parent/accordian-parent.component';
+import { MaterialText } from '@src/store/models/MaterialText';
 
 @Component({
   selector: 'app-text',
@@ -33,9 +34,9 @@ export class TextComponent {
   constructor(private readonly store: Store, private actions$: Actions) {
   }
 
-  categories: any[] = []; 
+  categories: any[] = [];
   text: any[] = [];
-  newPostString = 'Add Post';
+  newPostString = 'Add Text Content';
   selectedCategoryName = '';
 
   ngOnInit() {
@@ -43,7 +44,7 @@ export class TextComponent {
     // set data
     this.store.select(selectMaterialCategorys).subscribe((cats) => {
       console.log("material fetch dispatched");
-    
+
       this.categories = [...cats];
     });
 
@@ -73,7 +74,7 @@ export class TextComponent {
       });
     });
 
-    
+
   }
 
   adjustTextareaHeight(event: Event): void {
@@ -83,15 +84,14 @@ export class TextComponent {
     textarea.style.height = `${textarea.scrollHeight}px`;
   }
 
-  
+
   getCurrentCategoryName(mcq: any): string {
     return this.selectedCategoryName || mcq.category_name || 'Select a Category';
   }
 
   selectCategory(categoryName: string, index: number): void {
-    console.log('selectCategory', categoryName, index);
+    console.log('selectCategory', categoryName, index, this.text[index]);
     this.selectedCategoryName = categoryName;
-    this.text[index].category_name = categoryName; // Update the mcq object if needed
   }
 
 
@@ -119,7 +119,6 @@ export class TextComponent {
   onEdit(i: number) {
     console.log('component edit', i);
 
-    this.selectedCategoryName = '';
 
     this.text.forEach((item: any, index: number) => {
       item.editing = false;
@@ -133,49 +132,75 @@ export class TextComponent {
   onDelete(i: number) {
     this.text[i].is_deleted = true;
 
-    this.selectedCategoryName = '';
-    //this.store.dispatch(invokeUpdateContentAPI(this.text[i]));
+    this.store.dispatch(invokeMaterialText_DeleteAPI({ material_id: this.text[i].material_id }));
 
-    // remove from the list array
-    this.text.splice(i, 1);
+    this.actions$.pipe(
+      ofType(materialText_DeleteAPI_Success),
+      take(1)
+    ).subscribe((data: any) => {
+      console.log("content fetch dispatched", data);
 
-    this.text[i].editing = false;
-    this.text[i].adding = false;
+      if (data.success)
+        this.text.splice(i, 1);
+
+      this.selectedCategoryName = '';
+    });
   }
 
   onSave(i: number) {
     console.log('component save', i);
 
-    this.selectedCategoryName = '';
+    // invoke dispatch
+    const textChanged: MaterialText = this.text[i];
 
-    /*  if (this.text[i].adding) {
-       this.store.dispatch(invokeContentCreateAPI({
-         content: {
-           Id: -1,
-           content_type_id: this.text[i].content_type_id,
-           title: this.text[i].title,
-           description: this.text[i].description,
-           is_public: this.text[i].is_public,
-           is_active: this.text[i].is_active,
-           is_deleted: this.text[i].is_deleted
-         }
-       }));
-     } else if (this.text[i].editing) {
-       this.store.dispatch(invokeUpdateContentAPI({
-         content: {
-           Id: this.text[i].id || -1,
-           content_type_id: this.text[i].content_type_id,
-           title: this.text[i].title,
-           description: this.text[i].description,
-           is_public: this.text[i].is_public,
-           is_active: this.text[i].is_active,
-           is_deleted: this.text[i].is_deleted
-         }
-       }));
-     }
-  */
-    this.text[i].editing = false;
-    this.text[i].adding = false;
+    if (this.selectedCategoryName !== '') {
+      textChanged.category_name = this.selectedCategoryName; // Update the mcq object if needed
+      textChanged.material_category_id = this.categories.find((cat: any) => cat.category_name === this.selectedCategoryName)?.id;
+    }
+
+    console.log('textChanged', textChanged);
+
+    // dispatch the action
+    if (this.text[i].adding) {
+      this.store.dispatch(invokeMaterialText_CreateAPI({ materialText: textChanged }));
+
+      this.actions$.pipe(
+        ofType(materialText_CreateAPI_Success),
+        take(1)
+      ).subscribe((data: any) => {
+        console.log("content fetch dispatched", data);
+
+        const newText: any = { ...data.materialText };
+        const catName = this.categories.find((cat: any) => cat.id === newText.material_category_id)?.category_name;
+        console.log('catName', catName);
+        newText.category_name = catName;
+        newText.editing = false;
+        newText.adding = false;
+
+        this.text[i] = newText;
+        this.selectedCategoryName = '';
+      });
+    }
+    else if (this.text[i].editing) {
+      this.store.dispatch(invokeMaterialText_UpdateAPI({ materialText: textChanged }));
+
+      this.actions$.pipe(
+        ofType(materialText_UpdateAPI_Success),
+        take(1)
+      ).subscribe((data: any) => {
+        console.log("content fetch dispatched", data);
+
+        const newText: any = { ...data.materialText };
+        const catName = this.categories.find((cat: any) => cat.id === newText.material_category_id)?.category_name;
+        console.log('catName', catName);
+        newText.category_name = catName;
+        newText.editing = false;
+        newText.adding = false;
+
+        this.text[i] = newText;
+        this.selectedCategoryName = '';
+      });
+    }
   }
 
   onCancel(i: number) {

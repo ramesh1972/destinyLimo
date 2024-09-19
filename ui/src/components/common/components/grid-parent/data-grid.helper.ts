@@ -17,6 +17,9 @@ export class DataGridComponentHelper {
 
     tableName: string = '';
     idColName: string = '';
+    parentTableName: string = '';
+    parentTableIdColName: string = '';
+
     is_soft_delete: boolean = false;
     mandatoryColumns: any = [];
 
@@ -33,6 +36,11 @@ export class DataGridComponentHelper {
         this.idColName = idColName;
         this.mandatoryColumns = mandatoryColumns;
         this.is_soft_delete = is_soft_delete;
+    }
+
+    setParentTableInfo(parentTableName: string, parentTableIdColName: string) {
+        this.parentTableName = parentTableName;
+        this.parentTableIdColName = parentTableIdColName;
     }
 
     setColumns(columns: any) {
@@ -215,7 +223,7 @@ export class DataGridComponentHelper {
         console.log('changedValues', this.dataChanges);
     }
 
-    onUpdateRecord(id: number, col: any, value: any) {
+    onUpdateRecord(id: number, col: any, value: any, parentId: number = -1) {
         console.log('onUpdateRecord', id, col, value);
 
         // get any previous update to the same record and column
@@ -230,12 +238,17 @@ export class DataGridComponentHelper {
 
             this.dataChanges[index].records.push({ colName: col, value: value });
 
+
             console.log('changedValues2', this.dataChanges);
             return;
         }
 
         // if value is a file then append formData
-        this.dataChanges.push({ action: 'update', idCol: id, records: [{ colName: col, value: value }] });
+        var records2 = [{ colName: col, value: value }];
+        if (parentId !== -1)
+            records2.push({ colName: this.parentTableIdColName, value: parentId });
+
+        this.dataChanges.push({ action: 'update', idCol: id, parentTableName: this.parentTableName, records: records2 });
 
         console.log('changedValues', this.dataChanges);
 
@@ -249,9 +262,10 @@ export class DataGridComponentHelper {
         return fileExtensionPattern.test(fileName);
     }
 
-    onDeleteRecord(id: number) {
+    onDeleteRecord(id: number, parentId: number = -1) {
+
         if (this.is_soft_delete) {
-            this.onUpdateRecord(id, 'is_deleted', "true");
+            this.onUpdateRecord(id, 'is_deleted', "true", parentId);
 
             if (this.compRef.onDeleteRecord)
                 this.compRef.onDeleteRecord(id);
@@ -288,18 +302,18 @@ export class DataGridComponentHelper {
         this.dataChanges[0].idColName = this.idColName;
 
         // manage file uploads
-        this.filesToBeUploaded = [];
+/*         this.filesToBeUploaded = [];
         this.dataChanges.forEach((change: any) => {
             change.records.forEach((record: any) => {
 
-                if (this.isFile(record.value.name!)) {
+                if (this.isFile(record.value?.name!)) {
                     console.log('file upload', record.value.name);
 
                     this.filesToBeUploaded.push(record.value);
                     record.value = record.value.name;
                 }
             });
-        });
+        }); */
 
         console.log('filesToBeUploaded', this.filesToBeUploaded);
         console.log('dataChanges new', this.dataChanges);
@@ -324,6 +338,7 @@ export class DataGridComponentHelper {
 
         this.originalData = [...newData];
         this.dataChanges = [];
+        this.filesToBeUploaded = [];
 
         this.compRef.saveButtonEnabled = false;
         this.compRef.resetButtonEnabled = false;
@@ -353,18 +368,26 @@ export class DataGridComponentHelper {
 
             const { col, row, targetIcon, cellType } = args;
 
+            const record = this.table?.getRecordByCell(col, row);
+
+            var parentId = -1;
+            if (this.parentTableName !== '')
+                parentId = record[this.parentTableIdColName];
+
+            const pk_id = record !== undefined || record !== null ? record[this.idColName] : -1;
+
             if (targetIcon) {
                 if (targetIcon.name === 'delete') {
                     const value = this.table?.getRecordByCell(1, row);
-                    if (value.id === undefined || value.id === null) {
+                    if (pk_id === -1) {
                         this.table?.deleteRecords([row - 1]);
                         return;
                     }
 
-                    alert('delete: ' + value.id);
+                    alert('delete: ' + pk_id);
 
                     this.table?.deleteRecords([row - 1]);
-                    this.onDeleteRecord(value.id);
+                    this.onDeleteRecord(pk_id, parentId);
                 }
             }
 
@@ -376,11 +399,11 @@ export class DataGridComponentHelper {
                 record[this.columns[col].field] = !record[this.columns[col].field];
                 console.log('changed checkbox value', record[this.columns[col].field]);
 
-                if (record.id === undefined || record.id === null) {
+                if (pk_id === -1) {
                     this.onNewRecord(this.columns[col].field, row, record[this.columns[col].field].toString());
                 }
                 else
-                    this.onUpdateRecord(record.id, this.columns[col].field, record[this.columns[col].field].toString());
+                    this.onUpdateRecord(pk_id, this.columns[col].field, record[this.columns[col].field].toString(), parentId);
 
                 this.disableRowEditing(row, !record[this.columns[col].field]);
             }
@@ -409,29 +432,44 @@ export class DataGridComponentHelper {
                 }
             }
 
+            const pk_id = record !== undefined || record !== null ? record[this.idColName] : -1;
+
             if (changedValues?.length === 0) {
                 console.log('updated record', record);
-                if (record === undefined || record.id === undefined || record.id === null) {
+                if (pk_id === -1) {
                     console.log('new record', fieldDef.field, row, args.changedValue);
                     this.onNewRecord(fieldDef.field, row, args.changedValue);
                 }
                 else {
                     const id = record.id;
+                    var parentId = -1;
+                    if (this.parentTableName !== '')
+                        parentId = record[this.parentTableIdColName];
+
                     console.log('update record', record, fieldDef.field, args.changedValue);
-                    this.onUpdateRecord(id, fieldDef.field, args.changedValue);
+                    this.onUpdateRecord(pk_id, fieldDef.field, args.changedValue, parentId);
                 }
             }
             else {
+                var parentId = -1;
+                if (this.parentTableName !== '')
+                    parentId = record[this.parentTableIdColName];
+
                 changedValues?.forEach((changedValue2: any) => {
-                    console.log('updated record', changedValue2);
-                    if (record === undefined || record.id === undefined || record.id === null) {
-                        console.log('new record', changedValue2.field, row, changedValue2.value);
-                        this.onNewRecord(changedValue2.field, row, changedValue2.value);
+                    if (this.isFile(changedValue2.value?.name)) {
+                        console.log('file upload', changedValue2.value.name);
+                        this.filesToBeUploaded.push(changedValue2.value);
                     }
                     else {
-                        const id = record.id;
-                        console.log('new record', changedValue2);
-                        this.onUpdateRecord(id, changedValue2.field, changedValue2.value);
+                        console.log('updated record', changedValue2);
+                        if (pk_id === -1) {
+                            console.log('new record', changedValue2.field, row, changedValue2.value);
+                            this.onNewRecord(changedValue2.field, row, changedValue2.value);
+                        }
+                        else {
+                            console.log('new record', changedValue2);
+                            this.onUpdateRecord(pk_id, changedValue2.field, changedValue2.value, parentId);
+                        }
                     }
                 });
             }

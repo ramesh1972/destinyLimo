@@ -19,6 +19,8 @@ import { invokeUserProfilesFetchAPI, UserProfilesFetchAPI_Success } from '@src/s
 import { CommonModule } from '@angular/common';
 import { invokeUsersFetchAPI, UsersFetchAPI_Success } from '@src/store/actions/user.action';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { pad } from 'lodash-es';
+import { FilePaths } from '@src/components/common/file-paths';
 
 @Component({
   selector: 'app-users',
@@ -48,7 +50,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["isApproved"] == true;
+          return record["isApproved"] == true && record["isLocked"] == false;
         }
       }]);
     }
@@ -56,7 +58,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["isApproved"] == false && (record["approveRejectReason"] == "" || record["approveRejectReason"] == null);
+          return record["isApproved"] == false && record["isLocked"] == false;
         }
       }]);
     }
@@ -64,7 +66,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["isLocked"] == true && (record["approveRejectReason"] == "" || record["approveRejectReason"] == null);
+          return record["isLocked"] == true;
         }
       }]);
     }
@@ -72,7 +74,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["approveRejectReason"] != "" && record["approveRejectReason"]  != null && record["isApproved"] == false;
+          return record["isApproved"] == false;
         }
       }]);
     }
@@ -105,41 +107,53 @@ export class UsersComponent {
       console.log("users fetch dispatched", data);
 
       this.users = data?.allUsers?.map((user: any) => {
-        const isRejected = user.isApproved === false  && user.approveRejectReason !== null && user.approveRejectReason !== "";
-        let userStatus = isRejected ? "Rejected" : (user.isApproved ? "Approved" : "Pending Approval");
-        userStatus = user.isLocked ? "Locked" : userStatus;
-
-        console.log('user status', userStatus);
-        console.log('user approved', user.isApproved);
-        console.log('user lockec', user.isLocked);
-
-        let statusBGColor = 'lightgreen';
-        if (userStatus === 'Rejected') {
-          statusBGColor = 'red';
-        }
-        else if (userStatus === 'Pending Approval') {
-          statusBGColor = 'yellow';
-        }
-        else if (userStatus === 'Locked') {
-          statusBGColor = 'lightgrey';
-        }
+        let { userStatus, statusBGColor } = this.setUserStatus(user);
         
+        var userProfileNew = {
+          ...user.userProfile,
+          avatar: FilePaths.GetAvatarPath(user.userProfile?.avatar || 'blank-avatar.webp')
+        };
+
         return {
           ...user,
+          userProfile: userProfileNew,
           userStatus: userStatus,
+  
           userStatusBGColor: statusBGColor
         };
       });
 
       this.dataGridHelper!.setData(this.users);
 
-      this.selectedUser = this.users[1];
+      this.selectedUser = this.users[0];
 
       console.log('selected user', this.selectedUser);
 
       // ----> draw the table
       this.drawVTable();
     });
+  }
+
+  private setUserStatus(user: any) {
+    const isRejected = user.isApproved === false;
+    let userStatus = isRejected ? "Rejected" : (user.isApproved ? "Approved" : "Pending Approval");
+    userStatus = user.isLocked ? "Locked" : userStatus;
+
+    console.log('user status', userStatus);
+    console.log('user approved', user.isApproved);
+    console.log('user lockec', user.isLocked);
+
+    let statusBGColor = 'lightgreen';
+    if (userStatus === 'Rejected') {
+      statusBGColor = 'red';
+    }
+    else if (userStatus === 'Pending Approval') {
+      statusBGColor = 'yellow';
+    }
+    else if (userStatus === 'Locked') {
+      statusBGColor = 'lightgrey';
+    }
+    return { userStatus, statusBGColor };
   }
 
   // columns definition
@@ -187,7 +201,7 @@ export class UsersComponent {
         disableColumnResize: true,
         style: {
           bgColor: 'rgba(184, 132, 132, 0.3)',
-          textBaseline: "middle"
+          textBaseline: "middle",
         },
         customLayout: (args: any) => {
           const { table, row, col, rect } = args;
@@ -196,17 +210,17 @@ export class UsersComponent {
           const percentCalc = VTable.CustomLayout.percentCalc;
 
           const container = new VTable.CustomLayout.Group({
-            height,
+            height: 240,
             width,
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'nowrap',
             alignItems: 'center',
-            boundsPadding: [10, 10, 10, 10],
+            boundsPadding: [4, 4, 4, 4],
           });
 
           const containerLeft: any = new VTable.CustomLayout.Group({
-            height: 50,
+            height: 240,
             width: 180,
 
             display: 'flex',
@@ -218,12 +232,12 @@ export class UsersComponent {
           });
 
           container.add(containerLeft);
+          
 
           const avatar = new VTable.CustomLayout.Image({
-            src: record.userProfile?.avatar,
+            src: record["userProfile"]["avatar"],
             width: 40,
             height: 40,
-            boundsPadding: [4, 4],
             cornerRadius: 20,
           });
 
@@ -235,7 +249,6 @@ export class UsersComponent {
             fontSize: 13,
             fontFamily: 'sans-serif',
             fill: 'black',
-            lineHeight: 20,
             boundsPadding: [4, 10],
             marginTop: 15
           });
@@ -308,7 +321,7 @@ export class UsersComponent {
       columns: this.dataGridHelper?.columns,
       data: this.users,
       widthMode: 'autoWidth',
-      heightMode: 'adaptive',
+      heightMode: 'standard',
       heightAdaptiveMode: 'only-body',
       autoFillHeight: false,
       autoFillWidth: true,
@@ -339,6 +352,7 @@ export class UsersComponent {
         autoWrapText: true,
         color: 'black',
         textBaseline: "top",
+        lineHeight: 50,
       },
       headerStyle: {
         bgColor: '#a881e1',
@@ -381,5 +395,25 @@ export class UsersComponent {
         this.selectedUser = args.originData;
       }
     });
+  }
+
+  onUserUpdated(updatedUser: any) {
+    // Find the index of the updated user in the users list
+    const index = this.users.findIndex(user => user.id === updatedUser.id);
+    if (index !== -1) {
+
+      let { userStatus, statusBGColor} = this.setUserStatus(updatedUser);
+
+      updatedUser.userStatus = userStatus;
+      updatedUser.statusBGColor = statusBGColor;
+
+      // Update the user in the users list
+      this.users[index] = updatedUser;
+
+      this.dataGridHelper?.table?.setRecords(this.users);
+
+      // refresh the table
+      this.dataGridHelper?.table?.render();
+    }
   }
 }
