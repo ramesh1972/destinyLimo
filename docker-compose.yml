@@ -10,7 +10,6 @@ services:
     network_mode: "host"
     volumes:
       - /var/clients/webforless/destiny-limo/prod/uploads:/uploads
-
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 

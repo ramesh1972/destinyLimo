@@ -17,6 +17,7 @@ namespace DestinyLimoServer.Common.Uploader
 
         private readonly IConfiguration _configuration = null!;
 
+        // TODO configuratipn not getting DIed in production
         public FileUploader(ILogger logger, IConfiguration configuration)
         {
             _logger = logger;
@@ -39,19 +40,28 @@ namespace DestinyLimoServer.Common.Uploader
         {
             try
             {
+                System.Console.WriteLine("Uploading file:" + file.FileName + " to folder:" + folderName);
+
                 if (file == null || file.Length == 0)
                 {
                     _logger.LogError("File is empty.");
                     return null!;
                 }
 
+                System.Console.WriteLine($"Root path: {_rootUploadsFolderName}"");
+                System.Console.WriteLine($"Folder name: {folderName}");
+                
                 string folderPath = Path.Combine(_rootUploadsFolderName, folderName);
+                System.Console.WriteLine($"Folder path: {folderPath}");
+
                 if (!Directory.Exists(folderPath))
                 {
                     Directory.CreateDirectory(folderPath);
                 }
 
                 string filePath = Path.Combine(folderPath, file.FileName);
+                System.Console.WriteLine($"File path & name: {filePath}");
+
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);

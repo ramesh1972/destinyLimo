@@ -46,6 +46,9 @@ builder.Services.AddSingleton<DapperContext>(provider =>
     return new DapperContext(connectionString);
 });
 
+var connectionString = configuration.GetConnectionString("MySqlConnection") ?? throw new Exception("Connection string is null.");
+    Console.WriteLine($"Connection string: {connectionString}");
+
 // Auto Mapper Configurations
 var mapperConfig = new MapperConfiguration(mc =>
 {
@@ -91,9 +94,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Serve static files from the "UploadedFiles" folder
-var uploadPath = configuration.GetSection("Uploads").GetValue<string>("Destination") ?? throw new Exception("Upload path is null.");
-var fileserverPath = configuration.GetSection("Uploads").GetValue<string>("FileServePath") ?? throw new Exception("File serve path is null.");
 
 // Custom middleware to handle CORS for static files
 app.Use(async (context, next) =>
@@ -104,6 +104,12 @@ app.Use(async (context, next) =>
     await next.Invoke();
 });
 
+// Serve static files from the "UploadedFiles" folder
+var uploadPath = configuration.GetSection("Uploads").GetValue<string>("Destination") ?? throw new Exception("Upload path is null.");
+var fileserverPath = configuration.GetSection("Uploads").GetValue<string>("FileServePath") ?? throw new Exception("File serve path is null.");
+
+Console.WriteLine($"Upload path: {uploadPath}");
+Console.WriteLine($"File server path: {fileserverPath}");
 
 app.UseStaticFiles(new StaticFileOptions
 {
