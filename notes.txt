@@ -28,8 +28,16 @@ COMPELTE IT
 
 ISSUES
 ------
-NOW
+IMPORTANT BUGS
 2) change the file & video cards - too big
+4) new user post registration is undefined
+3) edit profile on admin is not working
+4) the categories in grid of content & video sometimes are empty
+5) sometimes grid values with username and image is coming empty
+NOW
+6) [Intervention] Unable to preventDefault inside passive event listener due to target being treated as passive. See 
+
+5) the video wifth & heihgt in admin console is not mobile responsive
 2) next/prev button not viswible in mobile
 1) something wrong on loading of images in landing page (15 mins)
 3) responsive design for grids (follow categories) ----> YES
