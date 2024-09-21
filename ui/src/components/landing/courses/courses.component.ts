@@ -56,7 +56,7 @@ export class CoursesComponent {
     ).subscribe((data: any) => {
       console.log("cats fetch dispatched", data);
 
-      this.categories = [...data.allMaterialCategories];
+      this.categories = [...data.allMaterialCategory];
     });
 
 

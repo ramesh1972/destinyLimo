@@ -67,7 +67,7 @@ export class VideosComponent {
     ).subscribe((data: any) => {
       console.log("cats fetch dispatched", data);
 
-      this.categories = [...data.allMaterialCategories];
+      this.categories = [...data.allMaterialCategory];
     });
 
     this.store.dispatch(invokeMaterialVideoFetchAPI({ isPublic: false }));
@@ -154,7 +154,7 @@ export class VideosComponent {
           lineHeight: 60,
         },
         fieldFormat: (record: any) => {
-          return record.video2.type === 'file' ? URL.createObjectURL(record.video2.video) : record.video2.video;
+          return record.video2 === null || record.video2 === undefined ? '' : record.video2.video;  
         }
       },
       {
@@ -175,6 +175,11 @@ export class VideosComponent {
         fieldFormat: (record: any) => {
           // if this is a file then streip the http and path and return the file name
           console.log('video2', record.video2);
+
+          if (record.video2 === null || record.video2 === undefined) {
+            return '';
+          }
+          
           if (record.video2.type === 'file') {
             console.log('file', record.video2.video);
             const parts = record.video2.video.split('/');

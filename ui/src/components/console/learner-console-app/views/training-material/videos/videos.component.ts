@@ -48,7 +48,7 @@ export class VideosComponent {
     ).subscribe((data: any) => {
       console.log("cats fetch dispatched", data);
 
-      this.categories = [...data.allMaterialCategories];
+      this.categories = [...data.allMaterialCategory];
     });
 
     this.store.dispatch(invokeMaterialVideoFetchAPI({ isPublic: false }));

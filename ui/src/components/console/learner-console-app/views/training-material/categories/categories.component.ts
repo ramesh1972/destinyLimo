@@ -55,7 +55,7 @@ export class CategoriesComponent {
       take(1)
     ).subscribe((data: any) => {
         console.log('categories fetched', data);
-        this.dataGridHelper!.setData(data.allMaterialCategories);
+        this.dataGridHelper!.setData(data.allMaterialCategory);
 
         // ----> draw the table
         this.drawVTable();

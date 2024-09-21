@@ -459,6 +459,9 @@ export class DataGridComponentHelper {
                         console.log('file upload', changedValue2.value.name);
                         this.filesToBeUploaded.push(changedValue2.value);
                     }
+                    else if (changedValue2.value === null || changedValue2.value === undefined) {
+                        console.log('null value');
+                    }
                     else {
                         if (pk_id === undefined || pk_id === null || pk_id === -1) {
                             console.log('new record', changedValue2.field, row, changedValue2.value);

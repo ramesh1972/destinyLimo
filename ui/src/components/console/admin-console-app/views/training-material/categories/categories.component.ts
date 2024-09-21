@@ -56,7 +56,7 @@ export class CategoriesComponent {
     ).subscribe((data: any) => {
       console.log("cats fetch dispatched", data);
 
-      const categories = data.allMaterialCategories.map((category: any) => {
+      const categories = data.allMaterialCategory.map((category: any) => {
         return {
           ...category,
           material_category_id: category.id

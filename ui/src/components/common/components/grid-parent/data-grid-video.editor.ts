@@ -15,7 +15,7 @@ export class DataGridVideoEditor {
     const that = this;
     this.container = container;
     this.successCallback = endEdit;
-    this.returnValue = value;
+    this.returnValue = value || {};
 
     // create root element
     this.rootElement = document.createElement('div');
@@ -47,7 +47,7 @@ export class DataGridVideoEditor {
     videoUrlInput.style.fontSize = '13px'; // Font size
     videoUrlInput.style.transition = 'border-color 0.3s'; // Smooth transition for focus effect
 
-    if (value.video && value.video.toLowerCase().startsWith('http')) {
+    if (value !== null && value !== undefined && value.video && value.video.toLowerCase().startsWith('http')) {
       videoUrlInput.value = value.video;
     }
 
@@ -82,7 +82,7 @@ export class DataGridVideoEditor {
     isVimeoCheckbox.style.height = '18px';
     isVimeoCheckbox.style.padding = '2px';
     isVimeoCheckbox.style.marginLeft = '-18px';
-    isVimeoCheckbox.checked = value.is_vimeo;
+    isVimeoCheckbox.checked = value !== null && value !== undefined && value.is_vimeo;
 
     // create is vimeo label
     const isVimeoLabel = document.createElement('label');
@@ -158,7 +158,7 @@ export class DataGridVideoEditor {
     this.fileNameLabel.style.marginTop = '-6px';
     this.fileNameLabel.style.overflow = 'hidden';
 
-    if (value.video && !value.video.toLowerCase().startsWith('http')) {
+    if (value !== null && value !== undefined && value.video && !value.video.toLowerCase().startsWith('http')) {
       this.fileNameLabel.textContent = value.video;
     }
     else {
