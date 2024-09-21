@@ -64,46 +64,38 @@ export class VideosComponent {
     this.actions$.pipe(
       ofType(materialCategoryFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("cats fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log("cats fetch dispatched", data);
 
-      this.store.select(selectMaterialCategorys).subscribe((data: any) => {
-        console.log('cats fetched', data);
-
-        this.categories = [...data];
-      });
+      this.categories = [...data.allMaterialCategories];
     });
 
     this.store.dispatch(invokeMaterialVideoFetchAPI({ isPublic: false }));
     this.actions$.pipe(
       ofType(materialVideoFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("content fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log('content fetched', data);
 
-      this.store.select(selectMaterialVideos).subscribe((data: any) => {
-        console.log('content fetched', data);
+      const data2 = data.allMaterialVideos.map((d: any) => {
+        console.log('processing content', d.url);
+        var isURL: string = d.url.toLowerCase().startsWith('http') ? 'url' : 'file';
 
-        const data2 = data.map((d: any) => {
-          console.log('processing content', d.url);
-          var isURL: string = d.url.toLowerCase().startsWith('http') ? 'url' : 'file';
+        var videoFilePath = FilePaths.GetTrainingMaterialVideoURL(d.url);
 
-          var videoFilePath = FilePaths.GetTrainingMaterialVideoURL(d.url);
-
-          var cat_option = { value: d.material_category_id, label: this.categories.find((c: any) => c.id === d.material_category_id)?.category_name.toUpperCase() };
-          return {
-            ...d,
-            cat_option: cat_option,
-            video2: { video: isURL === 'url' ? d.url : videoFilePath, type: isURL, is_vimeo: d.is_vimeo }
-          };
-        });
-
-        console.log('content processed', data2);
-        this.dataGridHelper!.setData(data2);
-
-        // ----> draw the table
-        this.drawVTable();
+        var cat_option = { value: d.material_category_id, label: this.categories.find((c: any) => c.id === d.material_category_id)?.category_name.toUpperCase() };
+        return {
+          ...d,
+          cat_option: cat_option,
+          video2: { video: isURL === 'url' ? d.url : videoFilePath, type: isURL, is_vimeo: d.is_vimeo }
+        };
       });
+
+      console.log('content processed', data2);
+      this.dataGridHelper!.setData(data2);
+
+      // ----> draw the table
+      this.drawVTable();
     });
   }
 
@@ -162,7 +154,7 @@ export class VideosComponent {
           lineHeight: 60,
         },
         fieldFormat: (record: any) => {
-          return record.video2.isURL === 'file' ? URL.createObjectURL(record.video2.video) : record.video2.video;
+          return record.video2.type === 'file' ? URL.createObjectURL(record.video2.video) : record.video2.video;
         }
       },
       {

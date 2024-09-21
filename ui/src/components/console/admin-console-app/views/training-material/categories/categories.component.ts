@@ -53,24 +53,21 @@ export class CategoriesComponent {
     this.actions$.pipe(
       ofType(materialCategoryFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("categories fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log("cats fetch dispatched", data);
 
-      this.store.select(selectMaterialCategorys).subscribe((data: any) => {
-
-        const categories = data.map((category: any) => {
-          return {
-            ...category,
-            material_category_id: category.id
-          };
-        });
-
-        console.log('categories fetched', categories);
-        this.dataGridHelper!.setData(categories);
-
-        // ----> draw the table
-        this.drawVTable();
+      const categories = data.allMaterialCategories.map((category: any) => {
+        return {
+          ...category,
+          material_category_id: category.id
+        };
       });
+
+      console.log('categories fetched', categories);
+      this.dataGridHelper!.setData(categories);
+
+      // ----> draw the table
+      this.drawVTable();
     });
   }
 
@@ -135,7 +132,7 @@ export class CategoriesComponent {
         scrollSliderCornerRadius: 6,
         hoverOn: false,
         barToSide: false,
-        width:16,
+        width: 16,
       },
       defaultStyle: {
         borderLineWidth: .5,

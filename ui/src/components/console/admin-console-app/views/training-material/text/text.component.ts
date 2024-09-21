@@ -55,26 +55,20 @@ export class TextComponent {
     this.actions$.pipe(
       ofType(materialTextFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("content fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log('material fetched', data);
 
-      this.store.select(selectMaterialTexts).subscribe((data: any) => {
-        console.log('material fetched', data);
-
-        this.text = data.map((mcq: any) => {
-          const catName = this.categories.find((cat: any) => cat.id === mcq.material_category_id)?.category_name;
-          console.log('catName', catName);
-          return {
-            ...mcq,
-            category_name: catName,
-            editing: false,
-            adding: false
-          };
-        });
+      this.text = data.allMaterialTexts.map((mcq: any) => {
+        const catName = this.categories.find((cat: any) => cat.id === mcq.material_category_id)?.category_name;
+        console.log('catName', catName);
+        return {
+          ...mcq,
+          category_name: catName,
+          editing: false,
+          adding: false
+        };
       });
     });
-
-
   }
 
   adjustTextareaHeight(event: Event): void {

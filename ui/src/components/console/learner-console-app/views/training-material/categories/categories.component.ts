@@ -53,17 +53,13 @@ export class CategoriesComponent {
     this.actions$.pipe(
       ofType(materialCategoryFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("categories fetch dispatched");
-
-      this.store.select(selectMaterialCategorys).subscribe((data: any) => {
+    ).subscribe((data: any) => {
         console.log('categories fetched', data);
-        this.dataGridHelper!.setData(data);
+        this.dataGridHelper!.setData(data.allMaterialCategories);
 
         // ----> draw the table
         this.drawVTable();
       });
-    });
   }
 
   // columns definition

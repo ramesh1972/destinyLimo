@@ -9,7 +9,7 @@ services:
       - "5293:5293"
     network_mode: "host"
     volumes:
-      - uploads-dir:/uploads
+      - /var/clients/webforless/destiny-limo/prod/uploads:/uploads
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
@@ -19,6 +19,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - "9080:9080"
-
-  volumes:
-    uploads-dir:

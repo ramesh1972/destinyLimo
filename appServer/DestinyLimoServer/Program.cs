@@ -27,6 +27,9 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
+// register the configuration
+builder.Services.AddSingleton<IConfiguration>(configuration);
+
 // Add CORS policy
 builder.Services.AddCors(options =>
 {
@@ -47,7 +50,7 @@ builder.Services.AddSingleton<DapperContext>(provider =>
 });
 
 var connectionString = configuration.GetConnectionString("MySqlConnection") ?? throw new Exception("Connection string is null.");
-    Console.WriteLine($"Connection string: {connectionString}");
+Console.WriteLine($"Connection string: {connectionString}");
 
 // Auto Mapper Configurations
 var mapperConfig = new MapperConfiguration(mc =>

@@ -53,14 +53,10 @@ export class CoursesComponent {
     this.actions$.pipe(
       ofType(materialCategoryFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("cats fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log("cats fetch dispatched", data);
 
-      this.store.select(selectMaterialCategorys).subscribe((data: any) => {
-        console.log('cats fetched', data);
-
-        this.categories = [...data];
-      });
+      this.categories = [...data.allMaterialCategories];
     });
 
 
@@ -91,7 +87,7 @@ export class CoursesComponent {
       console.log('videos fetched', data);
 
       this.videos = data.allMaterialVideos.map((video: any) => {
-        const isURL = video.url.startsWith('http');
+        const isURL = video.url.toLowerCase().startsWith('http');
 
         const url = isURL ? video.url : FilePaths.GetTrainingMaterialFileURL(video.url);
 
@@ -111,14 +107,11 @@ export class CoursesComponent {
     this.actions$.pipe(
       ofType(materialMCQFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("content fetch dispatched");
-
-      this.store.select(selectMaterialMCQs).subscribe((data: any) => {
+    ).subscribe((data: any) => {
         console.log("cats ", this.categories);
         console.log('material fetched', data);
 
-        const mcqs = data.map((mcq: any) => {
+        const mcqs = data.allMaterialMCQs.map((mcq: any) => {
           console.log("mat cat", mcq.material_category_id);
           const catName = this.categories.find((cat: any) => cat.id === mcq.material_category_id)?.category_name || 'Undefined';
           console.log('catName', catName);
@@ -133,7 +126,6 @@ export class CoursesComponent {
         this.mcqs = [...mcqs];
         console.log("mods mcqs", this.mcqs)
       });
-    });
   }
 
   fileTypeIcon(fileName: string): string {

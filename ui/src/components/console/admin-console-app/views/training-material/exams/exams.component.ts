@@ -55,31 +55,26 @@ export class ExamsComponent {
     this.actions$.pipe(
       ofType(materialMCQFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("content fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log('material fetched', data);
 
-      this.store.select(selectMaterialMCQs).subscribe((data: any) => {
-        console.log("cats ", this.categories);
-        console.log('material fetched', data);
+      const mcqs = data.allMaterialMCQs.map((mcq: any) => {
+        console.log("mat cat", mcq.material_category_id);
+        const catName = this.categories.find((cat: any) => cat.id === mcq.material_category_id)?.category_name || 'Undefined';
+        console.log('catName', catName);
 
-        const mcqs = data.map((mcq: any) => {
-          console.log("mat cat", mcq.material_category_id);
-          const catName = this.categories.find((cat: any) => cat.id === mcq.material_category_id)?.category_name || 'Undefined';
-          console.log('catName', catName);
-
-          return {
-            ...mcq,
-            id: mcq.id,
-            title: mcq.question_text || 'MCQ Question',
-            category_name: catName,
-            editing: false,
-            adding: false
-          };
-        });
-
-        this.mcqs = [...mcqs];
-        console.log("mods mcqs", this.mcqs)
+        return {
+          ...mcq,
+          id: mcq.id,
+          title: mcq.question_text || 'MCQ Question',
+          category_name: catName,
+          editing: false,
+          adding: false
+        };
       });
+
+      this.mcqs = [...mcqs];
+      console.log("mods mcqs", this.mcqs);
     });
   }
 

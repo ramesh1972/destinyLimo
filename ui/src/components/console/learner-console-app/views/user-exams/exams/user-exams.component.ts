@@ -62,36 +62,32 @@ export class UserExamsComponent {
       this.categories = [...data];
     });
 
-    this.store.dispatch(invokeMaterialMCQFetchAPI({isPublic: false}));
+    this.store.dispatch(invokeMaterialMCQFetchAPI({ isPublic: false }));
 
     // Wait for the action to complete
     this.actions$.pipe(
       ofType(materialMCQFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("content fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log("cats ", this.categories);
+      console.log('material fetched', data);
 
-      this.store.select(selectMaterialMCQs).subscribe((data: any) => {
-        console.log("cats ", this.categories);
-        console.log('material fetched', data);
+      const mcqs = data.allMaterialMCQs.map((mcq: any) => {
+        console.log("mat cat", mcq.material_category_id);
+        const catName = this.categories.find((cat: any) => cat.id === mcq.material_category_id)?.category_name || 'Undefined';
+        console.log('catName', catName);
 
-        const mcqs = data.map((mcq: any) => {
-          console.log("mat cat", mcq.material_category_id);
-          const catName = this.categories.find((cat: any) => cat.id === mcq.material_category_id)?.category_name || 'Undefined';
-          console.log('catName', catName);
-
-          return {
-            ...mcq,
-            title: mcq.question_text || 'MCQ Question',
-            category_name: catName,
-            editing: false,
-            adding: false
-          };
-        });
-
-        this.mcqs = [...mcqs];
-        console.log("mods mcqs", this.mcqs)
+        return {
+          ...mcq,
+          title: mcq.question_text || 'MCQ Question',
+          category_name: catName,
+          editing: false,
+          adding: false
+        };
       });
+
+      this.mcqs = [...mcqs];
+      console.log("mods mcqs", this.mcqs)
     });
 
     // set data
@@ -414,7 +410,7 @@ export class UserExamsComponent {
         scrollSliderCornerRadius: 6,
         hoverOn: false,
         barToSide: false,
-        width:16,
+        width: 16,
       },
       defaultStyle: {
         autoWrapText: true,

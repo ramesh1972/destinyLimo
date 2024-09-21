@@ -54,15 +54,11 @@ export class CoursesComponent {
     this.actions$.pipe(
       ofType(materialCategoryFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("cats fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log("cats fetch dispatched", data);
 
-      this.store.select(selectMaterialCategorys).subscribe((data: any) => {
-        console.log('cats fetched', data);
-
-        this.categories = [...data];
-      });
-    })
+      this.categories = [...data.allMaterialCategories];
+    });
 
     this.store.dispatch(invokeMaterialFileFetchAPI({ isPublic: false }));
     this.actions$.pipe(

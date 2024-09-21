@@ -45,42 +45,32 @@ export class VideosComponent {
     this.actions$.pipe(
       ofType(materialCategoryFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("cats fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log("cats fetch dispatched", data);
 
-      this.store.select(selectMaterialCategorys).subscribe((data: any) => {
-        console.log('cats fetched', data);
-
-        this.categories = [...data];
-      });
-    })
+      this.categories = [...data.allMaterialCategories];
+    });
 
     this.store.dispatch(invokeMaterialVideoFetchAPI({ isPublic: false }));
     this.actions$.pipe(
       ofType(materialVideoFetchAPI_Success),
       take(1)
-    ).subscribe(() => {
-      console.log("content fetch dispatched");
+    ).subscribe((data: any) => {
+      console.log('videos fetched', data);
 
-      this.store.select(selectMaterialVideos).subscribe((data: any) => {
-        console.log('videos fetched', data);
+      this.videos = data.allMaterialVideos.map((video: any) => {
+        const isURL = video.url.toLowerCase().startsWith('http');
 
-        
+        const url = isURL ? video.url : FilePaths.GetTrainingMaterialFileURL(video.url);
+        return {
+          ...video,
+          url: url,
 
-        this.videos = data.map((video: any) => {
-          const isURL = video.url.startsWith('http');
-
-          const url = isURL ? video.url : FilePaths.GetTrainingMaterialFileURL(video.url);
-          return {
-            ...video,
-            url: url,
-            
-            category_name: this.categories.find((c: any) => c.id === video.material_category_id)?.category_name || 'Not Categorized'
-          };
-        });
-
-        console.log('videos modifiled', this.videos);
+          category_name: this.categories.find((c: any) => c.id === video.material_category_id)?.category_name || 'Not Categorized'
+        };
       });
+
+      console.log('videos modifiled', this.videos);
     });
   }
 
