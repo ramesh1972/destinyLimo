@@ -160,9 +160,6 @@ export class HomeRegisterComponent {
         reader.onload = (e) => {
           this.avatarFile = resizedImage;
           this.avatarPreview = reader.result;
-          this.registerForm.setValue({
-            avatar: reader.result
-          });
         };
 
         reader.readAsDataURL(resizedImage);
@@ -199,7 +196,7 @@ export class HomeRegisterComponent {
           firstName: this.registerForm.value.firstName,
           lastName: this.registerForm.value.lastName,
           dob: this.registerForm.value.dob,
-          avatar: this.registerForm.value.avatar,
+          avatar: this.avatarFile!.name,
           phoneNumber: this.registerForm.value.mobile,
           address: this.registerForm.value.address,
           licenseNumber: this.registerForm.value.license,

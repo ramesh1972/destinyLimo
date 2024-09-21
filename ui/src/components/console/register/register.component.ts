@@ -44,7 +44,7 @@ import { updateUser, updateUser_Failure, updateUser_Success } from '@src/store/a
   providers: [RegisterFormValidationService]
 })
 export class RegisterComponent {
-  currentUser: any;
+  currentUser: any = {};
   constructor(private formBuilder: FormBuilder, public validationFormsService: RegisterFormValidationService, private store: Store, private actions$: Actions) {
     this.formErrors = this.validationFormsService.errorMessages;
     this.createForm();
@@ -62,7 +62,8 @@ export class RegisterComponent {
     console.log('Register component initialized');
     this.store.select(selectLoggedInUser).subscribe((user: any) => {
       console.log('User', user);
-      this.currentUser = user;
+      this.currentUser = {...user};
+      this.currentUser.userProfile = {...this.currentUser.userProfile} || {};
 
       const formattedDob = user?.userProfile?.dob ? new Date(user.userProfile.dob).toISOString().split('T')[0] : '';
       console.log('User  DOB', formattedDob);
@@ -70,7 +71,7 @@ export class RegisterComponent {
       const issueDate = user?.userProfile?.licenseIssueDate ? new Date(user.userProfile.licenseIssueDate).toISOString().split('T')[0] : '';
       const expiryDate = user?.userProfile?.licenseExpiryDate ? new Date(user.userProfile.licenseExpiryDate).toISOString().split('T')[0] : '';
 
-      this.registerForm.patchValue({
+      this.registerForm.setValue({
         username: user?.username,
         firstName: user?.userProfile?.firstName,
         lastName: user?.userProfile?.lastName,
@@ -123,9 +124,7 @@ export class RegisterComponent {
         reader.onload = (e) => {
           this.avatarFile = resizedImage;
           this.avatarPreview = reader.result;
-          this.registerForm.setValue({
-            avatar: reader.result
-          });
+          this.currentUser.userProfile.avatar = resizedImage.name;
         };
 
         reader.readAsDataURL(resizedImage);
