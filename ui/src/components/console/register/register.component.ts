@@ -70,7 +70,7 @@ export class RegisterComponent {
       const issueDate = user?.userProfile?.licenseIssueDate ? new Date(user.userProfile.licenseIssueDate).toISOString().split('T')[0] : '';
       const expiryDate = user?.userProfile?.licenseExpiryDate ? new Date(user.userProfile.licenseExpiryDate).toISOString().split('T')[0] : '';
 
-      this.registerForm.setValue({
+      this.registerForm.patchValue({
         username: user?.username,
         firstName: user?.userProfile?.firstName,
         lastName: user?.userProfile?.lastName,
@@ -114,6 +114,7 @@ export class RegisterComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
       const file = input.files[0];
+      console.log('uploaded pic', file);
 
       resizeImage(file, 100, 100, (resizedImage: File) => {
         console.log('resized image', resizedImage);
@@ -165,6 +166,10 @@ export class RegisterComponent {
         licenseIssueDate: this.registerForm.value.issueDate,
         licenseExpiryDate: this.registerForm.value.expiryDate,
       };
+
+      // get only the file name from the path
+      newUser.userProfile.avatar =  newUser.userProfile.avatar?.split('\\').pop() || '';
+      console.log('New User', newUser);
 
       this.store.dispatch(updateUser({ updatedUser: newUser, avatar: this.avatarFile! }));
 

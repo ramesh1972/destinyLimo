@@ -19,6 +19,9 @@ C1)----> Admin console
 13) certificate editor
 16) Overview dashboard
 
+C1) ---> learner's console
+MARK COMPELTE
+
 C2) ----> Common console
 1) change password (need to update backend) (1 hr)
 1) messages, badges
@@ -38,6 +41,10 @@ F) HOME
 ISSUES
 ------
 1) try to isolate css/scss for course master and coreui
+2) change the file & video cards - too big
+3) some issue in edit profile - throwing username must be set or something on fileupload
+2) after file & video bulk save gettin error for a.value
+2) next/prev button not viswible in mobile
 1) something wrong on loading of images in landing page (15 mins)
 2) responsive design for landing page (60 mins)
 2) responsive design for console pages  - when scrolling horizonatally
