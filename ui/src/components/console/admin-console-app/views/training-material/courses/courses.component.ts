@@ -42,7 +42,7 @@ export class CoursesComponent {
 
     // set content table info
     const defaultColumns = [
-      { colName: "material_type_id", defaultValue: "7" },
+      { colName: "material_type_id", defaultValue: "1" },
       { colName: "is_active", defaultValue: "true" },
       { colName: "is_public", defaultValue: "false" },
       { colName: "is_deleted", defaultValue: "false" }

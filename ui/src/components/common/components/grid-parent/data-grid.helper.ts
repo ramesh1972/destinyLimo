@@ -191,18 +191,21 @@ export class DataGridComponentHelper {
     }
 
     onNewRecord(col: string, rowNum: number, value: any) {
+        console.log('onNewRecord', col, rowNum, value);
+        console.log('onNewRecord dataChanges', this.dataChanges);
+
         var index = this.dataChanges.filter((change: any) => change.action === 'insert' && change.rowNum === rowNum);
-        console.log('index', index);
+        console.log('OnNewRecord index', index);
+
         if (index.length > 0) {
+            console.log('found record', col, rowNum, value);
             var found = index[0].records.find((insert: any) => insert.colName === col);
             if (found) {
                 found.value = value;
-                console.log('changedValues', this.dataChanges);
                 return;
             }
             else {
                 index[0].records.push({ colName: col, value: value });
-                console.log('changedValues', this.dataChanges);
                 return;
             }
         }
@@ -220,11 +223,12 @@ export class DataGridComponentHelper {
             }
         });
 
-        console.log('changedValues', this.dataChanges);
+        console.log('OnNewRecord changedValues2', this.dataChanges);
     }
 
     onUpdateRecord(id: number, col: any, value: any, parentId: number = -1) {
         console.log('onUpdateRecord', id, col, value);
+        console.log('onUpdateRecord dataChanges', this.dataChanges);
 
         // get any previous update to the same record and column
         const index = this.dataChanges.findIndex((change: any) => change.action === 'update' && change.idCol === id);
@@ -232,25 +236,23 @@ export class DataGridComponentHelper {
             var found = this.dataChanges[index].records.find((update: any) => update.colName === col);
             if (found) {
                 found.value = value;
-                console.log('changedValues', this.dataChanges);
                 return;
             }
 
             this.dataChanges[index].records.push({ colName: col, value: value });
 
-
-            console.log('changedValues2', this.dataChanges);
+            console.log('onUpdateRecord changedValues2', this.dataChanges);
             return;
         }
 
-        // if value is a file then append formData
+        // if new entry 
         var records2 = [{ colName: col, value: value }];
         if (parentId !== -1)
             records2.push({ colName: this.parentTableIdColName, value: parentId });
 
         this.dataChanges.push({ action: 'update', idCol: id, parentTableName: this.parentTableName, records: records2 });
 
-        console.log('changedValues', this.dataChanges);
+        console.log('onUpdateRecord changedValues3', this.dataChanges);
 
         this.compRef.resetButtonEnabled = true;
         this.compRef.saveButtonEnabled = true;
@@ -263,12 +265,14 @@ export class DataGridComponentHelper {
     }
 
     onDeleteRecord(id: number, parentId: number = -1) {
+        console.log('onDeleteRecord', id, parentId);
 
         if (this.is_soft_delete) {
             this.onUpdateRecord(id, 'is_deleted', "true", parentId);
 
             if (this.compRef.onDeleteRecord)
                 this.compRef.onDeleteRecord(id);
+
             return;
         }
 
@@ -298,38 +302,22 @@ export class DataGridComponentHelper {
             return;
         }
 
-        console.log('idColName', this.idColName);
+
         this.dataChanges[0].idColName = this.idColName;
 
-        // manage file uploads
-/*         this.filesToBeUploaded = [];
-        this.dataChanges.forEach((change: any) => {
-            change.records.forEach((record: any) => {
-
-                if (this.isFile(record.value?.name!)) {
-                    console.log('file upload', record.value.name);
-
-                    this.filesToBeUploaded.push(record.value);
-                    record.value = record.value.name;
-                }
-            });
-        }); */
-
-        console.log('filesToBeUploaded', this.filesToBeUploaded);
-        console.log('dataChanges new', this.dataChanges);
+        console.log('onSaveRecords idColName', this.idColName);
+        console.log('onSaveRecords filesToBeUploaded', this.filesToBeUploaded);
+        console.log('onSaveRecords dataChanges', this.dataChanges);
 
         if (this.store) {
-            console.log('dispatching bulk update');
+            console.log('onSaveRecords dispatching bulk update');
             this.store?.dispatch(bulkUpdate({ tableName: this.tableName, allActionRecords: this.dataChanges, allFileUploads: this.filesToBeUploaded }));
-            console.log('dispatched bulk update');
+            console.log('onSaveRecords dispatched bulk update');
         }
         else
             console.warn('store not set');
 
         // maka a new copy of the original data which is the updated data
-        console.log('records', this.table?.records);
-
-        // mkae a deep copy of the records
         const newData = this.table?.records.map((record: any) => {
             return {
                 ...record
@@ -379,7 +367,7 @@ export class DataGridComponentHelper {
             if (targetIcon) {
                 if (targetIcon.name === 'delete') {
                     const value = this.table?.getRecordByCell(1, row);
-                    if (pk_id === -1) {
+                    if (pk_id === undefined || pk_id === null || pk_id === -1) {
                         this.table?.deleteRecords([row - 1]);
                         return;
                     }
@@ -399,7 +387,7 @@ export class DataGridComponentHelper {
                 record[this.columns[col].field] = !record[this.columns[col].field];
                 console.log('changed checkbox value', record[this.columns[col].field]);
 
-                if (pk_id === -1) {
+                if (pk_id === undefined || pk_id === null || pk_id === -1) {
                     this.onNewRecord(this.columns[col].field, row, record[this.columns[col].field].toString());
                 }
                 else
@@ -415,13 +403,18 @@ export class DataGridComponentHelper {
             const { col, row } = args;
 
             const record = this.table?.getRecordByCell(col, row);
-            const changedValue = this.table?.getCellValue(col, row);
-            console.log('changedValue cell value change', changedValue);
-            const fieldDef = this.columns[col];
+            const currentValue = args.currentValue;
+            const changedValue = args.changedValue;
 
+            console.log('record', record);
+            console.log('currentValue', currentValue);
+            console.log('changedValue cell value change', changedValue);
+
+            const fieldDef = this.columns[col];
             const colName = this.columns[col].field;
             console.log('colName', colName);
 
+            // get any vlues from the edit handlers
             let changedValues: any[] = [];
             if (this.editHandlers.length > 0) {
                 const handler = this.editHandlers.find((editHandler: any) => editHandler.col === colName);
@@ -432,15 +425,19 @@ export class DataGridComponentHelper {
                 }
             }
 
+            // the pk id of the record
             const pk_id = record !== undefined || record !== null ? record[this.idColName] : -1;
 
             if (changedValues?.length === 0) {
-                console.log('updated record', record);
-                if (pk_id === -1) {
-                    console.log('new record', fieldDef.field, row, args.changedValue);
+                if (pk_id === undefined || pk_id === null || pk_id === -1) {
                     this.onNewRecord(fieldDef.field, row, args.changedValue);
                 }
                 else {
+                    if (currentValue === changedValue) {
+                        console.log('no change in value');
+                        return;
+                    }
+
                     const id = record.id;
                     var parentId = -1;
                     if (this.parentTableName !== '')
@@ -456,19 +453,25 @@ export class DataGridComponentHelper {
                     parentId = record[this.parentTableIdColName];
 
                 changedValues?.forEach((changedValue2: any) => {
+                    console.log('changedValues record', changedValue2);
+
                     if (this.isFile(changedValue2.value?.name)) {
                         console.log('file upload', changedValue2.value.name);
                         this.filesToBeUploaded.push(changedValue2.value);
                     }
                     else {
-                        console.log('updated record', changedValue2);
-                        if (pk_id === -1) {
+                        if (pk_id === undefined || pk_id === null || pk_id === -1) {
                             console.log('new record', changedValue2.field, row, changedValue2.value);
                             this.onNewRecord(changedValue2.field, row, changedValue2.value);
                         }
                         else {
-                            console.log('new record', changedValue2);
-                            this.onUpdateRecord(pk_id, changedValue2.field, changedValue2.value, parentId);
+                            var currentValue2 = record[changedValue2.field];
+                            if (currentValue2 !== changedValue2.value) {
+                                console.log('change in value');
+
+                                console.log('new record', changedValue2);
+                                this.onUpdateRecord(pk_id, changedValue2.field, changedValue2.value, parentId);
+                            }
                         }
                     }
                 });

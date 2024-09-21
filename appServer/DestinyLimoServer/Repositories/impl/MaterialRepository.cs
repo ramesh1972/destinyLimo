@@ -101,24 +101,36 @@ namespace DestinyLimoServer.Repositories.impl
         public async Task<int> AddMaterialAsync(T material, string[]? cols = null)
         {
             // 1st add to the training_material parent table
-            // remove material_id from cols
-            var cols2 = cols?.Where(x => x != "material_id").ToArray();
+            Material trainingMaterial = (material as Material)!;
 
-            IBaseRepository<Material> repo = (IBaseRepository<Material>)GetMaterialRepository("training_material", "material_id");
-            int newMaterialId = await repo.AddAsync(material as Material, cols2);
+            // remove material_id from cols
+            var material_table_cols = new string[] { "material_id", "material_type_id", "material_category_id", "is_public", "is_active", "is_deleted", "created_at", "updated_at", "title", "description", "thumbnail", "background_img" };
+
+            var cols2 = cols?.Where(x => x != "material_id").ToArray();
+            cols2 = cols2?.Where(x => material_table_cols.Contains(x)).ToArray();
+
+            int newMaterialId = -1;
+            if (cols2 != null && cols2.Length > 0)
+            {
+                IBaseRepository<Material> repo = new BaseRepository<Material>(_dapperContext!, "training_material", "material_id");
+                newMaterialId = await repo.AddAsync(trainingMaterial, cols2);
+            }
 
             var material_pk_id = -1;
 
             // 2nd add to the specific material table
             // remove all training_material cols from cols
-            var material_table_cols = new string[] { "material_id", "material_type_id", "material_category_id", "is_public", "is_active", "is_deleted", "created_at", "updated_at", "title", "description", "thumbnail", "background_img" };
             var cols3 = cols?.Where(x => !material_table_cols.Contains(x)).ToArray();
+    
             var tableName = _getTableName();
 
             if (cols3 == null || cols3.Length == 0)
             {
                 return newMaterialId;
             }
+
+            // add material_id to cols
+            cols3 = [.. cols3, "material_id"];
 
             if (tableName == "training_material_text")
             {
@@ -177,13 +189,13 @@ namespace DestinyLimoServer.Repositories.impl
 
             var cols2 = cols?.Where(x => x != "material_id").ToArray();
             cols2 = cols2?.Where(x => material_table_cols.Contains(x)).ToArray();
-            
+
             if (cols2 != null && cols2.Length > 0)
             {
                 IBaseRepository<Material> materialRepository = new BaseRepository<Material>(_dapperContext!, "training_material", "material_id");
                 await materialRepository.UpdateAsync(trainingMaterial, trainingMaterial.material_id, cols2);
             }
-        
+
             // remove all training_material cols from cols
             var cols3 = cols?.Where(x => !material_table_cols.Contains(x)).ToArray();
 

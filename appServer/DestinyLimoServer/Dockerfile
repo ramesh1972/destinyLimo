@@ -17,8 +17,6 @@ RUN dotnet build "DestinyLimoServer.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "DestinyLimoServer.csproj" -c Release -o /app/publish
 
-VOLUME /uploads
-
 # Final stage: create the runtime image
 FROM base AS final
 WORKDIR /app

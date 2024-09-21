@@ -12,7 +12,7 @@ namespace DestinyLimoServer.Common.Uploader
     {
         // get the root uploads folder name from configuratio
         private string _rootUploadsFolderName = "";
-
+        private string _fileServePath;
         private readonly ILogger _logger;
 
         private readonly IConfiguration _configuration = null!;
@@ -25,6 +25,11 @@ namespace DestinyLimoServer.Common.Uploader
             _configuration = configuration;
 
             _rootUploadsFolderName = _configuration.GetSection("Uploads").GetValue<string>("Destination")!;
+            _fileServePath = _configuration.GetSection("Uploads").GetValue<string>("FileServePath")!;
+
+            System.Console.WriteLine($"Root uploads folder name: {_rootUploadsFolderName}");
+            System.Console.WriteLine($"File serve path: {_fileServePath}");
+
         }
 
         public string GetFilePathName(string folderName, string fileName)
@@ -48,7 +53,7 @@ namespace DestinyLimoServer.Common.Uploader
                     return null!;
                 }
 
-                System.Console.WriteLine($"Root path: {_rootUploadsFolderName}"");
+                System.Console.WriteLine($"Root path: {_rootUploadsFolderName}");
                 System.Console.WriteLine($"Folder name: {folderName}");
                 
                 string folderPath = Path.Combine(_rootUploadsFolderName, folderName);
@@ -67,6 +72,7 @@ namespace DestinyLimoServer.Common.Uploader
                     await file.CopyToAsync(fileStream);
                 }
 
+                System.Console.WriteLine("File uploaded successfully.");
                 return filePath;
             }
             catch (Exception ex)
