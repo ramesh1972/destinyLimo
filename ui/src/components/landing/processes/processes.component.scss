@@ -4,6 +4,7 @@
     background-color: #f9f9f9;
     padding-top: 140px;
     margin-top: 50px;
+    margin-bottom: 100px;
 }
 
 .processes-list {
@@ -37,7 +38,7 @@
     color: #fff;
     background-color: #007bff;
     border-radius: 50%;
-    width: 80px;
+    width: 180px;
     height: 40px;
     display: flex;
     align-items: center;
@@ -45,15 +46,9 @@
     margin-right: 20px;
 }
 
-@media screen and (max-width: 768px) {
-    .step-number {
-        width: 200px;
-        height: 40px;
-    }
-    
-}
 .step-content {
     animation: fadeIn 1.5s ease-in-out;
+    width: 400%;
 }
 
 .step-content h3 {
@@ -69,4 +64,5 @@
     align-items: start;
     display: flex;
     text-align: left;
+
 }

@@ -1,11 +1,11 @@
-<div class="register">
+<div class="register"  style="margin-bottom: 120px;">
     <div class="container-fluid">
         <div class="row row-eq-height">
             <div class="nopadding">
                 <div class="courses-container">
-                    <h2>View some of our Sample Courses</h2>
-                    <div class="main-container">
-                        <h1 style="text-align: start;margin-top: 20px;">Files</h1>
+                    <h2 >View some of our Sample Courses</h2>
+                    <div class="main-container" >
+                        <h1 class="sub-title" style="text-align: start;margin-top: 20px;">FILES</h1>
                         <div class="row" style="margin-top:-50px;row-gap: 20px;justify-content: center;">
 
                             <div class="col-md-4" *ngFor="let file of files" style="width: 300px;">
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                         <div class="main-container">
-                            <h1 style="text-align: start;margin-top: 40px;">Videos</h1>
+                            <h1 class="sub-title"  style="text-align: start;margin-top: 40px;">VIDEOS</h1>
                             <div class="row" style="row-gap: 20px; justify-content: center;">
                                 <div class="col-md-4" *ngFor="let video of videos" style="width: 330px;height: fit-content;">
                                     <div
@@ -86,7 +86,7 @@
 
                     </div>
                     <div class="main-container">
-                        <h1 style="text-align: start;margin-top: 40px;">MCQs</h1>
+                        <h1 class="sub-title"  style="text-align: start;margin-top: 40px;">MCQs</h1>
                         <div class="row" style="row-gap: 20px">
                             <c-accordion [alwaysOpen]="true">
                                 <c-accordion-item #item="cAccordionItem" [visible]="item.visible"
