@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../builds"
+		},
+		{
+			"path": "../../../sample-templates/course-master"
 		}
 	],
 	"settings": {

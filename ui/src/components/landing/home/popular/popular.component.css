@@ -1,6 +1,5 @@
-.page_section {
-    padding-top: 50px;
-    padding-bottom: 50px;
+.page-section {
+    margin-top: 450px;
 }
 
 .popular_cats_container {
@@ -26,4 +25,10 @@
 
 .spaced-item {
     margin-bottom: 20px; /* Adjust the value as needed */
+}
+
+@media screen and (max-width: 800px) {
+    .page-section {
+        margin-top: 700px;
+    }
 }

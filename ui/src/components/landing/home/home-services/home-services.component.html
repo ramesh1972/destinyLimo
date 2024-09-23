@@ -1,39 +1,38 @@
-<div class="services page_section">
+<div class="page_section">
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="section_title text-center">
-                    <h1>Popular Services</h1>
-                </div>
+    <div class="col">
+        <div class="section_title text-center">
+            <h1>Popular Services</h1>
+        </div>
+    </div>
+
+    <div class="row services_row" *ngIf="services.length > 2">
+
+        <div class="col-lg-4 service_item text-left d-flex flex-column align-items-center justify-content-start">
+            <div class="icon_container d-flex flex-row justify-content-center">
+                <img src="/images/services/earth-globe.svg" alt="">
+                <h3 style="text-align: center;vertical-align: middle;padding-left: 10px;margin-top: 5px;">{{services[0].title}}</h3>
             </div>
+            
+            <p>{{services[0].description}}</p>
         </div>
 
-        <div class="row services_row" *ngIf="services.length > 2">
+        <div class="col-lg-4 service_item text-left d-flex flex-column align-items-center justify-content-start">
+            <div class="icon_container d-flex flex-row justify-content-center">
+                <img src="/images/services/exam.svg" alt="">
 
-            <div class="col-lg-4 service_item text-left d-flex flex-column align-items-start justify-content-start">
-                <div class="icon_container d-flex flex-column justify-content-end">
-                    <img src="/images/services/earth-globe.svg" alt="">
-                </div>
-                <h3>{{services[0].title}}</h3>
-                <p>{{services[0].description}}</p>
+                <h3 style="text-align: center;vertical-align: middle;padding-left: 10px;margin-top: 5px;">{{services[1].title}}</h3>
             </div>
+            <p>{{services[1].description}}</p>
+        </div>
 
-            <div class="col-lg-4 service_item text-left d-flex flex-column align-items-start justify-content-start">
-                <div class="icon_container d-flex flex-column justify-content-end">
-                    <img src="/images/services/exam.svg" alt="">
-                </div>
-                <h3>{{services[1].title}}</h3>
-                <p>{{services[1].description}}</p>
+        <div class="col-lg-4 service_item text-left d-flex flex-column align-items-center justify-content-start">
+            <div class="icon_container d-flex flex-row justify-content-center">
+                <img src="/images/services/books.svg" alt="">
+                <h3 style="text-align: center;vertical-align: middle;padding-left: 10px;margin-top: 5px;">{{services[2].title}}</h3>
             </div>
-
-            <div class="col-lg-4 service_item text-left d-flex flex-column align-items-start justify-content-start">
-                <div class="icon_container d-flex flex-column justify-content-end">
-                    <img src="/images/services/books.svg" alt="">
-                </div>
-                <h3>{{services[2].title}}</h3>
-                <p>{{services[2].description}}</p>
-            </div>
+            
+            <p>{{services[2].description}}</p>
         </div>
     </div>
 </div>
