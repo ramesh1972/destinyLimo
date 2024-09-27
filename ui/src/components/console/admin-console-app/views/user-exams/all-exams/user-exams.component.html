@@ -37,7 +37,7 @@
             [categories]="categories"></app-user-exam-answers>
     </div>
 
-    <div style="width: 100%;margin-top:10px" *ngIf="showingResults && examAnswers.length == 0">
+    <div style="width: 100%;margin-top:10px;padding:20px" *ngIf="showingResults && examAnswers.length == 0">
         <div class="grid-title-new-exam">No Exam Details found for Exam No. {{currentExam.examId}} by Learner
             {{currentExam.userId}}</div>
     </div>

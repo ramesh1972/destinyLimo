@@ -28,15 +28,10 @@
     <div class="answers-container" *ngIf="filteredUserAnswers.length > 0">
         <div *ngFor="let answer of filteredUserAnswers; let i = index">
             <c-card style="border: 1px solid blue;width:100%;">
-                <c-card-header class="title_header">
-                    <span class="card-title title-description">{{
-                        answer.description }}</span>
-                        <span class="card-title title-category">Category:
-                            {{answer.category_name}}</span>
-                </c-card-header>
+                
 
                 <c-card-header>
-                    <div style="display: flex;flex-direction: row; vertical-align: middle;margin-top: -50px;">
+                    <div style="display: flex;flex-direction: row; vertical-align: middle;">
                         <span class="card-title-question"><b>{{
                             answer.question_text
                             }}</b></span>

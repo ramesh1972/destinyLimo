@@ -58,7 +58,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["isApproved"] == false && record["isLocked"] == false;
+          return record["isApproved"] == false && record["isLocked"] == false && record["approveRejectReason"] == null;
         }
       }]);
     }
@@ -74,7 +74,7 @@ export class UsersComponent {
       this.dataGridHelper?.table?.updateFilterRules([{
         filterFunc: (record: Record<string, any>) => {
 
-          return record["isApproved"] == false;
+          return record["isApproved"] == false && record["isLocked"] == false;
         }
       }]);
     }

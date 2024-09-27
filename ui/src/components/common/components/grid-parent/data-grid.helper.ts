@@ -372,8 +372,6 @@ export class DataGridComponentHelper {
                         return;
                     }
 
-                    alert('delete: ' + pk_id);
-
                     this.table?.deleteRecords([row - 1]);
                     this.onDeleteRecord(pk_id, parentId);
                 }

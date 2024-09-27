@@ -98,25 +98,35 @@ export class NewExamsComponent {
       take(1)
     ).subscribe((data: any) => {
       console.log("exams fetch dispatched", data);
+      console.log("exams fetch dispatched users", this.users);
+      this.exams = data.allExams;
+      console.log("modified exams :", this.exams)
 
-      this.exams = data.allExams.map((exam: any) => {
+      // users
+      this.store.dispatch(invokeUserProfilesFetchAPI());
+      this.actions$.pipe(
+        ofType(UserProfilesFetchAPI_Success),
+        take(1)
+      ).subscribe((data: any) => {
+        console.log("users fetch dispatched", data);
+        this.userExamsInfo = data.allUserProfiles.map((user: UserProfile) => {
 
-        var user = this.users.find((user: any) => user.userId === exam.userId);
+          const avatarURL = FilePaths.GetAvatarPath(user.avatar!);
+          return {
+            ...user,
+            userFullName: user ? user.firstName + " " + user.lastName : "Not Found",
+            avatar: avatarURL,
+            num_exams_not_taken: this.exams.filter((exam: any) => exam.userId === user.userId)?.length,
+            new_exam_assigned_by_admin: false
+          }
+        });
 
-        if (user !== undefined && user !== null)
-          console.log("found user", user);
-
-        const avatarURL = FilePaths.GetAvatarPath(user?.avatar || '/images/avatars/blank-avatar.webp');
-        return {
-          ...exam,
-          userFullName: user ? user.firstName + " " + user.lastName : "Not Found",
-          avatar: avatarURL
-        };
+        this.dataGridHelper!.setData(this.userExamsInfo);
+        
+        // ----> draw the table
+        this.drawVTable();
       });
-
-      console.log("modified files :", this.exams)
     });
-
   }
 
   // columns definition

@@ -7,7 +7,7 @@
 
 .fixed-height {
   height: 100vh; /* Set the desired fixed height */
-  object-fit: cover; /* Optional: Ensure the image covers the area */
+  object-fit: fill; /* Optional: Ensure the image covers the area */
 }
 
 .responsive-height {
